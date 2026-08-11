@@ -20,3 +20,7 @@ track2_scratch/checkpoints/*
 *.bin
 *.safetensors
 *.onnx
+
+# Personal progress / study notes
+progress/
+

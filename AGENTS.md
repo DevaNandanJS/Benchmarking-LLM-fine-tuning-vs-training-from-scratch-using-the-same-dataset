@@ -27,6 +27,10 @@ llm_task/
   track2_scratch/
     configs/ checkpoints/ logs/ eval/ generations/ scripts/ track2_run.ipynb
   shared_eval/           # cross-track comparison artifacts
+  progress/              # human-readable phase-by-phase documentation (updated after EVERY phase)
+    README.md            # project index + status table for both tracks
+    track1_finetune/     # one .md file per completed phase
+    track2_scratch/      # one .md file per completed phase
   writeup/
   requirements.txt       # pinned deps (installed on the Colab kernel)
 ```
@@ -79,3 +83,37 @@ llm_task/
 Complete a phase only when its "Definition of Done" checklist in
 `plan/finetuning_execution_plan.md` is verifiably satisfied (files exist, logged, committed).
 Do not mark a phase done on intent.
+
+## Progress documentation (user-triggered, not automatic)
+
+The `progress/` folder contains human-readable, study-ready documentation of every
+decision and implementation step taken. The user reads these documents to understand
+and revise the project.
+
+**When:** The user explicitly asks — e.g. "document phase 1", "write up what we did",
+"update progress". Do NOT write or update progress documents unless the user asks.
+
+### Folder structure
+
+```
+progress/
+  README.md                    # project index + status table for both tracks
+  track1_finetune/
+    phase1_data_extraction.md  # one file per phase
+    phase2_model_selection.md
+    ...
+  track2_scratch/
+    phase1_data_extraction.md  # stub exists
+    ...
+```
+
+### How to document a phase when requested
+
+1. Read all relevant scripts, configs, logs, and artifacts for the target phase.
+2. Fill out or update the phase document (`progress/<track>/phase<N>_<name>.md`):
+   - **Goal & summary** of the phase.
+   - **Step-by-step walkthrough** of code logic and why choices were made.
+   - **Key findings / bugs / edge cases** encountered and how they were solved.
+   - **Decisions table** (choice + reasoning).
+   - **Definition of Done checklist** marked with evidence.
+3. Update the status table in `progress/README.md` (`🔲 Not started` → `✅ Complete`).
