@@ -31,3 +31,9 @@ STATS_JSON: Path = EXTRACTED_DIR / "stats.json"
 MANIFEST_JSON: Path = EXTRACTED_DIR / "extraction_manifest.json"
 HYPHEN_LOG: Path = EXTRACTED_DIR / "hyphen_join_decisions.txt"
 RAW_PAGES_DIR: Path = EXTRACTED_DIR / "raw_pages"
+
+# ── Phase 2 output files ─────────────────────────────────────────────────────
+CONFIGS_DIR: Path = TRACK_DIR / "configs"
+MODEL_CHOICE_MD: Path = CONFIGS_DIR / "model_choice.md"
+# Full list of model.named_modules() — authoritative source for Phase 4 target_modules.
+MODEL_ARCH_JSON: Path = CONFIGS_DIR / "model_architecture.json"
