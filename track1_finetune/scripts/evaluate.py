@@ -137,7 +137,7 @@ def plot_loss_curve(records: list[dict], run_name: str) -> None:
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     fig.savefig(LOSS_CURVE_PNG, dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print(f"[phase6] loss curve saved → {LOSS_CURVE_PNG}")
+    print(f"[phase6] loss curve saved -> {LOSS_CURVE_PNG}")
 
 
 def get_val_text_bytes(boundary_token_idx: int) -> tuple[int, str]:
@@ -326,7 +326,7 @@ once that track completes.
 """
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     LOSS_CURVE_INTERP_MD.write_text(interpretation, encoding="utf-8")
-    print(f"[phase6] interpretation template saved → {LOSS_CURVE_INTERP_MD}")
+    print(f"[phase6] interpretation template saved -> {LOSS_CURVE_INTERP_MD}")
 
 
 def main() -> None:
@@ -388,7 +388,7 @@ def main() -> None:
     FINAL_METRICS_JSON.write_text(
         json.dumps(metrics, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"[phase6] final_metrics.json saved → {FINAL_METRICS_JSON}")
+    print(f"[phase6] final_metrics.json saved -> {FINAL_METRICS_JSON}")
 
     # ── 3. Write interpretation template ─────────────────────────────────
     write_interpretation_template(metrics, records)

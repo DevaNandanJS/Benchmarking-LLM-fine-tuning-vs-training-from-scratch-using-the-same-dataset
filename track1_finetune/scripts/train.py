@@ -187,7 +187,7 @@ def append_sweep_row(run_name: str, lora_r: int, final_train_loss: float,
             round(best_val_loss, 6), best_val_epoch,
             iso_now(),
         ])
-    print(f"[phase5] sweep row appended → {SWEEP_RESULTS_CSV}")
+    print(f"[phase5] sweep row appended -> {SWEEP_RESULTS_CSV}")
 
 
 def main() -> None:
@@ -247,7 +247,7 @@ def main() -> None:
         "timestamp": iso_now(),
     }
     cfg_path = dump_config(run_cfg, f"phase5_{run_name}")
-    print(f"[phase5] run config saved → {cfg_path}")
+    print(f"[phase5] run config saved -> {cfg_path}")
 
     # ── 3. Load datasets ──────────────────────────────────────────────────
     print(f"[phase5] loading tensors from {TRAIN_PT} / {VAL_PT} ...")
@@ -421,7 +421,7 @@ def main() -> None:
             ckpt_dir = BEST_VAL_DIR / run_name
             ckpt_dir.mkdir(parents=True, exist_ok=True)
             model.save_pretrained(str(ckpt_dir))
-            print(f"[phase5] ✓ new best val_loss={val_loss:.4f} → checkpoint saved → {ckpt_dir}")
+            print(f"[phase5] [OK] new best val_loss={val_loss:.4f} -> checkpoint saved -> {ckpt_dir}")
 
         # ── 11. Early stopping ────────────────────────────────────────────
         # Trigger if val loss has increased for PATIENCE consecutive epochs
@@ -459,7 +459,7 @@ def main() -> None:
         if overfitting_step:
             print(f"[phase5] overfitting divergence first observed at step {overfitting_step}")
     if not smoke:
-        print(f"[phase5] best checkpoint → {BEST_VAL_DIR / run_name}")
+        print(f"[phase5] best checkpoint -> {BEST_VAL_DIR / run_name}")
 
     # ── 13. Append to sweep_results.csv ──────────────────────────────────
     if not smoke:
@@ -471,7 +471,7 @@ def main() -> None:
             best_val_loss=best_val_loss,
             best_val_epoch=best_val_epoch,
         )
-        print(f"[phase5] sweep_results.csv updated → {SWEEP_RESULTS_CSV}")
+        print(f"[phase5] sweep_results.csv updated -> {SWEEP_RESULTS_CSV}")
     else:
         print("[phase5] SMOKE MODE complete — no checkpoints or CSV written")
         print("[phase5] Smoke test passed: shapes OK, loss finite, AMP/dtype checks done")

@@ -10,13 +10,27 @@ from __future__ import annotations
 import json
 import os
 import random
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+# ── UTF-8 stdout/stderr reconfiguration ─────────────────────────────────────
+# Ensures print() with non-ASCII characters (e.g. arrows in log messages)
+# never crashes with UnicodeEncodeError on Windows default console (CP1252)
+# or other non-UTF-8 environments. No-ops silently on streams that don't
+# support reconfigure (e.g. piped/redirected output in some CI environments).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        if hasattr(_stream, "reconfigure"):
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 SEED = 42
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TRACK_DIR = Path(__file__).resolve().parents[1]
+
 
 
 def set_seed(seed: int = SEED) -> int:

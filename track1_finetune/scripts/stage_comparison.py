@@ -57,11 +57,11 @@ def main() -> None:
         sys.exit(1)
 
     shutil.copy2(FINAL_METRICS_JSON, T1_METRICS_JSON)
-    print(f"[phase8] copied → {T1_METRICS_JSON}")
+    print(f"[phase8] copied -> {T1_METRICS_JSON}")
 
     if LOSS_CURVE_PNG.exists():
         shutil.copy2(LOSS_CURVE_PNG, T1_LOSS_CURVE_PNG)
-        print(f"[phase8] copied → {T1_LOSS_CURVE_PNG}")
+        print(f"[phase8] copied -> {T1_LOSS_CURVE_PNG}")
     else:
         print(f"[phase8] WARNING: {LOSS_CURVE_PNG} not found — skipping plot copy")
 
@@ -146,7 +146,7 @@ vs TBD for Track 2) quantifies the compute cost of each approach.
 | `track2_loss_curve.png` | *(TBD — Track 2)* |
 """
     COMPARISON_NOTES_MD.write_text(notes, encoding="utf-8")
-    print(f"[phase8] comparison notes written → {COMPARISON_NOTES_MD}")
+    print(f"[phase8] comparison notes written -> {COMPARISON_NOTES_MD}")
 
     # ── 4. Definition-of-Done assertions ─────────────────────────────────
     assert T1_METRICS_JSON.exists(), f"FAIL: {T1_METRICS_JSON} not written"

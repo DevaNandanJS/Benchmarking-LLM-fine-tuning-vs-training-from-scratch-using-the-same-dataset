@@ -102,8 +102,13 @@ def generate_completion(model, tokenizer, prompt: str, device,
 
     inputs = tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
     input_ids = inputs["input_ids"].to(device)
+    # Pass attention_mask explicitly: when pad_token == eos_token, HF cannot
+    # infer the mask automatically and warns of unexpected behavior. Passing it
+    # directly guarantees correct causal-LM decoding regardless of pad_token config.
+    attention_mask = inputs["attention_mask"].to(device)
 
     gen_kwargs = dict(
+        attention_mask=attention_mask,
         max_new_tokens=max_new_tokens,
         pad_token_id=tokenizer.pad_token_id,
         eos_token_id=tokenizer.eos_token_id,
@@ -119,6 +124,7 @@ def generate_completion(model, tokenizer, prompt: str, device,
     # Decode only the newly generated tokens (strip the prompt prefix)
     new_ids = output_ids[0, input_ids.shape[1]:]
     return tokenizer.decode(new_ids, skip_special_tokens=True)
+
 
 
 def write_samples_md(prompts: list[str], sampled: list[str],
@@ -164,7 +170,7 @@ def write_samples_md(prompts: list[str], sampled: list[str],
 
     GENERATIONS_DIR.mkdir(parents=True, exist_ok=True)
     TRACK1_SAMPLES_MD.write_text("".join(lines), encoding="utf-8")
-    print(f"[phase7] samples saved → {TRACK1_SAMPLES_MD}")
+    print(f"[phase7] samples saved -> {TRACK1_SAMPLES_MD}")
 
 
 def main() -> None:

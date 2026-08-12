@@ -167,7 +167,7 @@ def validate_target_modules(model, target_modules: list[str]) -> list[str]:
         for t in target_modules
     }
     for t, example in found_sample.items():
-        print(f"[phase4] ✓ target '{t}' → e.g. '{example}'")
+        print(f"[phase4] [OK] target '{t}' -> e.g. '{example}'")
     return all_names
 
 
@@ -212,7 +212,7 @@ def main() -> None:
             ),
         }
         out = dump_config(run_cfg, cfg["run_name"])
-        print(f"[phase4] sweep config saved → {out}")
+        print(f"[phase4] sweep config saved -> {out}")
 
     # ── 3. Read model_architecture.json for target module verification ─────
     if MODEL_ARCH_JSON.exists():
@@ -354,7 +354,7 @@ def main() -> None:
     TRAINABLE_PARAMS_JSON.write_text(
         json.dumps(trainable_params_record, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"\n[phase4] trainable_params.json saved → {TRAINABLE_PARAMS_JSON}")
+    print(f"\n[phase4] trainable_params.json saved -> {TRAINABLE_PARAMS_JSON}")
 
     # ── 11. Definition-of-Done assertions ──────────────────────────────────
     # Config files
@@ -374,7 +374,7 @@ def main() -> None:
     print("\n[phase4] ✅ all Definition-of-Done assertions passed")
     print(f"[phase4] trainable: {trainable:,} params  ({pct:.3f}%)")
     print(f"[phase4] sanity loss: {sanity_loss}")
-    print(f"[phase4] sweep configs written: r=4, r=8, r=16  → configs/run_phase4_r*.json")
+    print(f"[phase4] sweep configs written: r=4, r=8, r=16  -> configs/run_phase4_r*.json")
     print("[phase4] Phase 4 complete. Commit configs/ back to repo, then run Phase 5.")
 
 

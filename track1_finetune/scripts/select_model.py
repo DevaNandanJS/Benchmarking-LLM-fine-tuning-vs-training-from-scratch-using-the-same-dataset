@@ -60,7 +60,7 @@ def main() -> None:
             "labels (labels=-100 at pad positions). Failure to do so trains the "
             "model on <eos> as content signal."
         )
-        print(f"[phase2] pad_token set → eos_token: '{tokenizer.eos_token}'")
+        print(f"[phase2] pad_token set -> eos_token: '{tokenizer.eos_token}'")
     else:
         pad_token_decision = (
             f"pad_token already set: '{tokenizer.pad_token}' "
@@ -99,7 +99,7 @@ def main() -> None:
     }
     MODEL_ARCH_JSON.parent.mkdir(parents=True, exist_ok=True)
     MODEL_ARCH_JSON.write_text(json.dumps(arch_record, indent=2) + "\n", encoding="utf-8")
-    print(f"[phase2] full module list ({len(all_module_names)} names) saved → {MODEL_ARCH_JSON}")
+    print(f"[phase2] full module list ({len(all_module_names)} names) saved -> {MODEL_ARCH_JSON}")
 
     # Print filtered view of attention modules for immediate spot-check
     attention_keywords = ("q_proj", "k_proj", "v_proj", "o_proj", "c_attn", "attn")
@@ -133,7 +133,7 @@ def main() -> None:
             f"({delta_pct:+.1f}%)"
         )
     STATS_JSON.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
-    print(f"[phase2] stats.json updated → {STATS_JSON}")
+    print(f"[phase2] stats.json updated -> {STATS_JSON}")
 
     # ── 7. Quantization decision — memory math ────────────────────────────
     fp16_bytes = total_params * 2
@@ -174,7 +174,7 @@ def main() -> None:
         "model_architecture_json": str(MODEL_ARCH_JSON),
     }
     cfg_path = dump_config(run_config, "phase2")
-    print(f"[phase2] run config saved → {cfg_path}")
+    print(f"[phase2] run config saved -> {cfg_path}")
 
     # ── 9. Definition-of-Done assertions ────────────────────────────────────
     updated_stats = json.loads(STATS_JSON.read_text(encoding="utf-8"))
@@ -183,7 +183,7 @@ def main() -> None:
     )
     assert MODEL_ARCH_JSON.exists(), "FAIL: model_architecture.json not written"
     assert cfg_path.exists(), f"FAIL: run config not saved at {cfg_path}"
-    print("\n[phase2] ✓ all Definition-of-Done assertions passed")
+    print("\n[phase2] [OK] all Definition-of-Done assertions passed")
     print("[phase2] Phase 2 complete. Review configs/ and data/extracted/stats.json, then commit.")
 
 
