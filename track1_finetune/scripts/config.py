@@ -43,3 +43,8 @@ TRAIN_PT: Path = PROCESSED_DIR / "track1_train.pt"
 VAL_PT: Path = PROCESSED_DIR / "track1_val.pt"
 DATASET_STATS_JSON: Path = PROCESSED_DIR / "dataset_stats.json"
 SPLIT_STRATEGY_MD: Path = CONFIGS_DIR / "split_strategy.md"
+
+# ── Phase 4 output files ─────────────────────────────────────────────────────
+# Authoritative trainable-parameter count + sanity-check loss (required DoD deliverable).
+# Written by wrap_lora.py at run time on Colab.
+TRAINABLE_PARAMS_JSON: Path = CONFIGS_DIR / "trainable_params.json"

@@ -38,7 +38,7 @@ SmolLM2-135M's tokenizer may or may not ship with a `<pad>` token depending on t
 
 ## Quantization Decision
 
-**No quantization — plain fp16/bf16 LoRA. `bitsandbytes` is not required.**
+**No quantization — plain fp16 LoRA. `bitsandbytes` is not required.**
 
 | Item | Value |
 |---|---|
@@ -47,11 +47,23 @@ SmolLM2-135M's tokenizer may or may not ship with a `<pad>` token depending on t
 | T4 VRAM | 15 GB |
 | Weight footprint / VRAM | ~1.8% |
 
-**Important caveat — this is weights-only:** the 270 MB figure covers only the frozen base-model weights stored in fp16. Full training memory also includes:
-- **Activations** (forward pass intermediate tensors, batch-size dependent)
-- **Gradients and optimizer state** for the LoRA-trainable parameter slice
+**Important caveat — this is weights-only:** the 270 MB figure covers only the frozen base-model weights stored in fp16. Full training memory also includes activations (forward pass intermediate tensors, batch-size dependent) and gradients + optimizer state for the LoRA-trainable parameter slice. Because LoRA keeps only ~0.5–2% of parameters trainable, the additional memory for gradients and optimizer state is small in absolute terms. Total footprint should be confirmed empirically in Phase 5 via `torch.cuda.max_memory_allocated()` after the first training step and `nvidia-smi` during training.
 
-Because LoRA keeps only ~0.5–2% of parameters trainable, the additional memory for gradients and optimizer state is small in absolute terms. However, the total footprint should be confirmed empirically in Phase 5 by checking `torch.cuda.max_memory_allocated()` after the first training step and `nvidia-smi` during training. The quantization decision can be revisited at that point if VRAM pressure is unexpectedly high (e.g., due to a large batch size or long context length).
+---
+
+## Why fp16, Not bfloat16
+
+**T4 is Turing-generation (SM 7.5) — it does not have native bfloat16 hardware support.**
+
+Native bf16 tensor core acceleration requires **Ampere (SM 8.0) or newer** (e.g., A100, A10G). On a T4, PyTorch bf16 operations fall back to software emulation and run significantly slower than native fp16. fp16 is the correct and efficient choice for T4.
+
+> **Interview anchor:** "Why fp16 not bf16?" — T4 is Turing, SM 7.5. Ampere (SM 8.0) is the first generation with native bf16 tensor cores. bf16 on T4 = software fallback = slower training with no numerical benefit over fp16 + GradScaler.
+
+**fp16 training stability (Phase 5 requirement):** fp16 without loss scaling is a common source of NaN loss, separate from the LR/clipping issues in Appendix A. Phase 5's training loop **must** use:
+- `torch.cuda.amp.autocast(dtype=torch.float16)` — mixed precision forward (compute in fp16, accumulate gradients in fp32)
+- `torch.cuda.amp.GradScaler` — scales loss before `.backward()`, unscales before gradient clipping and optimizer step
+
+This is flagged at Phase 4 (wrap_lora.py docstring) so it is not discovered as a surprise mid-Phase-5.
 
 ---
 
