@@ -37,3 +37,9 @@ CONFIGS_DIR: Path = TRACK_DIR / "configs"
 MODEL_CHOICE_MD: Path = CONFIGS_DIR / "model_choice.md"
 # Full list of model.named_modules() — authoritative source for Phase 4 target_modules.
 MODEL_ARCH_JSON: Path = CONFIGS_DIR / "model_architecture.json"
+
+# ── Phase 3 output files ─────────────────────────────────────────────────────
+TRAIN_PT: Path = PROCESSED_DIR / "track1_train.pt"
+VAL_PT: Path = PROCESSED_DIR / "track1_val.pt"
+DATASET_STATS_JSON: Path = PROCESSED_DIR / "dataset_stats.json"
+SPLIT_STRATEGY_MD: Path = CONFIGS_DIR / "split_strategy.md"

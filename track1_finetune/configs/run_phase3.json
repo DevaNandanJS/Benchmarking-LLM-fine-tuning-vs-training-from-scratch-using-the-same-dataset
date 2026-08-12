@@ -1,0 +1,9 @@
+{
+  "phase": 3,
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "context_length": 256,
+  "train_stride": 128,
+  "val_stride": 256,
+  "val_fraction": 0.15,
+  "seed": 42
+}
