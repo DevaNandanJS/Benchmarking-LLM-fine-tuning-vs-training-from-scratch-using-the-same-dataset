@@ -1,0 +1,15 @@
+{
+  "seed": 42,
+  "python": "3.12.13",
+  "platform": "Linux-6.6.122+-x86_64-with-glibc2.35",
+  "torch": "2.11.0+cu128",
+  "cuda_available": true,
+  "cuda_version": "12.8",
+  "gpu": "Tesla T4",
+  "vram_gb": 15.64,
+  "transformers": "4.57.6",
+  "peft": "0.19.1",
+  "datasets": "4.0.0",
+  "accelerate": "1.14.0",
+  "bitsandbytes": null
+}

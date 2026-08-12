@@ -1,0 +1,11 @@
+{
+  "run_name": "r16",
+  "checkpoint_dir": "/content/llm_task/llm_task/track1_finetune/checkpoints/best_val/r16",
+  "val_chunks": 38,
+  "total_val_tokens_scored": 9728,
+  "mean_ce_loss": 2.377641,
+  "perplexity": 10.7794,
+  "bpb": 1.309722,
+  "bpb_note": "BPB = (sum_CE_nats / utf8_byte_length_of_val_text) / ln(2). Val windows are non-overlapping (val_stride=context_length=256, val_overlap_pct=0.0 per dataset_stats.json) so each token is scored exactly once \u2014 BPB formula is valid. Byte boundary aligned via return_offsets_mapping (not re-sliced by token index) to avoid character-offset drift.",
+  "timestamp": "2026-08-12T10:01:56.508621+00:00"
+}

@@ -1,0 +1,22 @@
+{
+  "phase": 5,
+  "run_name": "r4",
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "lora_r": 4,
+  "lora_alpha": 8,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "learning_rate": 0.0002,
+  "batch_size": 8,
+  "max_epochs": 10,
+  "weight_decay": 0.01,
+  "warmup_ratio": 0.05,
+  "max_grad_norm": 1.0,
+  "early_stop_patience": 2,
+  "smoke_test": false,
+  "seed": 42,
+  "timestamp": "2026-08-12T09:50:52.317098+00:00"
+}

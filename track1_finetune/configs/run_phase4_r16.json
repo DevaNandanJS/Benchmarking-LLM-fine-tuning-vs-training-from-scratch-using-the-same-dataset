@@ -1,0 +1,16 @@
+{
+  "phase": 4,
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "bias": "none",
+  "task_type": "CAUSAL_LM",
+  "seed": 42,
+  "timestamp": "2026-08-12T09:50:30.637139+00:00",
+  "note": "Pre-sweep config authored at Phase 4. Training runs in Phase 5 consume these configs. See eval/sweep_results.csv for final comparison."
+}

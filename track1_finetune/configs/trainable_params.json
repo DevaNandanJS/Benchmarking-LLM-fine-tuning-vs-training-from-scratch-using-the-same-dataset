@@ -1,0 +1,22 @@
+{
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "lora_r": 8,
+  "lora_alpha": 16,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "v_proj"
+  ],
+  "bias": "none",
+  "total_parameters": 134975808,
+  "trainable_parameters": 460800,
+  "trainable_percentage": 0.341,
+  "sanity_check_loss": 3.3724,
+  "sanity_check_loss_finite": true,
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "architecture_source": "configs/model_architecture.json",
+  "seed": 42,
+  "timestamp": "2026-08-12T09:50:33.014732+00:00",
+  "note": "trainable_parameters and trainable_percentage are authoritative \u2014 computed from sum(p.numel() for p in model.parameters() if p.requires_grad). GQA note: SmolLM2-135M uses Grouped-Query Attention; k_proj/v_proj project to a smaller dimension than q_proj \u2014 do not assume equal per-module contributions when reasoning about parameter counts. Phase 5 MUST use torch.cuda.amp.autocast + GradScaler for fp16 stability."
+}
