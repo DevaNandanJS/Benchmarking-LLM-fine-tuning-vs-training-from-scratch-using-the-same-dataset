@@ -12,6 +12,8 @@ transformers>=4.46,<5
 peft>=0.13,<1
 accelerate>=1.0,<2
 datasets>=3.0,<6
+torchao>=0.16.0
+
 
 pypdf>=4.0
 pdfplumber>=0.11
