@@ -4,7 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Large binary artifacts (kept out of git; see Phase 0 step 4 for Drive-backed persistence)
-data/raw/*
+
 data/extracted/*
 data/processed/*
 !data/raw/.gitkeep
