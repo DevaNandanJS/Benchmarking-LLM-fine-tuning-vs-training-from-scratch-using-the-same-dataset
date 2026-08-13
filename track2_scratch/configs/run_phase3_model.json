@@ -1,0 +1,12 @@
+{
+  "vocab_size": 1024,
+  "block_size": 256,
+  "n_layer": 6,
+  "n_head": 4,
+  "n_embd": 192,
+  "dropout": 0.1,
+  "bias": true,
+  "tie_weights": true,
+  "phase": "phase3_model",
+  "seed": 42
+}
