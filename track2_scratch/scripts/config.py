@@ -56,4 +56,9 @@ GENERATIONS_DIR:       Path = TRACK_DIR / "generations"
 TRACK2_SAMPLES_MD:     Path = GENERATIONS_DIR / "track2_samples.md"
 
 # ── Phase 7 — shared eval (repo root) ────────────────────────────────────────
-SHARED_EVAL_DIR:       Path = REPO_ROOT / "shared_eval"
+SHARED_EVAL_DIR:             Path = REPO_ROOT / "shared_eval"
+COMPARISON_NOTES_MD:         Path = SHARED_EVAL_DIR / "comparison_notes.md"
+TRACK1_FINAL_METRICS_JSON:   Path = SHARED_EVAL_DIR / "track1_final_metrics.json"
+TRACK1_LOSS_CURVE_PNG:       Path = SHARED_EVAL_DIR / "track1_loss_curve.png"
+TRACK2_SHARED_METRICS_JSON:  Path = SHARED_EVAL_DIR / "track2_final_metrics.json"
+TRACK2_SHARED_LOSS_CURVE_PNG:Path = SHARED_EVAL_DIR / "track2_loss_curve.png"

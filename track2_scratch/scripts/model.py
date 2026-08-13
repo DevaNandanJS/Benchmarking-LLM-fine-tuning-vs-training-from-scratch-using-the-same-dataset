@@ -439,6 +439,125 @@ class GPT(nn.Module):
             "timestamp":          iso_now(),
         }
 
+    @torch.no_grad()
+    def generate(
+        self,
+        input_ids: torch.Tensor,
+        max_new_tokens: int = 100,
+        temperature: float = 1.0,
+        top_k: int | None = None,
+        top_p: float | None = None,
+        eos_token_id: int | None = None,
+    ) -> torch.Tensor:
+        """Autoregressive next-token generation loop.
+
+        Args:
+            input_ids:      (1, T_prompt) LongTensor, already on the correct device.
+            max_new_tokens: Maximum number of new tokens to append.
+            temperature:    Sampling temperature.  temperature <= 0.0 triggers
+                            pure greedy decoding via argmax (see note below).
+            top_k:          If set, only the top-k logits are sampled from.
+            top_p:          If set, nucleus (top-p) sampling is used.
+            eos_token_id:   If set, generation stops early when this token is emitted.
+
+        Returns:
+            LongTensor of shape (1, T_prompt + n_generated).
+
+        Design notes (for interview readiness):
+
+        Context crop (step a):
+            The position embedding table has exactly block_size entries.  Passing
+            a sequence longer than block_size would cause an index-out-of-bounds
+            error in nn.Embedding.  We take the last block_size tokens, matching
+            what is done in nanoGPT and similar implementations.
+
+        Greedy branch (temperature <= 0.0):
+            Dividing logits by a near-zero float (e.g. 1e-7) can produce very
+            large values (20.0 / 1e-7 = 2e8) that make F.softmax numerically
+            unstable on fp32 — the result collapses to a one-hot but may produce
+            -inf in intermediate computations.  A genuine argmax branch is two
+            lines, removes this class of failure entirely, and is unambiguous.
+
+        Temperature then top-k/top-p order:
+            Temperature is applied first (raw logits → scaled logits), then
+            top-k/top-p truncation, then softmax + multinomial.  Applying
+            softmax before temperature would change which tokens survive the
+            truncation step — always apply temperature to logits, not probs.
+
+        @torch.no_grad() decorator:
+            Applied to the whole method, not just the loop, so no computation
+            graph accumulates for any intermediate tensor.  Using the decorator
+            rather than a `with torch.no_grad():` block inside the loop avoids
+            the risk of accidentally removing the context manager during
+            refactoring.
+        """
+        was_training = self.training
+        self.eval()
+
+        try:
+            for _ in range(max_new_tokens):
+                # ── a. Crop context to block_size ────────────────────────────
+                ctx = (
+                    input_ids
+                    if input_ids.shape[1] <= self.config.block_size
+                    else input_ids[:, -self.config.block_size :]
+                )
+
+                # ── b. Forward — take only the last-position logits ──────────
+                logits, _ = self(ctx)           # (1, T, vocab_size)
+                logits = logits[:, -1, :]       # (1, vocab_size)
+
+                # ── c. Greedy branch — bypass softmax entirely ───────────────
+                if temperature <= 0.0:
+                    next_token = logits.argmax(dim=-1, keepdim=True)  # (1, 1)
+                    input_ids = torch.cat([input_ids, next_token], dim=1)
+                    if eos_token_id is not None and next_token.item() == eos_token_id:
+                        break
+                    continue
+
+                # ── d. Temperature scaling ───────────────────────────────────
+                logits = logits / temperature
+
+                # ── e. Top-k filtering ───────────────────────────────────────
+                if top_k is not None:
+                    k = min(top_k, logits.size(-1))
+                    # Zero out all logits below the k-th largest value.
+                    threshold = logits.topk(k).values[..., -1, None]
+                    logits = logits.masked_fill(logits < threshold, float("-inf"))
+
+                # ── f. Top-p (nucleus) filtering ─────────────────────────────
+                if top_p is not None:
+                    # Sort descending, compute cumulative softmax probs,
+                    # zero out tokens once the cumulative mass exceeds top_p.
+                    sorted_logits, sorted_idx = torch.sort(logits, descending=True)
+                    cumulative_probs = torch.cumsum(
+                        F.softmax(sorted_logits, dim=-1), dim=-1
+                    )
+                    # Remove tokens with cumulative prob above top_p.
+                    # Shift right by 1 to include the token that pushed us over.
+                    remove = cumulative_probs - F.softmax(sorted_logits, dim=-1) > top_p
+                    sorted_logits = sorted_logits.masked_fill(remove, float("-inf"))
+                    # Scatter back to original token ordering.
+                    logits = torch.zeros_like(logits).scatter_(
+                        dim=-1, index=sorted_idx, src=sorted_logits
+                    )
+
+                # ── g. Sample ────────────────────────────────────────────────
+                probs = F.softmax(logits, dim=-1)
+                next_token = torch.multinomial(probs, num_samples=1)  # (1, 1)
+
+                # ── h. Append and check EOS ──────────────────────────────────
+                input_ids = torch.cat([input_ids, next_token], dim=1)
+                if eos_token_id is not None and next_token.item() == eos_token_id:
+                    break
+
+        finally:
+            # Always restore training state, even if an exception is raised.
+            if was_training:
+                self.train()
+
+        return input_ids
+
 
 # ════════════════════════════════════════════════════════════════════════════
 # §6 — Runtime config loader
