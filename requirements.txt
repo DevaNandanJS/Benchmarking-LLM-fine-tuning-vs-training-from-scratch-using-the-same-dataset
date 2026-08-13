@@ -25,3 +25,6 @@ tiktoken>=0.6        # GPT-2 proxy token count (Phase 1 stats); CPU-only, no mod
 nltk>=3.8            # English wordlist for garble detection + hyphen-join disambiguation
 
 # bitsandbytes>=0.43   # only if the quantization decision gate (Phase 2) requires QLoRA
+
+# Track 2 extras — scratch training from random init
+tokenizers>=0.20       # Hugging Face Rust-backed BPE tokenizer trainer (ByteLevelBPETokenizer)
