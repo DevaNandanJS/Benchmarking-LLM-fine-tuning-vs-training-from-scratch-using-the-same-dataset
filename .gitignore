@@ -11,10 +11,10 @@ data/processed/*
 !data/extracted/.gitkeep
 !data/processed/.gitkeep
 
-track1_finetune/checkpoints/*
-!track1_finetune/checkpoints/.gitkeep
-track2_scratch/checkpoints/*
-!track2_scratch/checkpoints/.gitkeep
+finetuning_model/checkpoints/*
+!finetuning_model/checkpoints/.gitkeep
+slm_from_scratch/checkpoints/*
+!slm_from_scratch/checkpoints/.gitkeep
 
 *.pt
 *.bin
@@ -24,3 +24,4 @@ track2_scratch/checkpoints/*
 # Personal progress / study notes
 progress/
 
+.venv/

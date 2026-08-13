@@ -1,0 +1,16 @@
+{
+  "phase": "phase1_tokenizer",
+  "sweep_vocab_sizes": [
+    256,
+    1024,
+    4096
+  ],
+  "min_frequency": 2,
+  "special_tokens": [
+    "<|endoftext|>"
+  ],
+  "diminishing_ratio_threshold": 0.3,
+  "plateau_fraction": 0.9,
+  "input_file": "C:\\llm_task\\data\\extracted\\document_clean.txt",
+  "seed": 42
+}

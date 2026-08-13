@@ -1,0 +1,10 @@
+{
+  "total": 2915328,
+  "token_embedding": 196608,
+  "position_embedding": 49152,
+  "transformer_blocks": 2669184,
+  "final_layernorm": 384,
+  "lm_head_tied": 0,
+  "weight_tying": true,
+  "timestamp": "2026-08-13T12:45:32.200698+00:00"
+}

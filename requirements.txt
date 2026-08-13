@@ -4,8 +4,8 @@
 #   - torch is deliberately NOT listed: Colab ships a CUDA-enabled torch already.
 #   - transformers is capped below v5 (the plan's code targets the stable 4.x API;
 #     v5 is a new major that can break PEFT/LoRA tutorials).
-#   - exact installed versions are frozen separately in track1_finetune/environment.txt
-#     (and track2_scratch/environment.txt) via `pip freeze` on the remote session — that
+#   - exact installed versions are frozen separately in finetuning_model/environment.txt
+#     (and slm_from_scratch/environment.txt) via `pip freeze` on the remote session — that
 #     file is the reproducibility lock, commit it back to the repo.
 
 transformers>=4.46,<5
