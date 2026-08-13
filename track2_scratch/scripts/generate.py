@@ -29,6 +29,8 @@ import json
 import sys
 from pathlib import Path
 
+import torch
+
 # ── Bootstrap: make scripts/ importable regardless of CWD ────────────────────
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
@@ -160,9 +162,8 @@ def load_checkpoint(run_name: str, device):
 # §4 — Encode and decode helpers
 # ════════════════════════════════════════════════════════════════════════════
 
-def encode_prompt(tok, prompt: str, device) -> "torch.Tensor":
+def encode_prompt(tok, prompt: str, device) -> torch.Tensor:
     """Encode a text prompt to a (1, T) LongTensor on device."""
-    import torch  # noqa: PLC0415
     ids = tok.encode(prompt).ids
     return torch.tensor([ids], dtype=torch.long, device=device)
 
