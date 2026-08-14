@@ -29,7 +29,7 @@ Inputs (all produced by earlier phases on Colab):
   TASK2_slm_from_scratch/checkpoints/best_val/<run_name>/best_val_config.json
   TASK2_slm_from_scratch/eval/sweep_results.csv
   data/processed/slm_val.pt
-  data/processed/track2_dataset_stats.json
+  data/processed/slm_dataset_stats.json
   data/extracted/document_clean.txt
   TASK2_slm_from_scratch/tokenizer/vocab.json + merges.txt
 
@@ -238,7 +238,7 @@ def get_val_text_bytes() -> tuple[int, str]:
     """Return (utf8_byte_count, val_text_str) for the validation text span.
 
     Method (plan §5, review-adjudicated):
-        1. Read split_boundary_token_idx from track2_dataset_stats.json.
+        1. Read split_boundary_token_idx from slm_dataset_stats.json.
            Hard-fails with KeyError if the field is absent — no character-
            fraction fallback exists (that would misalign with the actual token
            split because BPE tokenization is non-uniform across the document).
@@ -259,7 +259,7 @@ def get_val_text_bytes() -> tuple[int, str]:
     stats = json.loads(DATASET_STATS_JSON.read_text(encoding="utf-8"))
     if "split_boundary_token_idx" not in stats:
         raise KeyError(
-            "[eval] 'split_boundary_token_idx' missing from track2_dataset_stats.json.\n"
+            "[eval] 'split_boundary_token_idx' missing from slm_dataset_stats.json.\n"
             "This field is written by build_dataset.py. Re-run Phase 2 on Colab and "
             "commit the updated stats file before running Phase 5. There is no fallback."
         )

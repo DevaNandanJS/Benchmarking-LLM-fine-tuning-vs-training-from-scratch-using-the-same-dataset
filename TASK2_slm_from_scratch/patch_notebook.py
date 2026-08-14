@@ -36,7 +36,7 @@ phase5_md = [
     '- `TASK2_slm_from_scratch/eval/sweep_results.csv` (written by train.py)\n',
     '- `TASK2_slm_from_scratch/checkpoints/best_val/<run>/best_val.pt` (best checkpoint)\n',
     '- `data/processed/slm_val.pt` (val tensors from Phase 2)\n',
-    '- `data/processed/track2_dataset_stats.json` (must contain `split_boundary_token_idx`)\n',
+    '- `data/processed/slm_dataset_stats.json` (must contain `split_boundary_token_idx`)\n',
     '\n',
     '**Outputs produced:**\n',
     '- `TASK2_slm_from_scratch/eval/loss_curve.png` -- train/val curves for all 3 sweep runs\n',

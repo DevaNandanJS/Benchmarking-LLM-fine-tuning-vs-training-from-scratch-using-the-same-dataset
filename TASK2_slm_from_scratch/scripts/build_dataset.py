@@ -26,7 +26,7 @@ Smoke-test invocation contract:
 Outputs (relative to repo root):
   data/processed/slm_train.pt          — {input_ids, labels} LongTensor[N,256]
   data/processed/slm_val.pt            — same schema, val chunks
-  data/processed/track2_dataset_stats.json
+  data/processed/slm_dataset_stats.json
   TASK2_slm_from_scratch/configs/run_phase2_dataset.json
   TASK2_slm_from_scratch/configs/split_strategy.md
 

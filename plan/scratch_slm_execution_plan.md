@@ -80,7 +80,7 @@
 1. Tokenize the full document with the chosen custom tokenizer into one long ID sequence.
 2. Apply the same sliding-window chunking approach as Track 1 Phase 3 — **match the split strategy (contiguous holdout) and, where feasible, a comparable context length** so the two tracks' "training examples" are conceptually aligned for the write-up's comparison section. Context length here is likely to differ from Track 1's if the vocabulary is much smaller (smaller vocab → more tokens per unit of text → consider whether to match token-count-per-example or raw-text-length-per-example; document whichever you choose).
 3. Save as plain `torch.Tensor` (a single long tensor of token IDs is sufficient at this data scale — no need for memory-mapped binary files as in large-corpus setups like nanoGPT's `prepare.py`, since the entire dataset comfortably fits in RAM).
-4. Log chunk counts, context length, and train/val split sizes to `data/processed/track2_dataset_stats.json`.
+4. Log chunk counts, context length, and train/val split sizes to `data/processed/slm_dataset_stats.json`.
 
 **Definition of Done:**
 - [ ] Script runs end-to-end from `document_clean.txt` + trained tokenizer to saved train/val tensors.
