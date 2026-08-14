@@ -1,0 +1,65 @@
+Table5. SummaryofLLM-basedlogparsingapproaches.The“LLMTechnique”columndescribesthemainlearning/adaptation
+paradigm,while“Reuse/Eff.”recordsorthogonalscalability,reuse,orsystem-levelefficiencymechanisms.
+Paper Setting Superv. LLMTechnique Reuse/Eff. BaseModel(s) Metric(s)
+Benchmarksandempiricalanalyses
+Le&Zhang[73] Online Both Zero-/few-shotpromptingstudy(capabilityanalysis) – GPT-3.5 PA,GA,ED
+Astekinetal.[4] Online Both Few-shotpromptingcomparisonacrossLLMs – CodeLlama-7B ED,PA,LCS
+LogEval[20] Offline Sup. Benchmarksuite(multiplelog-analysistasksincl. – GPT-4 PA,ED
+parsing)
+LogBase[197] Offline – Benchmarkdatasetforsemanticlogparsing – – –
+LLMDPP[173] Online Sup. DPP-baseddiversesampleselectionforfew-shot – Flan-T5-small GA,PA
+parsing
+VISTA[97] Online Sup. Variable-awareICL(efficiency/cost-orientedstudy) Cache GPT-3.5-Turbo PA
+Supervisedandlog-specificmodeladaptation
+GPT-2C[144] Offline Sup. Fine-tunedGPT-styleparser(Q&Aformulation) – GPT-2 F1
+LogStamp[164] Online Sup. Sequencelabelingfortemplate/parametertagging – BERT-base RI
+LogPPT[72] Offline Sup. Prompt-basedfew-shottokenlabeling – RoBERTa PA,GA,ED
+LLMParser[103] Offline Sup. Few-shotfine-tuningfortemplategeneration – LLaMA-7B PA,GA
+Mehrabi et Offline Sup. Compactfine-tuning(effectivenessstudy) – Mistral-7B MLA,ED,F1
+al.[110]
+OWL[42] Offline Sup. Logfoundationmodeltraining(IToperations) – OWL RI,F1
+PreLog[74] Online Sup. Logfoundationmodelpretraining(loganalytics) – PreLog-140M GA,OA,ED,uPA
+Leetal.[75] Online Sup. Few-shot tuning of semantic LLMs + adaptive Adap.cache RoBERTa(125M) GA,PA,FGA,FTA
+caching
+LogLM[94] Offline Sup. Instructiontuningforlogtasks – LLaMA-2-7B RI,F1
+SuperLog[62] Offline Sup. Continualpretraining+interpretabledomainknowl- – LLaMA-2-7B RI,F1
+edge
+Prompt-basedandadaptiveICLparsing
+DivLog[188] Online Sup. Adaptivefew-shotICLwithpromptenhancement – GPT-3(Curie) PA,PTA,RTA
+Liuetal.[92] Online Unsup. Promptstrategies(fixeddemos)foronlineparsing/- – GPT-3.5-Turbo F1
+analysis
+Xuetal.[212] Online Unsup. Zero-shotpromptingfortemplateextraction Temp.DB GPT-3.5 PA,GA,ED
+LogGenius[196] Online Unsup. Zero-shotprompting+syntheticloggeneration(as- – GPT-3.5-Turbo PA
+sistance)
+Zhouetal.[218] Online Unsup. Few-shotprompting(withaBERT-basedcomponent – GPT-3.5 GA,MLA,ED
+inpipeline)
+LLM-TD[169] Offline Unsup. ICL-basedtemplatedetectionforsecurityeventlogs Temp.cand. OpenChat FGA
+Lemur[207] Online Unsup. Entropy-guidedclustering+CoTtemplatemerging Cluster GPT-3.5 Templateaccuracy
+LogRules[57] Offline Sup. ICLenhancedwithrules(case-/rule-basedknowl- Rules GPT-4o-mini + PA,GA,ED,FGA,FTA
+edgeinjection) LLaMA-3-8B-Instruct
+Retrieval/refinement-orientedparsingandsystem-levelefficiencylayers
+LILAC[64] Online Sup. ICL+hierarchicaldemosampling+cacherefinement Adap.cache GPT-3.5 PA,GA,FGA,FTA
+LogBatcher[184] Online Unsup. Demonstration-freeparsingviaretrieval(nolabeled Cache GPT-3.5-Turbo GA,MLA,ED
+demos)
+LogParser- Online Unsup. Grouping+multi-stepprompting(RAG-style) Grouping GPT-3.5-Turbo GA,PA,FGA,FTA,GGD,PGD
+LLM[213]
+SelfLog[123] Online Both Group-wiseICLwithself-evolutionarymergetree Tree GPT-3.5 GA,PA,PTA,RTA
+HELP[186] Online Both Embeddingclustering+LLMtemplategeneration Cluster text-embedding-3- GA,FGA,PA,FTA
+small + Claude-3.5-
+Sonnet
+LibreLog[104] Offline Unsup. Retrieval-augmentedparsing+self-reflectionrefine- Temp.mem. LLaMA-3-8B-Instruct PA,GA
+ment
+Parse-LLM[152] Online Unsup. Agenticdecompositionwithcallabletools(header Tools GPT-4 GA,FGA,PA,FTA
+separation,etc.)
+AdaParser[182] Online Unsup. Self-generatedICL+self-correction Tree GPT-3.5 GA,FGA,PA,FTA
+Huangetal.[54] Online Unsup. Unsupervisedparserwithretrieval(nolabeledexam- Temp.DB GPT-3.5 GA,FGA,PA,FTA
+ples)
+EPAS[15] Online Unsup. Asynchronous scheduling of LLM queries (tail- Async Llama-3.1-70B- GA,FGA,PA,FTA
+latencyaware) Instruct
+SemanticLog[198] Online Unsup. Variable-awaretemplategenerationforlarge-scale Cache LLaMA-2-7B GA,PA,FTA
+parsing
+Duanetal.[26] Offline Unsup. LogBatcher-stylegrouping+LLMtemplatecorrec- Cache GPT-3.5-Turbo GA,FGA,PA,FTA
+tion
+InferLog[177] Online Unsup. ICL-orientedprefixKV-cachereuse+auto-tuning KVcache Qwen2.5-14B- PA,PTA,RTA,GA
+Instruct
+23

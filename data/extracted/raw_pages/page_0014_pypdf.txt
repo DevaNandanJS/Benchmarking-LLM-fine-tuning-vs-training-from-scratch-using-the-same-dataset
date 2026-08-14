@@ -1,0 +1,48 @@
+4.1 Task Definition
+Logging statement generation is the task of inserting and updating log statements into source code so that,
+during execution, the system emits textual records (logs) describing internal states and runtime events. Given
+a code context (e.g., a method, a basic block, or a file), automated logging must decidewhereto place logs,
+whatto record, andhowto phrase messages in a readable and maintainable way. A log statement is a hybrid
+artifact that combines a code-level logging API call (e.g., logger.info(. . . ) ) with a concise natural-language
+message and selected program variables. Effective generation, therefore, requires aligning program behavior
+with project-specific conventions, such as naming, verbosity, and severity-level usage, typically implemented
+through standard logging frameworks. This makes automated logging not only a code-generation problem, but
+also an observability-design problem shaped by developer intent, code context, message readability, and runtime
+diagnostic value [36, 87, 139, 219].
+1publicUser getUser ( String userId ) {
+2logger . info ( " Fetching user with id ={} " , userId ) ;
+3try{
+4User user = userRepository . find ( userId ) ;
+5if( user ==null) {
+6logger . warn ( " User not found : id ={} " , userId ) ;
+7}
+8returnuser ;
+9}catch( Dat ab as eE xce pt io n ex ) {
+10logger . error ( " Failed to fetch user : id ={} , error ={} " , userId , ex . getMessage () ) ;
+11throwex ;
+12}
+13}
+Listing 1. A simplified example of single-line logging in Java
+Listing 1 illustrates a simplified Java method instrumented with three log statements, and Listing 2 shows the
+corresponding runtime logs. The method logs an INFO message before accessing the repository, emits a WARN
+when the requested user is missing, and records an ERROR upon a database exception. Each statement pairs a
+concise event description with a small set of diagnostic variables (e.g., the user identifier and exception message),
+enabling developers to reconstruct key control-flow decisions and failure context from the log stream.
+1INFO 2025 -05 -12 10:15:03 UserService - Fetching user with id = U1024
+2WARN 2025 -05 -12 10:15:03 UserService - User not found : id = U1024
+3ERROR 2025 -05 -12 10:15:04 UserService - Failed to fetch user : id = U1024 , error = connection timeout
+Listing 2. Example single-line runtime logs emitted by Listing 1
+In practice, logs are commonly placed at execution milestones, boundary interactions with external components,
+and exception-handling paths, where recorded context is most useful for diagnosis [36, 219]. Most systems rely on
+standard logging frameworks that provide unified APIs and configurable formatting. In Java, widely used options
+include java.util.logging [117], Log4j 2 [ 3], SLF4J [132], and Logback [ 131], while Python typically uses
+the built-in logging module [128], sometimes complemented by structlog [141] or loguru [22]. Accordingly,
+automated logging techniques generally assume these APIs and aim to generate statements that can be directly
+inserted and compiled in real projects.
+4.2 Challenges
+Although logging is essential for observability, producing high-quality logs in practice is non-trivial. Prior
+automated approaches, typically based on heuristics, static analysis, and traditional machine-learning models,
+have therefore faced persistent limitations. Existing studies consistently suggest that logging usefulness is largely
+determined by three intertwined decisions: where to log, what to log, and how to keep logs effective over
+time [36, 84, 214, 219].
+14

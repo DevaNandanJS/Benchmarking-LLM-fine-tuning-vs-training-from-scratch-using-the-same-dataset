@@ -1,0 +1,44 @@
+General-purpose LLMsare trained broadly on large-scale, diverse text corpora and excel at natural-language in-
+terpretation, summarization, and interactive assistance [11, 116]. They are useful for prompt-based log understand-
+ing, RCA narratives, and incident reporting, but usually need retrieved context to handle organization-specific
+terminology, component names, and operational conventions [43, 79, 116, 120].
+Code-oriented LLMsare trained or fine-tuned heavily on code and technical corpora, improving performance
+on stack traces, error messages, configuration files, and program-context reasoning [ 13, 33, 178]. They are a
+better fit when log interpretation depends on linking symptoms to code/config, call stacks, APIs, or remediation
+commands [13].
+Domain-tailored LLMsadapt a backbone to a specific operational domain (e.g., AIOps for cloud platforms,
+network diagnostics, ICS security) via continued pretraining, instruction tuning, or explicit knowledge integra-
+tion [43, 120]. They are most valuable when logs contain specialized vocabularies, recurring incident patterns,
+and internal operational procedures that general-purpose models cannot infer reliably [43].
+3.4 Adaptation and Enhancement Paradigms
+Off-the-shelf LLMs are often not trainedspecificallyfor log analysis: they rarely see an organization’s proprietary
+log vocabulary, evolving component taxonomy, or operational ground-truth data (incidents, runbooks, and on-call
+decisions) [10, 43]. Therefore, LLM-based log analysis approaches typically improve reliability by controlling
+whatthe model sees (context and retrieved evidence) andhowit decides (prompting, reasoning scaffolds, tuning,
+tools, and verification) [79, 120, 181, 194]. Below, we summarize the most common paradigms in terms of the
+log-specific trade-offs they address: label scarcity, drift, grounding, controllability, inference cost, and deployment
+practicality [10].
+Prompting and in-context learning (ICL), including retrieval grounding.ICL treats the LLM as a training-
+free learner: prompts provide task instructions, output constraints, and a small set of demonstrations [11, 91, 113].
+In log settings, effective ICL is rarely a single “classify this log” instruction. It typically includes: (i)input
+normalization(variable masking, deduplication, component/time grouping), (ii)bounded evidence(top- 𝑘
+suspicious lines/windows rather than full streams), (iii)schema-constrained outputs(labels, ranked candidates,
+JSON fields), and (iv)system-specific exemplars(a few representative normal/failure patterns from the same
+environment) [91, 113].
+A common extension isretrieval-augmented generation (RAG), which retrieves relevant context (e.g.,
+similar historical windows/incidents, runbook passages, known signatures, or indexed summaries) and injects
+it into the prompt as additional demonstrations or evidence [79]. In many log-analysis pipelines, RAG can be
+viewed as anICL enablerrather than a separate paradigm: retrieval supplies high-quality in-context examples
+and system knowledge at inference time, without changing model weights [ 79]. This “retrieve→ prompt→
+decide” pattern improves bothgrounding(anchoring outputs to concrete evidence) andadaptation(bringing
+system-specific knowledge under drift) [43, 79].
+ICL remains attractive for rapid deployment and heterogeneous tasks, but it is sensitive to prompt quality,
+context selection, and distribution shift. As a result, many practical approaches combine RAG-augmented ICL
+with lightweight filtering (to reduce prompt noise) and downstream verification (to prevent overconfident
+hallucinations) [91, 113].Reasoning scaffolds: CoT, ToT, and structured decomposition.Many log tasks
+(especially diagnosis and remediation) benefit from explicit decomposition rather than one-shot generation [181,
+217].Chain-of-Thought (CoT)prompting encourages stepwise reasoning (e.g., identify key symptoms → map
+to components→ hypothesize causes→ justify with evidence) [181]. In log settings, CoT is most useful when
+intermediate artifacts arecheckableandgrounded(e.g., extracted entities, cited log lines, matched templates),
+not when it produces purely speculative narratives [ 176, 181].Tree-of-Thought (ToT)generalizes CoT by
+11

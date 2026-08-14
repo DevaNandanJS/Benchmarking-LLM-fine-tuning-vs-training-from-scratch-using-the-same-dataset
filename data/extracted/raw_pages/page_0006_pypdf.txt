@@ -1,0 +1,75 @@
+2020 2021 2022 2023 2024 2025
+0
+10
+20
+30
+40
+50
+60
+70
+80number of papers
+Logging
+Log Parsing
+Log Representation
+Anomaly Detection
+Failure Prediction
+Root Cause Analysis
+Log Summary
+20 (20)
+(12.3%)
+37 (29)
+(22.8%)
+3 (1)
+(1.9%) 70 (60)
+(43.2%)
+4 (3)
+(2.5%)
+25 (20)
+(15.4%)
+3 (1)
+(1.9%)
+T otal paper: 162 (deduplicated: 145)
+Fig. 3. Temporal and overall distribution of LLM4Log analysis papers across tasks. Note: Pie chart labels are shown as n (u),
+where n counts task papers (not deduplicated) and u counts unique papers (deduplicated).
+multiple tasks (e.g., a pipeline that both parses logs and detects anomalies), after deduplication by title, the corpus
+contains 145 unique papers. Notably, the pre-LLM log-analysis survey by He et al. [47] reported 158 log-analysis
+papers published from 1997 to 2020. In contrast, within only 2020–2025, we already observe 145LLM-based
+log-analysis papers,which suggests rapid growth in LLM-based log-analysis research and a clear recent
+increase in research attention that motivates a dedicated LLM4Log survey. Figure 3 summarizes the corpus
+from two complementary views: thetemporal trendover years (left) and thetask composition(right).
+Table 2. Top venues by number of papers in our
+LLM4Log corpus.
+Venue #Papers
+arXiv 29
+ICSE 11
+ASE 7
+ISSRE 7
+FSE 6
+CIKM 5
+ICLR 5
+EMSE 4
+TOSEM 4
+ICPC 3
+Note:We report the top 10 venues in the paper. The
+full list is available in our online repository.
+The task distribution (Fig. 3, right) is highly skewed. Most pa-
+pers concentrate on Anomaly Detection and Log Parsing, together
+accounting for roughlytwo-thirdsof all task-paper records, which
+reflects where LLMs are most immediately useful in practice:
+identifying suspicious behavior under noisy, drifting logs and
+structuring raw logs into analyzable forms. At the same time, the
+corpus also shows a clear expansion toward more downstream,
+operator-facing tasks. In particular, Root Cause Analysis forms a
+sizable slice and grows rapidly in the most recent years, indicating
+a shift from “detecting something is wrong” toward “explaining
+why and what to do, ” often requiring richer reasoning and evi-
+dence integration.
+Temporally, the corpus spans 2020–2025 and exhibits a pro-
+nounced surge in recent years (Fig. 3, left). Only a small number
+of papers appeared before 2023, followed by a sharp jump in 2024
+and an even larger volume in 2025. Beyond the overall growth,
+the per-task evolution is also informative: anomaly detection ap-
+pears earliest and grows steadily, while several downstream tasks
+emerge later and accelerate quickly (e.g., RCA and log summarization are largely concentrated in the most recent
+period). This pattern suggests that the community first adopted LLMs where they could be plugged into existing
+6

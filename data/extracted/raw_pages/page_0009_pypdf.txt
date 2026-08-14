@@ -1,0 +1,42 @@
+3.1 Why LLMs are a Good Fit for Log Tasks
+Logs as semi-structured text that bridges natural language and code.A key reason LLMs fit log analysis
+is that log messages sit between natural language and code. A typical log line mixes free-form descriptions
+(symptoms, actions, causal hints) with code-like structure and identifiers (function and class names, stack frames,
+paths, IPs, config keys, request IDs, error codes) [62, 74]. This hybrid format aligns with two core LLM strengths:
+natural-language understanding and code-aware pattern modeling [24, 108]. At the same time, log analysis is not
+just generic text understanding: the boundary between stable templates and variable values is often ambiguous,
+and the same token may be a symptom, parameter, component name, or incident clue depending on context. As a
+result, LLMs can capture intent and semantics that are often discarded when logs are reduced to templates/event
+IDs, and can still remain robust when token vocabularies evolve (e.g., new components, identifiers, or new error
+strings) [64, 103].
+Latent semantics beyond templates and surface patterns.Although many classic pipelines reduce logs to
+templates/event IDs, real log messages encode operational meaning: what operation was attempted, what failed,
+which component is implicated, how severe it is, and what the system was doing right before/after [72, 74]. These
+signals are frequently expressed implicitly via linguistic cues (error idioms, temporal markers, causal connectors,
+negation), code-like cues (exception types, API names, call sites, module prefixes), and temporal ordering across
+neighboring events [40, 103]. This makes logs different from many standalone text artifacts: they often carry
+a symptom chronology that operators use to reconstruct incidents. LLMs can exploit these cues to support
+interpretation, explanation, and cross-source integration, especially when purely symbolic representations are
+brittle or incomplete [42, 68, 98].
+Robustness under drift, partial observability, and long-tail behaviors.Logs evolve with versions, configu-
+ration changes, feature flags, and deployment environments. Meanwhile, rare events are common in operations
+and often carry disproportionate diagnostic value, even when they appear too infrequently for stable supervised
+learning [64, 103]. Compared with fixed-vocabulary or rule-based parser-dependent pipelines, LLM-based repre-
+sentations and prompting enable soft matching and semantic generalization, which helps when (i) rule-based
+parsers fail or drift, (ii) labeled anomalies/failures are scarce, or (iii) the same underlying issue is described with
+heterogeneous phrasing across services and versions [4, 103, 188].
+Unifying heterogeneous evidence into a single reasoning space.In production triage, the relevant evidence
+rarely lives in logs alone [20, 42]. Engineers correlate logs with traces/metrics, tickets, runbooks, configurations,
+and sometimes code diffs [ 20, 42]. LLMs can condition on mixed inputs (log snippets, retrieved historical
+cases, metric summaries, runbook steps, code/config fragments) and produce operator-oriented outputs such as
+hypotheses, ranked causes, incident narratives, and action candidates [42, 68, 98]. This ability to work across
+heterogeneous artifacts matches the reality of AIOps workflows, but a log-centric view remains necessary because
+logs often provide the chronological symptom evidence around which other signals are interpreted [42, 68].
+Human-facing outputs and decision support.Many operational tasks require a narrative (what happened,
+what changed, why likely) and not just a score/label [42, 68]. LLMs can highlight evidence, translate technical
+fragments into concise explanations, and generate structured artifacts for handoff (e.g., timelines, suspected
+components, extracted entities) [20, 98, 100]. However, free-form generation increases the risk of hallucinated
+rationales or overconfident claims [20, 68]. In practice, LLMs are most reliable when outputs are constrained and
+augmented (e.g., by quoting evidence spans, using structured extraction, or tying claims to retrieved/tool-produced
+facts) rather than relying on unconstrained storytelling [42, 98, 100].
+9

@@ -1,0 +1,56 @@
+[32] Asma Fariha, Vida Gharavian, Masoud Makrehchi, Shahryar Rahnamayan, Sanaa Alwidian, and Akramul Azim. Log anomaly detection
+by leveraging llm-based parsing and embedding with attention mechanism. In2024 IEEE Canadian Conference on Electrical and
+Computer Engineering (CCECE), pages 859–863. IEEE, 2024.
+[33] Zhangyin Feng, Daya Guo, Duyu Tang, Nan Duan, Xiaocheng Feng, Ming Gong, Linjun Shou, Bing Qin, Ting Liu, Daxin Jiang, and
+Ming Zhou. Codebert: A pre-trained model for programming and natural languages. InFindings of the Association for Computational
+Linguistics: EMNLP 2020, pages 1536–1547. Association for Computational Linguistics, 2020. doi: 10 .18653/v1/2020.findings-emnlp.139.
+URL https://aclanthology.org/2020.findings-emnlp.139/.
+[34] Joint Task Force. Security and privacy controls for information systems and organizations (nist special publication 800-53 revision 5),
+2020. URL https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final.
+[35] Amy Foster and Selva Kumar.COMBINING LLMS AND SHELL LOGS TO PREDICT BACKUP FAILURES. 07 2025.
+[36] Qiang Fu, Jieming Zhu, Wenlu Hu, Jian-Guang Lou, Rui Ding, Qingwei Lin, Dongmei Zhang, and Tao Xie. Where do developers log? an
+empirical study on logging practices in industry. InCompanion Proceedings of the 36th International Conference on Software Engineering,
+pages 24–33. ACM, 2014. doi: 10.1145/2591062.2591175.
+[37] Ying Fu, Meng Yan, Pinjia He, Chao Liu, Xiaohong Zhang, and Dan Yang. End-to-end log statement generation at block-level.Journal
+of Systems and Software, 216:112146, 2024. doi: 10.1016/j.jss.2024.112146.
+[38] Kai Greshake, Sahar Abdelnabi, Shailesh Mishra, Christopher Endres, Thorsten Holz, and Mario Fritz. Not what you ´ve signed up for:
+Compromising real-world LLM-integrated applications with indirect prompt injection, 2023. URL https://arxiv.org/abs/2302.12173.
+[39] Wei Guan, Jian Cao, Shiyou Qian, and Jianqi Gao. LogLLM: Log-based anomaly detection using large language models.arXiv preprint,
+2024. URL https://arxiv.org/abs/2411.08561.
+[40] H. Guo, S. Yuan, and X. Wu. Logbert: Log anomaly detection via bert. In2021 International Joint Conference on Neural Networks (IJCNN),
+pages 1–8. IEEE, 2021.
+[41] Hongcheng Guo, Jian Yang, Jiaheng Liu, Jiaqi Bai, Boyang Wang, Zhoujun Li, Tieqiao Zheng, Bo Zhang, Junran Peng, and Qi Tian.
+Logformer: A pre-train and tuning pipeline for log anomaly detection. InProceedings of the AAAI Conference on Artificial Intelligence
+(AAAI), pages 135–143, 2024.
+[42] Hongcheng Guo, Jian Yang, Jiaheng Liu, Liqun Yang, Linzheng Chai, Jiaqi Bai, Junran Peng, Xiaorong Hu, Chao Chen, Dongfeng Zhang,
+Xu Shi, Tieqiao Zheng, Liangfan Zheng, Bo Zhang, Ke Xu, and Zhoujun Li. Owl: A large language model for it operations. InProceedings of
+the Twelfth International Conference on Learning Representations (ICLR 2024), 2024. URL https://openreview.net/forum?id=SZOQ9RKYJu.
+[43] Suchin Gururangan, Ana Marasović, Swabha Swayamdipta, Kyle Lo, Iz Beltagy, Doug Downey, and Noah A. Smith. Don’t stop
+pretraining: Adapt language models to domains and tasks. InProceedings of the 58th Annual Meeting of the Association for Computational
+Linguistics (ACL), pages 8342–8360. Association for Computational Linguistics, 2020. doi: 10 .18653/v1/2020.acl-main.740. URL
+https://aclanthology.org/2020.acl-main.740/.
+[44] Fatemeh Hadadi, Qinghua Xu, Domenico Bianculli, and Lionel Briand. Llm meets ml: Data-efficient anomaly detection on unstable
+logs.ACM Transactions on Software Engineering and Methodology, 2025. doi: 10 .1145/3771283. URL https://doi .org/10.1145/3771283.
+arXiv:2406.07467.
+[45] Minghua He, Tong Jia, Chiming Duan, Huaqian Cai, Ying Li, and Gang Huang. Llmelog: An approach for anomaly detection based on
+llm-enriched log events. In2024 IEEE 35th International Symposium on Software Reliability Engineering (ISSRE), pages 132–143. IEEE,
+2024.
+[46] Pinjia He, Jieming Zhu, Zibin Zheng, and Michael R. Lyu. Drain: An online log parsing approach with fixed depth tree. In2017 IEEE
+International Conference on Web Services (ICWS), pages 33–40, 2017. doi: 10.1109/ICWS.2017.13.
+[47] Shilin He, Pinjia He, Zhuangbin Chen, Tianyi Yang, Yuxin Su, and Michael R Lyu. A survey on automated log analysis for reliability
+engineering.ACM computing surveys (CSUR), 54(6):1–37, 2021.
+[48] Shiming He, Ying Lei, Ying Zhang, Kun Xie, and Pradip Kumar Sharma. Parameter-efficient log anomaly detection based on pre-training
+model and lora. In2023 IEEE 34th International Symposium on Software Reliability Engineering (ISSRE), pages 207–217. IEEE, 2023.
+[49] Yi Wen Heng, Zeyang Ma, Zhenhao Li, Dong Jae Kim, and Tse-Hsun Chen. Benchmarking open-source large language models
+for log level suggestion. In2025 IEEE Conference on Software Testing, Verification and Validation (ICST), pages 314–325, 2025. doi:
+10.1109/ICST62969.2025.10988921.
+[50] Jordis Emilia Herrmann, Aswath Mandakath Gopinath, Mikael Norrlof, and Mark Niklas Mueller. Diagnosing robotics systems issues
+with large language models–a case study. InICLR 2025 Workshop on Foundation Models in the Wild.
+[51] András Horváth, András Oláh, Attila Pintér, Bálint Siklósi, Gergely Lukács, István Z. Reguly, Kálmán Tornai, Tamás Zsedrovits, and
+Zoltán Máthé. Anomaly detection algorithms for real-time log data analysis at scale.IEEE Access, 13:136288–136311, 2025. doi:
+10.1109/ACCESS.2025.3565575.
+[52] Changze Hu, Yu Fang, Jinhua Wu, Haoyang Li, and Geng Wang. Research on log anomaly detection based on sentence-BERT.Electronics,
+12(17):3580, 2023. doi: 10.3390/electronics12173580. URL https://www.mdpi.com/2079-9292/12/17/3580.
+[53] Junjie Huang, Zhihan Jiang, Jinyang Liu, Yintong Huo, Jiazhen Gu, Zhuangbin Chen, Cong Feng, Hui Dong, Zengyin Yang, and
+Michael R Lyu. Demystifying and extracting fault-indicating information from logs for failure diagnosis. In2024 IEEE 35th International
+45

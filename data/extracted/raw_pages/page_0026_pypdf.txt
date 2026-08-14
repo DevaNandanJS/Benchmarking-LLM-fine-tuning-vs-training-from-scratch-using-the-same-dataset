@@ -1,0 +1,44 @@
+hooks, and sometimes variable-aware reuse strategies that explicitly track parameter slots to avoid template
+corruption at scale (e.g., SemanticLog [198]). A useful takeaway is that these approaches treat LLM reasoning as
+a high-quality but expensive primitive, and invest in coordination layers to maximize structured output per LLM
+token.
+Overall, the method families address different parts of the challenge space. Supervised and log-specific model
+adaptation improves controllability and template–parameter boundary learning when labels or domain corpora
+are available. Prompt-based and adaptive ICL parsing supports rapid deployment when labeled data are limited
+and log patterns keep changing, but it depends on prompt and example quality. Retrieval/refinement-oriented
+parsing reduces manual labeling and helps cover less frequent patterns, but it depends on grouping and retrieval
+quality. System-level efficiency layers improve online throughput and output stability, but they can amplify
+cached or propagated errors if validation is weak.
+Early log parsing work focused on feasibility and prompting sensitivity, while more recent work increasingly
+separates two concerns: the learning/adaptation paradigm used to infer templates, and the reuse or coordi-
+nation mechanisms used to make LLM parsing practical at scale. Importantly, these families of approaches
+coexist. Supervised adaptation remains attractive when labeled logs are available, prompting dominates rapid
+deployment, retrieval/refinement reduces labeling needs, and system-level reuse is essential for online or
+mass scale. Across them, a unifying design principle is to combine LLM inference with lightweight parsing
+components, sampling, retrieval, grouping, caching, and validation that amortize LLM cost while preserving
+template stability under drift.
+5.4 Performance Evaluation Metrics
+Evaluation of log parsing has gradually shifted frommessage-levelheadline scores towardtemplate-levelmetrics,
+because production logs are heavy-tailed and drift over time: frequent templates can dominate averages and
+hide failures on rare but diagnosis-critical events. As a result, recent LLM-based parsers increasingly report
+classic metrics together with template-level ones to better reflect robustness (e.g., LILAC [ 64], Le et al. [ 75],
+LogParser-LLM [213]).
+Classic and still common: GA and PA (but frequency-biased).The most widely used metrics remain
+Grouping Accuracy (GA)andParsing Accuracy (PA)because they are simple and comparable across studies [4,
+20, 73]. GA evaluates whether each line is assigned to the correct event group, while PA evaluates whether the
+per-line template exactly matches the oracle [20, 73]. However, both aremessage-levelaverages: frequent templates
+dominate, so a parser can score high while failing on the long tail or under drift [ 64, 75]. They can also blur
+“grouping is correct” versus “placeholder boundaries are correct”, motivating template-level complements [57, 64].
+Increasingly adopted for robustness: FGA and FTA.To mitigate frequency bias, many recent parsers
+reportFGA(F1 of Grouping Accuracy) andFTA(F1 of Template Accuracy) astemplate-levelcomplements to
+GA/PA [64, 75, 186, 213]. FGA scores correctnessper template group(then aggregates via precision/recall-style
+F1), making rare-template fragmentation/merging visible. FTA is stricter because it also requires thetemplate text
+(static tokens and placeholders) to match, exposing boundary errors that GA/PA can hide [57, 64]. In practice,
+reporting {GA,PA}+{FGA,FTA} gives both backward comparability and clearer evidence of template-inventory
+recovery [64, 75].
+Diagnostics and niche variants: ED/LCS, GGD/PGD, PTA/RTA, F1, and RI.Several studies addEdit
+Distance (ED)and/orLongest Common Subsequence (LCS)between predicted and oracle templates to
+quantifyhow farnear-misses are (useful for diagnosing systematic boundary mistakes), but these should be
+treated as secondary signals instead of standalone correctness measures [4, 20, 73]. Some papers further introduce
+GGD/PGDto diagnoseerror modes: whether mistakes stem mainly from over-merging/over-splitting (grouping
+26

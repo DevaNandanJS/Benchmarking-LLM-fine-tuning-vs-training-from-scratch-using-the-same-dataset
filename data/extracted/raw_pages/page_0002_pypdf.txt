@@ -1,0 +1,108 @@
+To address these challenges, the research community has developed a rich body of work on automated
+log analysis, typically organized as a pipeline spanning logging practice, parsing/structuring, representation
+learning, anomaly/failure detection, failure prediction, diagnosis, and summarization [47]. In production settings,
+however, log analysis is constrained by operational realities. Incidents unfold under time pressure. Log streams are
+interleaved across services, hosts, and tenants. Failures manifest through long causal chains. The most diagnostic
+events are often rare, noisy, or buried in high-volume background messages [102, 192]. Moreover, engineers rarely
+rely on logs alone. Effective triage requires correlating logs with metrics/traces, historical incidents, runbooks,
+and code/configuration context [102, 192]. These characteristics make log analysis not only apattern recognition
+problem, but also anevidence-integrationandhuman decision-supportproblem. Log-centric LLM systems are
+therefore distinct from broader LLM4AIOps settings: logs combine natural-language-like descriptions with
+code-like identifiers, exhibit ambiguous template/value boundaries, evolve under version and deployment drift,
+and often carry the chronological symptom evidence that operators use to diagnose failures. The challenge is not
+merely to classify patterns, but to interpret noisy, long-tail runtime evidence in a form that remains useful for
+human decision making.
+The classic log-analysis pipeline was largely shaped before instruction-tuned LLMs became widely available,
+when methods were either rule-based or relied on fixed representations and task-specific supervision. In recent
+years, there has been a rapid methodological transition: pretrained Transformer language models, including
+modern LLMs, are increasingly used as the backbone for log analysis. Unlike traditional approaches that heavily
+depend on templates, handcrafted features, or patterns inferred from previously observed log outputs, LLMs
+offer semantic generalization and can condition on heterogeneous evidence (e.g., logs together with tickets,
+traces/metrics, runbooks, configurations, and code/configuration context), which can be especially useful in
+modern operational workflows [20, 42, 68]. In log-centric settings, this matters because the same failure may
+surface through heterogeneous wording across components and versions, while the most useful diagnostic
+evidence is often sparse, context dependent, and embedded in long chains of runtime messages rather than in a
+single fixed template.
+retrieval
+RAG /
+Case base / KB
+/ Vector index
+Inputs: Source code context, project
+conventions, historical loga/issues
+Outputs: New/updated log statements
+(level + message + variables)
+LLM-assisted Logging
+(Logging statement
+generation & maintenance)
+{ }
+Prompting / ICL for "where/what/
+how to log"
+Retrieval of project-specific
+conventions (RAG)
+Fine-tuning on logging datasets
+Consistency checking / refactoring
+suggestions
+Policy filtering (privacy-sensitive 
+fields)
+logging
+LLM-based Log Parsing
+Inputs: Raw log lines (+ headers),
+existing template inventory
+Outputs: Templates + parameters (+
+event IDs)
+2023-10-27,10:15:30
+INFO [main]
+Connection estab-
+lished to 192.168.1.1
+on port 8080
+Template:
+"Connection established
+to <IP> on port <Port>"
+Parameters:
+('IP' : '192.168.1.1',
+'Port' : '8080')
+Event ID:E123
+Few-shot prompting for template
+extraction
+RAG with template inventory 
+/ exemplars
+Hybrid: regex/header extraction + 
+LLM parsing
+Verification / consistency checks
+Cost control: 
+batching, caching,fallback parsers
+Log Representation
+Inputs: Parsed events/templates 
+(+ parameters), windows/sessions
+Outputs: Event/window embeddings;
+structured features
+Encoder embeddings (BERT-like)
+Domain pretraining / continued
+pretraining
+Contrastive learning / metric learning
+Parameter-aware encoding
+Retrievel index construction (for
+downstream RAG)
+Downstream tasks
+risk forecast / horizonanomaly score / label
+Root cause analysis:
+Anomaly detection:
+Log summarization:
+Failure prediction:
+concise incidentranked causes +evidence narrative
+Inputs: Representations + retrieved
+evidence (tickets/metrics/traces)
+Outputs: Alerts, precictions, Fanked
+causes, summaries/actions
+Prompting on windows 
+(direct inference)
+RAG with historical incidents
+Tool / agent augmentation (query
+metrics/traces)
+Grounded generation
+Verification / uncertainty 
+Fig. 1. An overview of LLM-based log analysis across the pipeline, from logging to downstream tasks. Note that some
+downstream studies operate directly on raw or lightly normalized log windows and therefore bypass explicit log parsing.
+This shift is already visible across theentirelog-analysis pipeline. Figure 1 provides an overview of how LLMs
+are applied across the log-analysis pipeline. Upstream, LLMs are used togenerate and maintain logging
+2

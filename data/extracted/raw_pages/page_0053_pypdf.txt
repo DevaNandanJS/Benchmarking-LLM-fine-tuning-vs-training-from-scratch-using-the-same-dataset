@@ -1,0 +1,56 @@
+Machinery. ISBN 9798400719264. doi: 10.1145/3755881.3755889. URL https://doi.org/10.1145/3755881.3755889.
+[200] Lingzhe Zhang, Tong Jia, Mengxi Jia, Yifan Wu, Aiwei Liu, Yong Yang, Zhonghai Wu, Xuming Hu, Philip Yu, and Ying Li. A survey of
+aiops in the era of large language models.ACM Computing Surveys, 2025.
+[201] Lingzhe Zhang, Tong Jia, Mengxi Jia, Yifan Wu, Hongyi Liu, and Ying Li. Scalalog: Scalable log-based failure diagnosis using
+llm. InICASSP 2025 - 2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP), pages 1–5, 2025. doi:
+10.1109/ICASSP49660.2025.10888670.
+[202] Lingzhe Zhang, Tong Jia, Mengxi Jia, Yifan Wu, Hongyi Liu, and Ying Li. Xraglog: A resource-efficient and context-aware log-
+based anomaly detection method using retrieval-augmented generation. InAAAI 2025 Workshop on Preventing and Detecting LLM
+Misinformation (PDLM), 2025.
+[203] Lingzhe Zhang, Tong Jia, Kangjin Wang, Weijie Hong, Chiming Duan, Minghua He, and Ying Li. Adaptive root cause localization for
+microservice systems with multi-agent recursion-of-thought.arXiv preprint arXiv:2508.20370, 2025.
+[204] Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian Q Weinberger, and Yoav Artzi. Bertscore: Evaluating text generation with bert.arXiv
+preprint arXiv:1904.09675, 2019.
+[205] Ting Zhang, Xin Huang, Wen Zhao, Shaohuang Bian, and Peng Du. Logprompt: A log-based anomaly detection framework using
+prompts. In2023 International Joint Conference on Neural Networks (IJCNN), pages 1–8, 2023. doi: 10 .1109/IJCNN54540.2023.10191948.
+[206] Wanhao Zhang, Qianli Zhang, Enyu Yu, Yuxiang Ren, Yeqing Meng, Mingxi Qiu, and Jilong Wang. Leveraging rag-enhanced large
+language model for semi-supervised log anomaly detection. In2024 IEEE 35th International Symposium on Software Reliability
+Engineering (ISSRE), pages 168–179, 2024. doi: 10.1109/ISSRE62328.2024.00026.
+[207] Wei Zhang, Xiangyuan Guan, Lu Yunhong, Jie Zhang, Shuangyong Song, Xianfu Cheng, Zhenhe Wu, and Zhoujun Li. Lemur: Log
+parsing with entropy sampling and chain-of-thought merging, 2025. URL https://arxiv.org/abs/2402.18205.
+[208] Xiao Zhang, Qi Wang, Mingyi Li, Yuan Yuan, Mengbai Xiao, Fuzhen Zhuang, and Dongxiao Yu. Tamo: Fine-grained root cause analysis
+via tool-assisted llm agent with multi-modality observation data in cloud-native systems.IEEE Transactions on Services Computing, 18
+(6):4221–4233, 2025.
+[209] Xuchao Zhang, Supriyo Ghosh, Chetan Bansal, Rujia Wang, Minghua Ma, Yu Kang, and Saravan Rajmohan. Automated root causing
+of cloud incidents using in-context learning with gpt-4. InCompanion Proceedings of the 32nd ACM International Conference on the
+Foundations of Software Engineering, pages 266–277, 2024.
+[210] Zhaohui Zhang, Shu Chen, and Dandan Shi. LogST: Log semi-supervised anomaly detection based on sentence-BERT. In2022 6th
+International Conference on System Innovation (ICSIP), pages 356–361, 2022. doi: 10.1109/ICSIP55141.2022.9886069.
+[211] Haoyu Zheng, Guojun Chu, Haifeng Sun, Jingyu Wang, Shimin Tao, and Hao Yang. LogDAPT: Log data anomaly detection with domain-
+adaptive pretraining (industry track). InProceedings of the 24th International Middleware Conference: Industrial Track (Middleware
+’23 Industry), pages 15–21. Association for Computing Machinery, 2023. doi: 10 .1145/3626562.3626830. URL https://doi .org/10.1145/
+3626562.3626830.
+[212] Chen Zhi, Liye Cheng, Meilin Liu, Xinkui Zhao, Yueshen Xu, and Shuiguang Deng. Llm-powered zero-shot online log parsing. In2024
+IEEE International Conference on Web Services (ICWS), pages 877–887. IEEE, 2024.
+[213] Aoxiao Zhong, Dengyao Mo, Guiyang Liu, Jinbu Liu, Qingda Lu, Qi Zhou, Jiesheng Wu, Quanzheng Li, and Qingsong Wen. Logparser-
+llm: Advancing efficient log parsing with large language models. InProceedings of the 30th ACM SIGKDD Conference on Knowledge
+Discovery and Data Mining, pages 4559–4570, 2024.
+[214] Renyi Zhong, Yichen Li, Jinxi Kuang, Wenwei Gu, Yintong Huo, and Michael R. Lyu. Logupdater: Automated detection and repair of
+specific defects in logging statements.ACM Transactions on Software Engineering and Methodology, 2025. doi: 10.1145/3731754.
+[215] Renyi Zhong, Yichen Li, Guangba Yu, Wenwei Gu, Jinxi Kuang, Yintong Huo, and Michael R. Lyu. Larger is not always better: Exploring
+small open-source language models in logging statement generation.ACM Trans. Softw. Eng. Methodol., October 2025. ISSN 1049-331X.
+doi: 10.1145/3773287. URL https://doi.org/10.1145/3773287. Just Accepted.
+[216] Dahlia Ziqi Zhou and Marios Fokaefs. Ai assistants for incident lifecycle in a microservice environment: A systematic literature review.
+arXiv preprint arXiv:2410.04334, 2024.
+[217] Denny Zhou, Nathanael Sch"arli, Le Hou, Jason Wei, Nathan Scales, Xuezhi Wang, Dale Schuurmans, Claire Cui, Olivier Bousquet,
+Quoc V. Le, and Ed Chi. Least-to-most prompting enables complex reasoning in large language models, 2022. URL https://arxiv .org/
+abs/2205.10625.
+[218] Yihan Zhou, Yan Chen, Xuanming Rao, Yukang Zhou, Yuxin Li, and Chao Hu. Leveraging large language models and bert for log parsing
+and anomaly detection.Mathematics, 12(17), 2024. ISSN 2227-7390. doi: 10 .3390/math12172758. URL https://www .mdpi.com/2227-
+7390/12/17/2758.
+[219] Jieming Zhu, Pinjia He, Qiang Fu, Hongyu Zhang, Michael R. Lyu, and Dongmei Zhang. Learning to log: Helping developers make
+informed logging decisions. InProceedings of the 37th IEEE/ACM International Conference on Software Engineering. IEEE/ACM, 2015.
+doi: 10.1109/ICSE.2015.60.
+[220] Xuhang Zhu, Xiu Tang, Sai Wu, Gang Chen, Haobo Wang, Chang Yao, Quanqing Xu, and Jichen Li. CoLA: Model collaboration for
+log-based anomaly detection.Proceedings of the VLDB Endowment, 18(11):3979–3987, 2025. doi: 10.14778/3749646.3749668.
+53

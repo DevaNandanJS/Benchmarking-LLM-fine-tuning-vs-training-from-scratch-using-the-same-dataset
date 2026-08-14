@@ -1,0 +1,55 @@
+[137] Hengyi Ren, Kun Lan, Zhi Sun, and Shan Liao. Clogllm: A large language model enabled approach to cybersecurity log anomaly
+analysis. In2024 4th International Conference on Electronic Information Engineering and Computer Communication (EIECC), pages
+963–970. IEEE, 2024.
+[138] Mayra Sofia Ruiz Rodriguez, SayedHassan Khatoonabadi, and Emad Shihab. Automated file-level logging generation for machine
+learning applications using llms: A case study using gpt-4o mini, 2025. URL https://arxiv.org/abs/2508.04820.
+[139] Guoping Rong, Shenghui Gu, Haifeng Shen, He Zhang, and Hongyu Kuang. How do developers’ profiles and experiences influence
+their logging practices? an empirical study of industrial practitioners. InProceedings of the 45th International Conference on Software
+Engineering, 2023.
+[140] Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Eric Hambro, Luke Zettlemoyer, Nicola Cancedda, and
+Thomas Scialom. Toolformer: Language models can teach themselves to use tools, 2023. URL https://arxiv.org/abs/2302.04761.
+[141] Hynek Schlawack and contributors. structlog: Structured logging for python. Online documentation, 2024. URL https://
+www.structlog.org/.
+[142] Abigail See, Peter J. Liu, and Christopher D. Manning. Get to the point: Summarization with pointer-generator networks. In
+Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (ACL), volume 1, pages 1073–1083, 2017. doi:
+10.18653/v1/P17-1099.
+[143] Pratheek Senevirathne, Samindu Cooray, Jerome Dinal Herath, and Dinuni Fernando. Virtual machine proactive fault tolerance using
+log-based anomaly detection.IEEE Access, 2024.
+[144] Febrian Setianto, Erion Tsani, Fatima Sadiq, Georgios Domalis, Dimitris Tsakalidis, and Panos Kostakos. Gpt-2c: A parser for
+honeypot logs using large pre-trained language models. InProceedings of the 2021 IEEE/ACM International Conference on Advances
+in Social Networks Analysis and Mining (ASONAM 2021), pages 649–653. ACM, 2021. doi: 10 .1145/3487351.3492723. URL https:
+//dl.acm.org/doi/10.1145/3487351.3492723.
+[145] Shiwen Shan, Yintong Huo, Yuxin Su, Yichen Li, Dan Li, and Zibin Zheng. Face it yourselves: An llm-based two-stage strategy to
+localize configuration errors via logs. InProceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis,
+pages 13–25, 2024.
+[146] Shiwen Shan, Yintong Huo, Yuxin Su, Zhining Wang, Dan Li, and Zibin Zheng. Conflogger: Enhance systems’ configuration
+diagnosability through configuration logging. InProceedings of the 48th IEEE/ACM International Conference on Software Engineering
+(ICSE ’26). ACM, 2026. doi: 10.1145/3744916.3764570. URL https://arxiv.org/abs/2508.20977.
+[147] Yangyi Shao, Wenbin Zhang, Peishun Liu, Ren Huyue, Ruichun Tang, Qilin Yin, and Qi Li. Log anomaly detection method based on
+bert model optimization. In2022 7th International conference on cloud computing and big data analytics (ICCCBDA), pages 161–166.
+IEEE, 2022.
+[148] Noah Shinn, Beck Labash, Ashwin Gopinath, Karthik Narasimhan, and Shunyu Yao. Reflexion: Language agents with verbal reinforce-
+ment learning, 2023. URL https://arxiv.org/abs/2303.11366.
+[149] Mohammad Shoeybi, Mostofa Patwary, Raul Puri, Patrick LeGresley, Jared Casper, and Bryan Catanzaro. Megatron-lm: Training
+multi-billion parameter language models using model parallelism, 2019. URL https://arxiv.org/abs/1909.08053.
+[150] Honglin Shu, Dong Wang, Antonio Mastropaolo, Gabriele Bavota, and Yasutaka Kamei. An empirical study on language models for
+generating log statements in test code.ACM Transactions on Software Engineering and Methodology, 2025. doi: 10.1145/3759915.
+[151] Chengyu Song, Linru Ma, Jianming Zheng, Jinzhi Liao, Hongyu Kuang, and Lin Yang. Audit-LLM: Multi-agent collaboration for
+log-based insider threat detection.arXiv preprint, 2024. URL https://arxiv.org/abs/2408.08902.
+[152] Chengyu Song, Lin Yang, Jianming Zheng, and Fei Cai. Parse-llm: A prior-free llm parser for unknown system logs. InProceedings of the
+34th ACM International Conference on Information and Knowledge Management (CIKM 2025). ACM, 2025. doi: 10 .1145/3746252.3761363.
+URL https://dl.acm.org/doi/10.1145/3746252.3761363.
+[153] Shuang Song, Yifei Zhang, and Neng Gao. Confront insider threat: Precise anomaly detection in behavior logs based on LLM fine-tuning.
+In Owen Rambow, Leo Wanner, Marianna Apidianaki, Hend Al-Khalifa, Barbara Di Eugenio, and Steven Schockaert, editors,Proceedings
+of the 31st International Conference on Computational Linguistics, pages 8589–8601, Abu Dhabi, UAE, January 2025. Association for
+Computational Linguistics. URL https://aclanthology.org/2025.coling-main.574/.
+[154] Abhay Srivatsa and Venkatasai Gudisa. Logsense: Scalable real-time log anomaly detection architecture.
+[155] Yicheng Sui, Xiaotian Wang, Tianyu Cui, Tong Xiao, Chenghao He, Shenglin Zhang, Yuzhi Zhang, Xiao Yang, Yongqian Sun, and Dan
+Pei. Bridging the gap: LLM-powered transfer learning for log anomaly detection in new software systems. In41st IEEE International
+Conference on Data Engineering, ICDE 2025, Hong Kong, May 19-23, 2025, pages 4414–4427. IEEE, 2025. doi: 10.1109/ICDE65448.2025.00331.
+URL https://doi.org/10.1109/ICDE65448.2025.00331.
+[156] Danyu Sun, Jinghuai Zhang, Jiacen Xu, Yu Zheng, Yuan Tian, and Zhou Li. From alerts to intelligence: A novel LLM-aided framework
+for host-based intrusion detection, 2025.
+[157] Yicheng Sun, Jacky Wai Keung, Zhen Yang, Shuo Liu, and Yihan Liao. SemiSMAC: A semi-supervised framework for log anomaly detec-
+tion with automated hyperparameter tuning.Information and Software Technology, 187:107869, 2025. doi: 10 .1016/j.infsof .2025.107869.
+50

@@ -1,0 +1,50 @@
+Table 7. Summary of LLM-based anomaly detection studies organized by task category. (continued from Table 6.)
+Paper Supervised? Train? Dataset(s) evaluated Parsing? Metric(s) Base Model(s)
+Prompt-Based & In-Context Learning (Zero/Few-shot)
+LogPrompt (IJCNN) [205] Supervised Yes HDFS, BGL No F1, Acc BERT-large
+LogPrompt (ICPC) [92] Unsup No HDFS, BGL Yes F1 ChatGPT
+Setu et al. [106] Supervised Yes Apache, BGL, HDFS Yes F1, AUC GPT-3
+LogGPT (HPCC) [129] Supervised No BGL, Spirit Yes F1 GPT-3.5-turbo
+Egersdoerfer et al. [27] Supervised No Lustre No F1 GPT-3.5-turbo
+Owl [42] New Model Yes BGL, Spirit Yes F1 Owl (LLaMA)
+Fariha et al. [32] Unsup Yes HDFS Yes F1 GPT-3.5-turbo
+VMFT-LAD [143] Semi-Sup Yes VM/Server failures Yes AUC GPT-3.5-turbo
+FLEXLOG [44] Supervised Yes ADFA, SynHDFS Yes F1 Mistral-22B
+CloudAnoAgent [221] Supervised No CloudAnoBench No Acc Gemini-2.5
+Retrieval-Augmented Generation (RAG)
+RAPID [115] Semi-Sup No HDFS, BGL, ThunderbirdNo F1 BERT
+LogRag [206] Semi-Sup Yes BGL, Spirit Yes Prec, Rec, F1 GPT-3.5-turbo,
+Mistral-7B-Instruct
+RAGLog [121] Semi-Sup No BGL, Thunderbird No F1 RAG Model
+XRAGLog [202] Semi-Sup No HDFS, BGL, ThunderbirdYes F1 GPT-3.5
+Hybrid & Collaborative (Small Model + Large Model)
+LLMeLog [45] Supervised Yes HDFS, BGL, ThunderbirdYes F1 ChatGPT + BERT
+LogFormer [41] Supervised Yes HDFS, BGL, TB, GAIA No F1 S-BERT + ChatGPT
+CLogLLM [137] Unsup Yes HDFS, BGL, ThunderbirdNo F1 Qwen + GPT-3.5
+LogLLM [39] Supervised Yes HDFS, BGL, TB, Liberty No F1 BERT + LLaMA-3
+AdaptiveLog [101] Supervised Yes BGL, Thunderbird No F1 BERT + ChatGPT
+LogRules [57] Supervised Yes BGL, Spirit No F1 GPT-4o + LLaMA-3
+LogADRef [89] Supervised Yes BGL, HDFS, Spirit, TB Yes F1 RoBERTa + GPT2
+SemiRALD [158] Supervised Yes HDFS, BGL Yes F1 ChatGPT + BERT
+LogSynergy [155] Supervised Yes Three production
+datasets, BGL, Thunder-
+bird, Spirit
+Yes F1 ChatGPT-4o
+CLSLog [183] Supervised Yes BGL, Zookeeper No F1 BERT + Qwen
+LEMAD [61] Semi-Sup Yes State Grid Corp Yes F1 BERT + GPT-4o
+CoLA [220] Supervised Yes HDFS, BGL, Spirit Yes F1 LLaMA-3 + GPT-4o
+LUK [98] Supervised Yes BGL, Spirit, ThunderbirdYes F1 GPT-3.5 + Expert
+SemiSMAC [157] Supervised Yes BGL, HDFS, Spirit Yes F1 GPT-4-turbo
+Agentic, Reasoning & Neuro-Symbolic Frameworks
+Audit-LLM [151] Unsup No CERT r4.2/5.2 No F1 GPT-3.5 (Agent)
+WebNorm [88] Semi-Sup No TrainTicket, NiceFish Yes F1 GPT-3.5 (Agent)
+LogRESP-Agent [76] Semi-Sup Yes EVTX-ATTACK No F1, TPR Gemini-2.0-Flash
+Song et al. [153] Supervised Yes CERT v6.2 No F1 ChatGLM-6B
+SHIELD [156] Supervised Yes DARPA-E3, ATLASv2 Yes Prec DeepSeek-R1
+LogReasoner [100] Supervised Yes BGL, Spirit No F1 Qwen2.5-1.5B
+Data Generation, Benchmarks & Visions
+Karlsen et al. [68] Supervised Yes CSIC, Thunderbird, BGLYes F1 RoBERTa/GPT
+LogEval [20] Supervised No BGL, Thunderbird No F1 GPT-4
+AD-LLM [193] Semi-Sup Yes News, Reviews, Spam No AUC LLaMA-3/GPT-4o
+AnomalyGen [81] Supervised Yes Hadoop, HDFS Yes F1 GPT-4o
+32

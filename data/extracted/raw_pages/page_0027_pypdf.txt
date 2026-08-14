@@ -1,0 +1,79 @@
+granularity) or from static↔variable boundary mismatches in templates [213]. A few prompting-based parsers
+reportPTA/RTAas template-level precision/recall variants that emphasize strict template recovery (often stricter
+than PA) [123, 188]. When parsing is formulated as token labeling,F1evaluates whether parameter boundaries
+are identified correctly [144]. And for clustering-style evaluation,RI(Rand Index) measures pairwise agreement
+of the predicted vs. oracle partition (together vs. apart) [ 42, 164]. Even within log parsing, direct cross-paper
+comparison remains limited because studies differ in datasets, online versus offline settings, oracle template
+definitions, grouping policies, and which metrics they report.
+6 Downstream Log Analysis Tasks
+Feedback loop: cache, updated templates/embeddings, retrieved similar incidents
+Direct raw-text / event-sequence text to LLM
+STAGE 2 - Log Representation
+(machine-consumable features) STAGE 3 - LLM-enabled
+STAGE 1 - Partition into STAGE 4 - Action for
+A) Symbolic sequence:
+(skip explicit features)
+sessions / windows
+event IDs / templates
+event counts, n-grams,parameter statistics
+B) Feature vector:
+modules/ threads/ processes
+Task Inference
+timeline + affected
+grounded evidence
+· Incident report /
+incident summary;
+· Identifier-based:
+(service/change/
+handoff summary
+Parsed Logs
+rollback / restart /
+resource reallocation
+On-call / SRE
+· Window-based: 3) Root Cause
+(templates +
+Summarization
+· Trigger alertspotential failuresparameters)
+ranked suspects
+anomaly label /
+1) Anomaly
+within horizon
+time-based or
+count-based
+windowing
+· Mitigation:
+key events +
+componentstemplate) +
+2) Failure
+Prediction
+request ID /
+trace-span ID /
+block ID
+Analysis
+Detection
+mixed sources:
+4) Log
+alert
+x*
+..
+o
+C) Embedding-based
+via pooling/attentionsequence embedding
+Classic: token-based
+event embeddingLLM: contextual
+embeddings
+Fig. 5. A common workflow for LLM-enabled downstream log analysis.
+Downstream log analysis aims to turn high-volume log evidence into actionable signals. Many pipelines
+operate on parsed templates and parameters, while some LLM-based approaches work directly with raw, lightly
+normalized, or embedded log windows. In this survey, we focus on four representative tasks:anomaly detection
+(flagging abnormal log sequences or windows),failure prediction(forecasting failures within a future time
+horizon),root cause analysis(identifying the most likely cause or component of an incident and justifying
+it with evidence), andlog summarization(compressing large log windows into concise, operator-friendly
+summaries).
+Challenges motivating the shift toward LLMs.Historically, operators often relied on keyword search and
+manual inspection, which is fragile under message vocabulary variation and scale [ 47]. Rule-based analytics
+can be efficient but are brittle under format drift and hard to adapt across systems, especially when log formats
+and templates evolve over time [21, 46]. Learning-based detectors and predictors improve automation, yet they
+often depend on careful feature engineering, stable parsing/representation choices, and sufficient labeled data,
+and can still be sensitive to log evolution [118]. They may also struggle to provide human-friendly explanations,
+27

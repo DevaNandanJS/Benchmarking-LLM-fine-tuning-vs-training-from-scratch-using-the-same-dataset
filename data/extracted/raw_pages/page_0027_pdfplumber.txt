@@ -1,0 +1,47 @@
+granularity)orfromstatic↔variableboundarymismatchesintemplates[213].Afewprompting-basedparsers
+reportPTA/RTAastemplate-levelprecision/recallvariantsthatemphasizestricttemplaterecovery(oftenstricter
+thanPA)[123,188].Whenparsingisformulatedastokenlabeling,F1evaluateswhetherparameterboundaries
+areidentifiedcorrectly[144].Andforclustering-styleevaluation,RI(RandIndex)measurespairwiseagreement
+ofthepredictedvs.oraclepartition(togethervs.apart)[42,164].Evenwithinlogparsing,directcross-paper
+comparisonremainslimitedbecausestudiesdifferindatasets,onlineversusofflinesettings,oracletemplate
+definitions,groupingpolicies,andwhichmetricstheyreport.
+6 DownstreamLogAnalysisTasks
+Feedback loop: cache, updated templates/embeddings, retrieved similar incidents
+STAGE 2 - Log Representation
+(machine-consumable features) STAGE 3 - LLM-enabled
+Task Inference
+A) Symbolic sequence:
+event IDs / templates 1) Anomaly 2) Failure
+Detection Prediction
+STAGE 1 - Partition into
+Parsed Logs sessions / windows STAGE 4 - Action for
+(templates + On-call / SRE
+parameters) · Id re e q n u t e if s ie t r ID -b a / sed: B ev ) e F n e t a c t o u u re n t v s e , c n t - o gr r a : ms, anomaly label / potential fa o ilures · Trigger alerts
+t b r l a o c c e k - s ID pan ID / parameter statistics alert within horizon .. · r M ol i l t b i a g c a k t i / o r n e : start /
+· Window-based: 3) Root Cause 4) Log resource reallocation
+modu m le i s x / e th d r e s a o d u s/ r p c r e o s c : esses t c i o m u e n - t b - a b s a e s d e d or C) Embedding-based Analysis Summarization · I h n a c n id d e o n ff t s re u p m o m rt a / ry
+windowing Classic: token-based
+embeddings
+* x
+ranked suspects incident summary;
+LLM: contextual (service/change/ key events +
+event embedding template) + timeline + affected
+sequence embedding grounded evidence components
+via pooling/attention
+Direct raw-text / event-sequence text to LLM
+(skip explicit features)
+Fig.5. AcommonworkflowforLLM-enableddownstreamloganalysis.
+Downstream log analysis aims to turn high-volume log evidence into actionable signals. Many pipelines
+operateonparsedtemplatesandparameters,whilesomeLLM-basedapproachesworkdirectlywithraw,lightly
+normalized,orembeddedlogwindows.Inthissurvey,wefocusonfourrepresentativetasks:anomalydetection
+(flaggingabnormallogsequencesorwindows),failureprediction(forecastingfailureswithinafuturetime
+horizon),rootcauseanalysis(identifyingthemostlikelycauseorcomponentofanincidentandjustifying
+it with evidence), and log summarization (compressing large log windows into concise, operator-friendly
+summaries).
+ChallengesmotivatingtheshifttowardLLMs.Historically,operatorsoftenreliedonkeywordsearchand
+manualinspection,whichisfragileundermessagevocabularyvariationandscale[47].Rule-basedanalytics
+canbeefficientbutarebrittleunderformatdriftandhardtoadaptacrosssystems,especiallywhenlogformats
+andtemplatesevolveovertime[21,46].Learning-baseddetectorsandpredictorsimproveautomation,yetthey
+oftendependoncarefulfeatureengineering,stableparsing/representationchoices,andsufficientlabeleddata,
+andcanstillbesensitivetologevolution[118].Theymayalsostruggletoprovidehuman-friendlyexplanations,
+27

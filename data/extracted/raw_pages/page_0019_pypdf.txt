@@ -1,0 +1,45 @@
+In summary, LLM-based approaches for logging differ not only in which tasks they tackle, but also in how
+they expose code, context, and prior examples to the model. Fine-tuned generators encode logging patterns into
+model parameters and jointly model location, level, message, and variables, which helps with where-to-log and
+what-to-log decisions but increases training cost and reduces portability. ICL methods exploit style imitation and
+adapt quickly to project conventions, but are sensitive to prompt and example quality. CoT, static context, and
+slicing ground placement and variable choices in control/data-flow evidence, improving semantic grounding at the
+cost of additional system complexity. Retrieval-augmented subtasks improve consistency for levels and messages
+through project-specific neighbors, but depend on retrieval quality. Agentic pipelines support how-to-log and
+maintenance by decomposing detection, classification, explanation, and repair, but introduce more moving parts
+and validation needs. These mechanisms collectively explain why LLMs can address long-standing challenges in
+where-to-log, what-to-log, and how-to-maintain-logs that were difficult to handle with hand-crafted rules or
+traditional ML alone.
+Across studies, the key shift introduced by LLMs is not raw generation capability but the ability to treat logging
+intent as a semantic inference problem instead of a syntactic insertion task. The most effective approaches
+consistently constrain and inform LLMs using execution-aware context, project-specific exemplars, or multi-
+step control, instead of relying on unconstrained generation. At the same time, LLMs do not eliminate the
+ambiguity of logging decisions but relocate difficulty from rule design to context selection, validation, and
+oversight, pointing toward hybrid, iterative maintenance workflows as a common design pattern.
+4.4 Performance Evaluation Metrics
+For automated logging, evaluation has gradually shifted from “exact-match-centric” reporting to a more nuanced,
+component-wise view. Early end-to-end generators often borrowed machine translation-style metrics (e.g., n-gram
+overlap such as BLEU [122]) because the task was framed as producing a single reference-like statement for each
+context. However, as LLM-based methods moved to prompt-based generation and multi-log settings, two issues
+became hard to ignore: (1) logging is inherently under-specified (multiple insertion points or phrasings can be
+equally reasonable), and (2) surface-form metrics are brittle (semantically correct messages can score poorly due
+to paraphrasing). As a result, more recent evaluations increasingly combine strict metrics (for comparability) with
+softer, semantics-aware ones (for faithfulness), such as embedding-based similarity metrics like BERTScore [204].
+Below, we summarize the most widely adopted metrics for each aspect and highlight what they capture (and
+what they miss).
+Forlogging-statement position, the de facto metric isPosition Accuracy (PA): whether the predicted
+insertion point matches the reference point at an agreed granularity (often statement/block instead of exact line).
+PA is easy to interpret and facilitates comparability across papers, so it remains a useful headline number. However,
+PA becomes less informative once methods are allowed to output multiple logs or “no log” decisions, because
+the problem is no longer a single-label prediction. In such cases, it is more appropriate to treat placement as a
+set prediction problem and reportprecision/recall/F1over predicted logging-statement position. This directly
+exposes two practically relevant failure modes: over-instrumentation (low precision) and under-instrumentation
+(low recall).
+Forlog level,Level Accuracy (LA)(or L-ACC) is the simplest and most commonly reported metric. Yet
+log levels are not purely categorical in practice: they have an ordinal meaning (e.g., predicting WARN when
+the reference is ERROR is typically less harmful than predicting DEBUG). Therefore, modern evaluations often
+complement LA with an ordinal-distance metric, such asAverage Ordinal Distance (AOD), to quantify the
+extent to which predictions deviate along a severity scale. In addition, because log levels can be imbalanced (e.g.,
+INFO dominates), macro-F1 or per-class reporting is often more diagnostic than a single LA number when the
+goal is to understand behavior on rare but critical levels.
+19

@@ -1,0 +1,55 @@
+[13] MarkChen,JerryTworek,HeewooJun,QimingYuan,HenriquePondedeOliveiraPinto,JaredKaplan,HarriEdwards,YuriBurda,
+NicholasJoseph,GregBrockman,AlexRay,RaulPuri,GretchenKrueger,MichaelPetrov,HeidyKhlaaf,GirishSastry,PamelaMishkin,
+BrookeChan,ScottGray,NickRyder,MikhailPavlov,AletheaPower,LukaszKaiser,MohammadBavarian,ClemensWinter,Philippe
+Tillet,FelipePetroskiSuch,DaveCummings,MatthiasPlappert,FotiosChantzis,ElizabethBarnes,ArielHerbert-Voss,WilliamHebgen
+Guss,AlexNichol,AlexPaino,NikolasTezak,JieTang,IgorBabuschkin,SuchirBalaji,ShantanuJain,WilliamSaunders,Christopher
+Hesse,AndrewN.Carr,JanLeike,JoshAchiam,VedantMisra,EvanMorikawa,AlecRadford,MatthewKnight,MilesBrundage,Mira
+Murati,KatieMayer,PeterWelinder,BobMcGrew,DarioAmodei,SamMcCandlish,IlyaSutskever,andWojciechZaremba.Evaluating
+largelanguagemodelstrainedoncode.arXivpreprintarXiv:2107.03374,2021.URLhttps://arxiv.org/abs/2107.03374.
+[14] SongChenandHaiLiao.Bert-log:Anomalydetectionforsystemlogsbasedonpre-trainedlanguagemodel.AppliedArtificialIntelligence,
+36(1):2145642,2022.doi:10.1080/08839514.2022.2145642.URLhttps://www.tandfonline.com/doi/full/10.1080/08839514.2022.2145642.
+[15] XiaoleiChen,JieShi,JiaChen,PengWang,andWeiWang. Epas:Efficientonlinelogparsingviaasynchronousschedulingofllm
+queries.InProceedingsofthe41stIEEEInternationalConferenceonDataEngineering(ICDE2025),pages4025–4037.IEEE,2025.doi:
+10.1109/ICDE.2025.00318.URLhttps://ieeexplore.ieee.org/abstract/document/11113127.
+[16] YinfangChen,HuaibingXie,MinghuaMa,YuKang,XinGao,LiuShi,YunjieCao,XuedongGao,HaoFan,MingWen,etal.Automatic
+rootcauseanalysisvialargelanguagemodelsforcloudincidents.InProceedingsoftheNineteenthEuropeanConferenceonComputer
+Systems,pages674–688,2024.
+[17] KevinClark,Minh-ThangLuong,QuocVLe,andChristopherDManning.Electra:Pre-trainingtextencodersasdiscriminatorsrather
+thangenerators.arXivpreprintarXiv:2003.10555,2020.
+[18] ClaraCorbelle,VictorCarneiro,andFidelCacheda.Semantichierarchicalclassificationappliedtoanomalydetectionusingsystem
+logswithabertmodel.AppliedSciences,14(13),2024.ISSN2076-3417.doi:10.3390/app14135388.URLhttps://www.mdpi.com/2076-
+3417/14/13/5388.
+[19] TianyuCui,RuoweiFu,ChangchangLiu,YuheJi,WenweiGu,ShenglinZhang,YongqianSun,andDanPei.Aetherlog:Log-basedroot
+causeanalysisbyintegratinglargelanguagemodelswithknowledgegraphs.In2025IEEE36thInternationalSymposiumonSoftware
+ReliabilityEngineering(ISSRE),pages49–60.IEEE,2025.
+[20] TianyuCui,ShiyuMa,ZiangChen,TongXiao,ChenyuZhao,ShiminTao,YilunLiu,ShenglinZhang,DuomingLin,ChangchangLiu,
+YuzheCai,WeibinMeng,YongqianSun,andDanPei.Logeval:Acomprehensivebenchmarksuiteforllmsinloganalysis.Empirical
+Softw.Engg.,30(6),October2025.ISSN1382-3256.doi:10.1007/s10664-025-10701-6.URLhttps://doi.org/10.1007/s10664-025-10701-6.
+[21] HetongDai,HengLi,Che-ShaoChen,WeiyiShang,andTse-HsunChen.Logram:Efficientlogparsingusing𝑛n-gramdictionaries.
+IEEETransactionsonSoftwareEngineering,48(3):879–892,2020.
+[22] Delganandcontributors.loguru:Pythonloggingmadesimple.Onlinedocumentation,2024.URLhttps://github.com/Delgan/loguru.
+[23] TimDettmers,ArtidoroPagnoni,AriHoltzman,andLukeZettlemoyer. Qlora:Efficientfinetuningofquantizedllms,2023. URL
+https://arxiv.org/abs/2305.14314.
+[24] JacobDevlin,Ming-WeiChang,KentonLee,andKristinaToutanova.Bert:Pre-trainingofdeepbidirectionaltransformersforlanguage
+understanding.InProceedingsofthe2019conferenceoftheNorthAmericanchapteroftheassociationforcomputationallinguistics:human
+languagetechnologies,volume1(longandshortpapers),pages4171–4186,2019.
+[25] ShengchengDuan,YihuaXu,ShengZhang,ShenWang,andYueDuan.Pdlogger:Automatedloggingframeworkforpracticalsoftware
+development,2025.URLhttps://arxiv.org/abs/2507.19951.
+[26] YiqiDuan,JianliangXu,ChangyuFan,andZixinLiu.Unsupervisedlogparsingbasedonlargelanguagemodelsandentropy.In2025
+11thInternationalSymposiumonSystemSecurity,Safety,andReliability(ISSSR),pages1–10.IEEE,2025.
+[27] ChrisEgersdoerfer,DiZhang,andDongDai.EarlyexplorationofusingChatGPTforlog-basedanomalydetectiononparallelfilesystems
+logs.InProceedingsofthe32ndInternationalSymposiumonHigh-PerformanceParallelandDistributedComputing(HPDC’23),pages
+315–316.AssociationforComputingMachinery,2023.doi:10.1145/3588195.3595943.URLhttps://doi.org/10.1145/3588195.3595943.
+[28] MaryamEkhlasi,AnuragPrakash,MaximeLamothe,andMichelDagenais.Insightai:Rootcauseanalysisinlargelogfileswithprivate
+datausinglargelanguagemodel.In2025IEEE/ACM4thInternationalConferenceonAIEngineering–SoftwareEngineeringforAI(CAIN),
+pages31–41,2025.doi:10.1109/CAIN66642.2025.00012.
+[29] MahmoudrezaEntezami,ShahabeddinRahimiHarsini,DavidHoushangi,andZahraEntezami. Anovelframeworkfordetecting
+anomaliesinnetworksecurityusingLLManddeeplearning.JournalofElectricalSystems,21(1s):294–302,2025.doi:10.52783/jes.8791.
+[30] KawinEthayarajh.Howcontextualarecontextualizedwordrepresentations?comparingthegeometryofBERT,ELMo,andGPT-2
+embeddings. InProceedingsofthe2019ConferenceonEmpiricalMethodsinNaturalLanguageProcessingandthe9thInternational
+JointConferenceonEmpiricalMethodsinNaturalLanguageProcessingandthe9thInternationalJointConferenceonNaturalLanguage
+Processing(EMNLP-IJCNLP),pages55–65,HongKong,China,November2019.AssociationforComputationalLinguistics. doi:
+10.18653/v1/D19-1006.
+[31] EuropeanParliamentandCounciloftheEuropeanUnion.Regulation(eu)2016/679oftheeuropeanparliamentandofthecouncil(general
+dataprotectionregulation).OfficialJournaloftheEuropeanUnion,L119,2016.URLhttps://eur-lex.europa.eu/eli/reg/2016/679/oj.
+44

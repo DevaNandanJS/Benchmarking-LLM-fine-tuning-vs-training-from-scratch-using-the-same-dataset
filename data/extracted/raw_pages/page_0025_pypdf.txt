@@ -1,0 +1,46 @@
+decision spaces such as candidate/template detection prompts (e.g., LLM-TD [169]) or rule-augmented prompting
+(e.g., LogRules [57]). In effect, adaptive ICL shifts the core engineering problem from “design a single good prompt”
+to “design a goodretriever/samplerfor prompts”, which improves coverage but introduces a new dependency on
+selection quality and context-budget constraints.
+5.3.4 Retrieval/refinement-oriented unsupervised parsing: reducing labels via self-generated context and iterative
+correction.A third family targets the no-label regime by replacing curated demonstrations with retrieval and
+refinement loops. Instead of supplying ground-truth templates as exemplars, these methods retrieve representative
+logs (or groups of logs) as contextual anchors and let the LLM infer templates from the retrieved context.
+LogBatcher [184] is representative: it performs demonstration-free parsing by retrieving or grouping similar
+logs and querying the LLM only on representative instances, thereby reducing both labeling and query volume.
+LibreLog [104] pushes this direction further with open-source models: it combines retrieval-augmented parsing
+with iterative self-reflection and a template memory, using refinement to compensate for missing labels while
+improving efficiency and privacy. Related work employs the same approach via self-generated ICL and self-
+correction mechanisms (e.g., AdaParser [182]) or via unsupervised template repositories that accumulate reusable
+templates over time [54].
+A recurring observation is that “unsupervised” here is rarely “single-shot”. Effectiveness hinges on the quality
+of upstream grouping/retrieval: if retrieved logs mix multiple templates, the model may output an averaged,
+over-general template. If retrieval is too narrow, variables may be frozen as constants. Consequently, many
+approaches couple retrieval with explicitgrouping and correctionstrategies, such as embedding-driven clustering
+before template generation (e.g., HELP [ 186]), entropy- or structure-guided grouping followed by template
+merging/refinement (e.g., Lemur [207] and entropy-based correction pipelines [26]), and memory-based reuse to
+converge toward stable inventories over long streams [54, 104]. In effect, these parsers trade manual labels for
+approach-level iteration: retrieval/grouping proposes candidate structure, while refinement/memory stabilizes
+templates across time and workload shifts.
+5.3.5 System-level efficiency layers: grouping, caching, scheduling, and agentic decomposition.Across the paradigms
+above, many approaches add system-level layers that make LLM parsing feasible in online or high-volume
+settings. These layers are orthogonal to the main learning paradigm: a parser may use prompting, ICL, or
+retrieval/refinement while also caching templates, grouping similar messages, scheduling LLM calls, or using
+tools to decompose the workflow.
+A common pattern is to explicitlyreusepast results to amortize LLM queries and stabilize outputs. LILAC [ 64]
+exemplifies this engineering pattern: it combines accuracy-oriented ICL (via carefully selected demonstrations)
+with an adaptive parsing cache that stores and refines templates over time, reducing repeated calls for recurring
+patterns while improving consistency under streaming workloads. Some approaches attach a template repository
+to zero-shot prompting so previously derived templates can be looked up and reused [212], while unsupervised
+parsers can rely on a template database to eliminate labeled demonstrations but still exploit reuse across the stream
+(e.g., Huang et al. [54]). Other approaches reduce open-ended generation by narrowing the search space, e.g., by
+prompting the model to identify multiple templates from a batch or from candidate structures (LLM-TD [169]), or
+by coupling semantic modeling with adaptive caching for robustness under drift [75].
+Grouping-based approaches parse only a small set of representative logs and propagate templates to the rest.
+LogParser-LLM [213] is representative of this family, using grouping and multi-step prompting to balance template
+fidelity against query volume. Beyond grouping, execution-layer optimizations target tail latency and inference
+overhead. EPAS [15] frames online parsing as an asynchronous scheduling problem, while other lines optimize
+prefix/KV-cache reuse or agentic decomposition (e.g., InferLog [177] and Parse-LLM [152]). The key trade-off is
+error amplification: once an incorrect template is cached, propagated, or promoted into memory, reuse layers
+can spread it widely. Hence, practical approaches typically require cache update policies, validation/refinement
+25

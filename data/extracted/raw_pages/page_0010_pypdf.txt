@@ -1,0 +1,44 @@
+3.2 Evolution of LLMs: Architectures and Training Stages
+Transformer backbones for long-context log modeling.Most LLM-based log-analysis methods build on
+Transformer architectures [170], whose self-attention mechanism supports scalable contextual modeling across
+long input windows. This matters for logs because useful cues can be far apart (e.g., an early warning followed
+by a later error burst), and multi-line context often changes the meaning of individual events [170].
+Encoder-only models: masked language modeling and contextual embeddings.Encoder-only pretrain-
+ing with masked language modeling (MLM), popularized by BERT [ 24] and its variants (e.g., RoBERTa [ 95],
+ELECTRA [17]), learns bidirectional contextual representations. Compared with decoder-only chat-style LLMs,
+encoder-only models typically have fewer parameters and lower inference cost, and some log-analysis papers
+therefore refer to them aspretrained language models (PLMs), not LLMs. However, since they are still substan-
+tially larger than traditional log models and have a large body of log-centric research, we treat them as part
+of the broader LLM family in this survey [130]. In log analytics, encoder-only LMs are most useful as efficient
+representation and scoring backbones [24, 40]. Their pretraining objectives can support semi- or unsupervised
+anomaly signals, while their embeddings support retrieval, clustering, and lightweight downstream heads for
+anomaly/failure classification when some supervision exists [17, 24, 40, 69, 135].
+Encoder–decoder models: conditional generation and structured transformation.Encoder–decoder
+Transformers generalize from representation learning to conditional generation: an encoder ingests the input
+sequence and a decoder produces an output sequence [160, 170]. Representative families include T5 [134] and
+BART [78], which are typically trained with denoising or text-to-text objectives [ 78, 134, 171]. For logs, this
+paradigm is most relevant when the task transforms one textual form into another: incident summarization,
+noisy-message normalization, structured extraction, or template-like rewriting conditioned on surrounding
+context [78, 134, 142].
+Decoder-only models: autoregressive pretraining and general-purpose assistance.Decoder-only autore-
+gressive LMs dominate interactive settings because they are flexible under prompting and can be scaled to strong
+instruction-following behavior [11, 66]. Representative examples include the GPT family [11] and open-weight
+decoder models such as LLaMA-style backbones [ 167]. For log analysis, they are attractive when workflows
+require open-ended reasoning, hypothesis generation, retrieval-augmented triage, remediation suggestions, or
+multi-turn operator interaction, especially when labeled data is scarce [120, 180]. The trade-off is higher inference
+cost and latency, which motivates selective escalation and hybrid designs discussed later [149].
+Key capabilities that matter for log tasks.Across architectures, several capabilities are particularly relevant to
+log analysis [10, 79, 116, 120, 181, 194]:(1) semantic normalization and abstraction—mapping heterogeneous
+phrasings to consistent meanings and grouping variants of the same issue.(2) contextual disambiguation—
+interpreting the same token differently depending on surrounding components, timestamps, and execution
+context (crucial under drift).(3) evidence integration over long contexts—integrating signals across many
+lines and multiple sources (logs, traces, metrics, tickets), typically mediated by windowing or retrieval in practice.
+(4) controllable outputs—producing operator-facing artifacts (ranked lists, extracted entities, timelines) instead
+of only free-form text.(5) reasoning and decomposition—breaking complex tasks into steps (form hypotheses,
+retrieve context, verify, refine), which underpins agentic log analysis pipelines.(6) software and code aware-
+ness—understanding stack traces, API names, configuration keys, and common failure modes, enabling more
+actionable interpretation than purely surface-level text matching [13].
+3.3 LLM Capability and Specialization Taxonomy for Log Analytics
+LLMs used in log analysis can be grouped by specialization level, which often determines where they fit in the
+log pipeline [10].
+10

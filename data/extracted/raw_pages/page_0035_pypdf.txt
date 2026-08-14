@@ -1,0 +1,43 @@
+6.3.2 LLM-based Approaches for Failure Prediction.Compared with anomaly detection, failure prediction must
+explicitly optimize lead time and horizon awareness: a useful predictor should raise early warnings sufficiently
+ahead of a failure event while controlling false alarms. Consequently, papers often report ranking/probabilistic
+metrics (e.g., AUC) and sometimes assess whether the model can provide actionable context (time-to-failure,
+likely causes).
+Generative prediction of crash events and causes.CrashEventLLM casts failure prediction as a text gen-
+eration problem: given preceding logs, the model predicts forthcoming crash-related information (e.g., time
+and cause) using an instruction-tuned LLaMA backbone, and evaluates generation quality with ROUGE-style
+metrics. [114] This formulation is attractive when operators want human-consumable explanations, but it also
+raises a methodological question: lexical-overlap metrics (e.g., ROUGE) may not faithfully reflect correctness of
+timestamps/causal factors, so future work may benefit from structured evaluation (e.g., exact match on failure
+type/time bins, and evidence grounding).
+Discriminative early warning from language-model representations.FALL proposes a language-model-
+based detector that outputs an early-warning score (reported with AUC-style evaluation) to detect imminent
+failures in large-scale systems. [60] In this design, the PLM (e.g., ELECTRA-style encoders) provides a robust
+representation of evolving log patterns, and the predictor focuses on separating pre-failure prefixes from normal
+operation. Conceptually, this parallels semi-supervised anomaly detection, but with labels aligned to future failure
+windows (pre-failure vs. non-pre-failure), making horizon definition and data leakage control (e.g., avoiding
+post-failure artifacts) especially important.
+Leveraging operational context beyond application logs.Combining LLMs and shell logs for backup-failure
+prediction highlights another practical pattern: operational failures are often best predicted using heterogeneous
+telemetry, where shell commands, job traces, and system events provide context that is not present in application
+logs alone. [35] Here, an LLM can serve as a semantic integrator for noisy, free-form operational traces, potentially
+improving feature robustness and interpretability.
+From anomaly detection to proactive fault tolerance.VMFT-LAD (Virtual Machine Proactive Fault Tolerance
+Using Log-Based Anomaly Detection) connects anomaly scoring with proactive mitigation for virtualized envi-
+ronments, treating detected abnormal patterns as early signals to trigger fault-tolerance actions (e.g., proactive
+migration or resource adjustment).[143] Although framed around anomaly detection, the operational goal aligns
+with failure prediction: catch the system early enough to intervene. This line suggests a promising integration
+point: LLM-based detectors could be paired with decision policies (rule-based or learned) that explicitly optimize
+lead time, cost, and risk.
+The current failure prediction literature using LLMs is still sparse and heterogeneous. Most works either (i)
+reuse LLM representations for discriminative early warning, or (ii) exploit instruction-following to generate
+human-readable failure explanations. A key open challenge is establishing consistent evaluation that jointly
+measures predictive quality, timeliness, and actionability, under realistic constraints such as log evolution,
+partial observability, and cross-component dependency.
+6.4 Root Cause Analysis / Failure Diagnosis
+6.4.1 Task definition.Root cause analysis (RCA) / Failure diagnosis aims to identify the most likely underlying
+cause(s) of an observed incident and provide actionable, operator-facing evidence. The goal is not only to name a
+suspect (e.g., component/change/event type), but also tojustifyit with grounded signals so that time-to-mitigation
+can be reduced. In this survey, multimodal RCA studies are discussed in this subsection when runtime logs are
+used directly or indirectly as part of the operational evidence.
+35

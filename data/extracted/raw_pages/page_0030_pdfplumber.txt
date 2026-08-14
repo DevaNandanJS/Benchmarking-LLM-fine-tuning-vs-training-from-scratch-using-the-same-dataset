@@ -1,0 +1,44 @@
+interfacethatmultipledownstreamtasks(anomalydetection,failurediagnosis,summarization)canshare.In
+practice,BigLog-stylepretrainingcanbeviewedasamiddlegroundbetween“classicfeatures”and“prompt
+onrawtext”:itkeepsinferenceefficient(fixed-lengthembeddings)whileimprovingsemanticrobustnessand
+portabilityatscale.
+Skippingexplicitfeatures:directraw-textorevent-sequencetextasinput.Finally,someLLM-based
+approachespartiallyorfullybypasshandcraftedfeatureconstructionbyfeedinganLLMtherawlogwindow(ora
+textformoftheeventsequence)andpromptingittoperformthedownstreamtaskdirectly.Thisdesigncanpreserve
+richercontextandenableexplanation-orientedoutputs,butitintroducesnewconstraints:longcontextsrequire
+carefulwindowing,summarization,orretrievaltocontrolnoiseandcost,andonlinedeploymentmaydemand
+additionalcompressionorcachingmechanisms.Overall,representationchoicestradeoffefficiency,robustness,
+andfidelity.Thus,manyrecentapproachescombinecompactclassicfeatureswithcontextualembeddingsor
+selectiveraw-textreasoning,dependingontaskrequirementsandoperationalbudgets.
+6.2 AnomalyDetection
+6.2.1 Taskdefinition. Loganomalydetectionidentifiesunexpected orundesired systembehaviorpatternsfrom
+logs.Suchanomaliestypicallyindicatepotentialfaults,misconfigurations,performanceregressions,orother
+conditionsthatviolatetheexpectednormalexecution,andthusserveasearlysignalsforreliabilitytriage.
+Givenasessionized(orwindowed)logsequence𝑆 =⟨(𝑒 𝑖 ,𝑡 𝑖 ,𝑝 𝑖)⟩ 𝑖 𝑛 =1 ,where𝑒 𝑖 isaparsedevent/template(or
+therawlogmessage),𝑡 𝑖 isthetimestamp,and𝑝 𝑖 areoptionalparameters,thetaskoutputseither(i)ananomaly
+score𝑎(𝑆)orabinarylabel𝑦 ∈ {0,1}indicatingwhetherthesequenceisabnormal,andoptionally(ii)localized
+evidencesuchassuspiciouspositionsI ⊆ {1,...,𝑛}(orkeytemplates/snippets)tosupportdebugging.
+Inpractice,anomalydetectionisusuallyreactive:itflagsabnormalstatesorbehaviorpatternsinobservedlogs
+(ofteninunsupervisedorweaklysupervisedsettings),withoutnecessarilypredictingwhether/whenaconcrete
+failurewilloccur.
+6.2.2 LLM-based Approaches for Anomaly Detection. Table 6–7 summarizes LLM-based anomaly detection
+studies.Acrosstheseworks,acommonpipelineis:(i)partitionlogsintosessions/windows,(ii)encodeeach
+sequenceintoarepresentation(templates,embeddings,orrawtext),(iii)computeananomalysignal(score/label),
+and(iv)optionallyreturnevidence (highlightedlines,retrievedneighbors,orexplanations)tosupporttriage.
+Existingapproachesmainlydifferalongfourdesignaxes:(1)representationinterface(parsedtemplatesvs.
+rawtext),(2)supervisionsetting(fullysupervisedwithbothnormal/anomalouslabelsvs.semi-supervised/one-
+classsettingsthattrainmostlyoronlyonnormal data,vs.unsupervisedsettings),(3)adaptation/training
+strategy(fine-tuning/prompt-tuningvs.keepingtheLLMfrozenandusingitinatraining-freemanner),and(4)
+inferenceform(discriminativeclassification,likelihood/perplexityscoring,prompting/ICL,retrieval,oragentic
+reasoning).Notably,prompting/in-contextlearning(ICL)islargelyorthogonaltosupervision,and“training”
+isnotsynonymouswith“supervision”:(i)manymethodstrainmodelswithoutusingtasklabels(e.g.,further
+pretrainingorcontrastivelearningonrelatedunlabeledlogs/corpora),and(ii)somemethodsaretraining-free
+butstillsupervisedatinferencetimebyusinglabeledexemplarsasdemonstrationsinICL.Notethatboundaries
+arenotstrict:manysystemscombinemultiplemechanisms(e.g.,encoderembeddings+prompting,orretrieval+
+generation).
+Discriminative and representation-learning encoders. A large body of work uses pretrained encoders
+(typicallyBERT-like)tomaplogeventsoreventsequencesintoembeddings,followedbyaclassifierorsequence
+modelforanomalyprediction.Representativeexamplesthatoperateonparsedtemplatesandlearndiscriminative
+decisionboundariesincludeHitAnomaly[55],SwissLog[80],andHilBERT[56].Severalstudiesadaptoroptimize
+the encoder/sequence modeling pipeline, such as BERT-Log [14], Prog-BERT-LSTM [147], and the semantic
+30

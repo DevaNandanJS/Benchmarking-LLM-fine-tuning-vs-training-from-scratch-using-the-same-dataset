@@ -1,0 +1,82 @@
+Table 8. Summary of LLM-based root cause analysis and failure diagnosis studies organized by category.
+Paper Train? Dataset(s) type Output Metric(s) Base Model(s)
+Prompting & In-Context Learning (ICL) for RCA / Diagnosis
+Chen et al. [16] Yes log, traces, metrics Explanation; category Micro and macro F1 GPT-4
+Shan et al. [145] No Log Root-cause configuration
+location
+Accuracy; FP GPT-4
+Zhang et al. [209] No Incident title, Inci-
+dent summary (logs,
+traces, etc.)
+Root cause ROUGE-L, ROUGE-1, ME-
+TEOR, GLEU, BERTScore,
+Nubia
+GPT-3.5-turbo, GPT-4
+InsightAI [28] No Log Flame graph; user Q&A
+chatbot
+F1 GPT-4o
+ScalaLog [201] No Log Root-cause description F1 GPT-3.5-turbo
+Agentic & Tool-Augmented RCA (Multi-step Reasoning)
+RCAgent [179] No Log, codebase Root causes, solutions, evi-
+dence, responsibilities
+METEOR, NUBIA,
+BLEURT, BARTScore,
+EmbScore
+Vicuna-13B-V1.5-16K,
+GTE-LARGE (embedding)
+OPENRCA [189] No Log, traces, metrics Root cause reasons and
+components
+Accuracy Claude 3.5
+TAMO [208] Yes Log, traces, metrics Root cause localization;
+fault type classification
+Acc@k; MiPr, MaPr, MiRe,
+MaRe, MiF1, MaF1
+GPT-4
+Flow-of-Action [124] No Log, traces, metricsRoot cause localization;
+fault type classification
+Root cause location accu-
+racy (LA); root cause type
+accuracy (TA)
+GPT-4-Turbo
+RCLAgent [203] No Metric, trace log Root cause localization Recall@k; MRR Claude-3.5-sonnet
+MicroRCA-Agent [163] Yes Log, traces, metrics Root-cause Top@K deepseek-v3
+Knowledge / Graph / Code-Augmented Diagnosis
+ForenSiX [58] No Log Context extraction, data de-
+pendency graph, diagnosis
+Accuracy GPT-4o
+COCA [85] No Log, codebase, trace Root-cause BLEU-4, ROUGE-1, ME-
+TEOR, Semantics, Useful-
+ness, Exact Match, Top-K
+GPT-4o
+AetherLog [19] Yes Log Root-cause category pre-
+diction
+F1 GPT-4o
+General Log Diagnosis: Fault Type / Resolution / Understanding
+LogSage [190] No Log Root causes; solutions Precision, Recall, F1 GPT-4o, Deepseek V3,
+Claude-3.7-Sonnet
+Herrmann et al. [50] Yes Issue description, log
+files, engineer com-
+munications
+Root cause description MSS MIXTRAL-8X7B
+Huang et al. [53] Yes Log Fault-indicating descrip-
+tion; fault-indicating
+parameter
+Precision, Recall, F1 UniXcoder
+LogLM [94] Yes Log Log-problem-resolution BLEU, ROUGE-1, ROUGE-
+2, ROUGE-L
+LLaMA2-7B
+LogReasoner [100] Yes Log Failure type Accuracy; Weighted-F1 Qwen2.5-1.5B
+Ji et al. [62] Yes Log 0/1 failure detection; fault
+type
+F1 LLaMA-2-7B
+LogExpert [172] Yes Log, StackOverflow
+issues
+Executable resolution
+steps, command filling
+BLEU-4, ROUGE-L GPT-3.5-turbo, GPT-4
+KnowLog [99] Yes Log Cause ranking Accuracy; Weighted F1 BERT
+AdaptiveLog [101] Yes Log Failure type Recall@k bert, chatgpt
+Taheri et al. [161] Yes Log Fault classification F1 RoBERTa, BigBird, Flan-T5
+Benchmarks & Evaluation Suites
+LogEval [20] Yes Log Fault types Accuracy; F1 GPT-4
+37

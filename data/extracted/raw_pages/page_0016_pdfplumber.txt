@@ -1,0 +1,51 @@
+Table4. SummaryofLLM-basedautomatedloggingstudiesorganizedbytaskcategory.
+Paper Task Paradigm Input Output Context/TechniqueBaseModel(s) Comparisons Metric(s)
+FullLoggingGeneration(GeneralPurpose:Location,Message,Variables)
+LANCE[108] FullGen Fine-tuning JavaMethod LogStmt - T5 - Acc,BLEU
+FastLog[185] FullGen Fine-tuning Method + InsertPoint ASTLocator PLBART - Acc,BLEU
+AST
+LEONID[109] Multi-Log Fine-tuning FullMethod 0-NLogs - T5 - BLEU,METEOR
+ELogger[37] BlockGen Fine-tuning CodeBlock SingleLog BlockFeatures Enc-Dec - -
+UniLog[187] FullGen ICL Method Loc+Level+MsgWarm-upDemos Codex,GPT-3 - PA,LA,MA
+SCLogger[83] FullGen ICL+CoT Method LogStmts CallGraph(2-hop) GPT-4, GPT-3.5 PA,AOD,F1
+LLaMA2
+PDLogger[25] FullGen ICL+CoT Method + Logs BackwardSlicing o3-mini, LLaMA3-70B PA,L-ACC
+Slice DeepSeek
+AUCAD[199] AlignGen Fine-tuning Method + Is- Logs IssueAlignment LLaMA3.1 Magicoder PA,LA,VF1
+sue
+Zhongetal.[215] FullGen Fine-tuning JavaMethod Logs CompactModelFT LLaMA-8B, GPT-4o, PA,LA,F1
+Mistral Claude
+SpecializedLoggingGeneration(TestCode,File-level,Configuration)
+File-Level[138] FileGen ICL PythonFile MultiLogs PipelineStages GPT-4o-mini - L-ACC,AOD
+Test-Code[150] TestLog ICL TestMethod Assert/Log TestIntent GPT-3.5, GPT-4o, Acc,BLEU
+CodeLlama Llama3
+ConfLogger[146] ConfigLog ICL+Rules ConfigCode Logs ConfigAnalysis GPT-4o - LA,AOD
+Benchmarks,EmpiricalStudies,andVisions
+LogBench[82] Study ICL/Zero Method Level+Msg - GPT-3.5/4 InCoder,Star- BLEU,ROUGE
+Coder
+AL-Bench[162] Benchmark - JavaCode Logs BenchmarkSuite - - ALD,DEA
+Auto-Logging[8] Vision - - - AIInstrumentation - - -
+SpecificLogTasks(LevelPrediction,DefectDetection,Repair,Quality)
+Hengetal.[49] LevelPred FT/Zero Snippet Level - CodeLlama- BERT, Acc,AUC
+13B RoBERTa
+OmniLLP[119] LevelPred RAG+ICL Log + Neigh- Level ClusterRetrieval CodeXEmbed - ARI,AUC
+bors
+LogUpdater[214] LogRepair Agent DefectLog FixedLog DefectTaxonomy CodeT5+,GPT- Claude3.5 BLEU,ROUGE
+4o
+Defects4Log[175] Detection ICL+CoT Method+Log DefectType DefectPatterns DeepSeek-R1 GPT-4o Precision,Recall
+LOGIMPROVER[84] Quality - Codebase Improved ProactiveAnalysis - - -
+Logs
+4.3 LLM-basedApproachesforLoggingStatementGeneration
+Table4groupsrecentLLM-basedloggingstudiesbytaskcategory,whilethediscussionbelowemphasizesthe
+methodologicalparadigmsbehindthem.Acrosstheseparadigms,thekeyideaistoexploitLLMsasjointmodels
+overcodeandnaturallanguage,sothatthethreecoredecisions,wheretolog,whatleveltouse,andhowto
+phrasethemessageandvariables,arenolongermadebyhand-craftedrulesorlocalclassifiers.Theselogging
+decisionsemergefromlearnedsemanticpatternsandin-contextreasoning.Below,weorganizepriorworkby
+howitusesLLMsandhighlightthemechanismsthatmakeeachparadigmeffective.
+4.3.1 Fine-tunedEnd-to-EndGenerators. Earlyworktreatsloggingasasequence-to-sequencelearningproblem
+andfine-tunesencoder–decodermodelstotransformrawcodeintologgedcode.LANCE[108]fine-tunesaT5
+modelonpairsofJavamethodswithandwithoutlogging,sothatthemodellearnstorewriteaninputmethod
+intoanoutputmethodcontaininganinjectedlogstatement.Duringdecoding,themodeljointlydecideswhere
+toinsertthestatement,whichleveltouse,whichvariablestolog,andhowtophrasethemessage.Thisjoint
+modelingispreciselywhereLLMsoutperformhandcraftedASTpatterns:insteadofmatchingrigidtemplates,
+16

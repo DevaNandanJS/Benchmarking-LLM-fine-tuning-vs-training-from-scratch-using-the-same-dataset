@@ -1,0 +1,46 @@
+5.3.1 Benchmarks and empirical analyses as the starting point.Early work primarily asked whether general-
+purpose LLMs can parse logs at all and how sensitive they are to prompting choices. Le & Zhang [73] provides a
+representative capability analysis of GPT-3.5 (ChatGPT) under zero-/few-shot prompts, showing that seemingly
+small prompt-format differences can materially change parsing quality. As the field matured, benchmark-style
+efforts (e.g., LogEval [ 20]) began to standardize evaluation and make it clearerwhich aspectimproves (e.g.,
+grouping versus precise template extraction), thereby enabling more comparable method design.
+A key takeaway from follow-up empirical analyses is thatexample selectionandvariable handlingrepeatedly
+emerge as high-leverage factors that affect both accuracy and cost (e.g., LLMDPP [173], VISTA [97], and compar-
+ative studies [4]). In other words, the “benchmark line” of work did not merely measure performance. It also
+identified recurring design knobs that later approaches considered.
+5.3.2 Supervised and log-specific model adaptation: training for structure and controllability.One family treats log
+parsing as a supervised learning problem and leverages modern LLMs to learn invariant skeletons and variable
+boundaries from data, often with greater tolerance for noisy token patterns than purely heuristic rules. A useful
+way to view this family iswhere supervision is placed: some methods supervisetoken-level decisions(constant vs.
+variable), while others supervisetemplate generationdirectly. LogPPT [ 72] is a label-efficient supervised parser.
+It fine-tunes a RoBERTa model on a small labeled dataset to perform few-shot token-level parameter labeling,
+reducing reliance on handcrafted parsing rules while remaining grounded in curated examples. Complementarily,
+LLMParser [103] represents lightweight supervised adaptation via few-shot fine-tuning, enabling a compact
+open-source LLM to directly generate templates with high accuracy when limited labels are available.
+In parallel, log-specific pretraining and domain adaptation aim to internalize “log language” from large corpora,
+narrowing the gap between natural text and log tokens. PreLog [74] illustrates this direction by pretraining a
+log-focused model for log analytics tasks (including parsing), providing a stronger initialization than generic
+LLMs for downstream log understanding. Overall, supervised paradigms tend to provide more controllable output
+formats and predictable behavior (often with lower inference-time cost than per-line prompting), but they trade
+off flexibility and maintenance: they rely on curated labels or domain corpora, and evolving templates may still
+require re-training or re-alignment to sustain accuracy under drift.
+5.3.3 Prompt-based and adaptive ICL parsing: structured generation without parameter updates.A second family
+avoids parameter updates and instead casts log parsing as astructured promptingproblem: given a raw message, the
+model is instructed to emit a normalized template (and optionally the extracted parameters) under a constrained
+output format. This direction is attractive for rapid deployment because it can work in a zero-shot or a few-shot
+manner without collecting training data. For example, Xu et al. [ 212] show that even a zero-shot LLM can
+extract templates online when paired with a lightweight template repository to reuse previously derived results.
+Beyond one-shot prompting, fixed-demo prompt strategies have been explored to stabilize parsing behavior
+in streaming settings (e.g., Liu et al. [92]), and some pipelines further leverage synthetic or auxiliary LLMs to
+improve downstream parsing quality (e.g., LogGenius [196]).
+Within prompting, adaptive ICL refines the paradigm by selecting demonstrations on the fly instead of relying
+on a static prompt. DivLog [ 188] is representative: it dynamically selects relevant labeled examples for each
+incoming log, turning parsing into a contextual compare-and-contrast process that helps the model separate
+invariants from variables for the specific message at hand. Empirical follow-ups suggest thatdiversityin the
+selected examples and explicit treatment of variables are recurring levers for robustness and cost control (e.g.,
+LLMDPP [173] and VISTA [97]).
+More broadly, prompt-based parsing effectively converts “rules in code” into “rules in the prompt”, which
+improves iteration speed and portability across models, but shifts the main technical challenge tocontrollability
+and normalization: the approach must guard against over-generalization, inconsistent placeholders, and format
+violations, which motivates explicit output constraints, prompt templates tailored to log syntax, and restricted
+24

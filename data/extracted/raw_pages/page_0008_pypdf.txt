@@ -1,0 +1,55 @@
+Table 3. Positioning of this survey relative to representative prior surveys.
+Survey Focus LLM Difference from our survey
+He et al. [47] Broad log analysis before the
+recent LLM wave
+No Updates the field for the LLM era with a dedicated
+log-centric focus
+Beck et al. [6] LLM-based system log parsing Yes Extends beyond parsing to the full log-analysis work-
+flow
+Akhtar et al. [1] LLM-based event-log analysis
+across security and computing
+contexts
+Yes Mainly summarizes what LLM techniques exist for
+event-log analysis. Our survey focuses on how
+LLM4Log is structured, evaluated, and where open
+challenges remain
+Remil et al. [136] AIOps incident-management
+review
+No Broader incident management rather than LLM-based
+log-centric analysis
+Zhou and Fokaefs [216] AI assistants for incident life-
+cycle in microservices
+No Incident-lifecycle support across logs, traces, and met-
+rics rather than log-centric analysis
+Wang and Qi [174] RCA survey in (micro)services No Focuses on one downstream task and broader observ-
+ability signals rather than the full LLM4Log workflow
+Zhang et al. [200] LLM-enabled AIOps and relia-
+bility engineering
+Yes Covers broader LLM4AIOps workflows across logs,
+metrics, traces, alerts, and incidents. Our survey fo-
+cuses on how LLM methods are adapted and evaluated
+when runtime logs are the central evidence source
+2.4 Threats to validity.
+Our survey collection methodology faces several limitations. First, the flagship-venue-first search strategy
+improves precision and anchors the survey in core software engineering venues, but it may still miss some
+interdisciplinary, industry-facing, or rapidly emerging work despite the subsequent snowballing and digital-library
+cross-checking. Second, the search process depends on keyword design, so relevant papers that use uncommon
+terminology may be harder to retrieve in the initial stages. Third, screening required manual judgment, especially
+for multimodal studies in which logs may be used indirectly instead of serving as a standalone explicit modality.
+Finally, some screening decisions are inherently subjective, especially for multimodal papers where the role of
+logs is not described clearly. In such cases, we included papers that we believed were sufficiently related and
+relevant to the scope of this survey.
+Cross-paper evaluation remains a threat to validity. The studies covered in this survey differ in their datasets,
+label definitions, model families, prompts, decoding settings, and evaluation metrics. In addition, many papers do
+not report enough prompt or inference details to support exact reproduction. For LLM-based methods, results may
+also vary across runs because of stochastic decoding, model updates, retrieval choices, or context selection. These
+differences make it difficult to compare reported performance numbers directly across papers. For this reason,
+our main conclusions focus on recurring design patterns, common evaluation gaps, and practical constraints in
+LLM4Log research. We treat claims about the best-performing method as exploratory.
+3 LLM Background & Taxonomy for Log Analysis
+LLMs have become a practical tool for log-centric software operations because logs are semi-structured, drift
+over time, preserve execution chronology, and are typically interpreted alongside heterogeneous artifacts (tickets,
+dashboards, traces, configurations, and code) [40, 72, 103, 108]. This section explains why logs form a distinct
+setting for LLM-based analysis, how major model families map to log-analysis workloads, and how adaptation
+paradigms interact with operational constraints such as drift, grounding, privacy, latency, and cost.
+8

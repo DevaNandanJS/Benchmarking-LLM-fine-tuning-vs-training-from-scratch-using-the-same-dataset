@@ -1,0 +1,62 @@
+80
+70
+60
+50
+40
+30
+20
+10
+0
+2020 2021 2022 2023 2024 2025
+srepap
+fo
+rebmun
+L L o o g g g P i a n r g sing ( 2 1 0 2 . ( 3 2 % 0) ) (1 3 . 9 (1 % ) ) ( 2 1 5 5 . ( 4 2 % 0) )
+Log Representation
+Anomaly Detection 4 (3)
+(2.5%)
+Failure Prediction 37 (29)
+Root Cause Analysis (22.8%)
+Log Summary
+3 (1)
+(1.9%)
+70 (60)
+(43.2%)
+Total paper: 162 (deduplicated: 145)
+Fig.3. TemporalandoveralldistributionofLLM4Loganalysispapersacrosstasks.Note:Piechartlabelsareshownasn(u),
+wherencountstaskpapers(notdeduplicated)anducountsuniquepapers(deduplicated).
+multipletasks(e.g.,apipelinethatbothparseslogsanddetectsanomalies),afterdeduplicationbytitle,thecorpus
+contains145uniquepapers.Notably,thepre-LLMlog-analysissurveybyHeetal.[47]reported158log-analysis
+paperspublishedfrom1997to2020.Incontrast,withinonly2020–2025,wealreadyobserve145LLM-based
+log-analysispapers,whichsuggestsrapidgrowthinLLM-basedlog-analysisresearchandaclearrecent
+increaseinresearchattentionthatmotivatesadedicatedLLM4Logsurvey.Figure3summarizesthecorpus
+fromtwocomplementaryviews:thetemporaltrend overyears(left)andthetaskcomposition(right).
+Thetaskdistribution(Fig.3,right)ishighlyskewed.Mostpa-
+persconcentrateonAnomalyDetectionandLogParsing,together Table2. Topvenuesbynumberofpapersinour
+accountingforroughlytwo-thirdsofalltask-paperrecords,which LLM4Logcorpus.
+reflects where LLMs are most immediately useful in practice:
+identifying suspicious behavior under noisy, drifting logs and
+Venue #Papers
+structuringrawlogsintoanalyzableforms.Atthesametime,the
+arXiv 29
+corpusalsoshowsaclearexpansiontowardmoredownstream,
+ICSE 11
+operator-facingtasks.Inparticular,RootCauseAnalysisformsa
+ASE 7
+sizablesliceandgrowsrapidlyinthemostrecentyears,indicating
+ISSRE 7
+ashiftfrom“detectingsomethingiswrong”toward“explaining
+FSE 6
+whyandwhattodo,”oftenrequiringricherreasoningandevi-
+CIKM 5
+denceintegration. ICLR 5
+Temporally, the corpus spans 2020–2025 and exhibits a pro- EMSE 4
+nouncedsurgeinrecentyears(Fig.3,left).Onlyasmallnumber TOSEM 4
+ofpapersappearedbefore2023,followedbyasharpjumpin2024 ICPC 3
+andanevenlargervolumein2025.Beyondtheoverallgrowth,
+Note:Wereportthetop10venuesinthepaper.The
+theper-taskevolutionisalsoinformative:anomalydetectionap- fulllistisavailableinouronlinerepository.
+pearsearliestandgrowssteadily,whileseveraldownstreamtasks
+emergelaterandacceleratequickly(e.g.,RCAandlogsummarizationarelargelyconcentratedinthemostrecent
+period).ThispatternsuggeststhatthecommunityfirstadoptedLLMswheretheycouldbepluggedintoexisting
+6

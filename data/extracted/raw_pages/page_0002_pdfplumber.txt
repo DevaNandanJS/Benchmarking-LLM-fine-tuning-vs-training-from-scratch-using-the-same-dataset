@@ -1,0 +1,50 @@
+To address these challenges, the research community has developed a rich body of work on automated
+loganalysis,typicallyorganizedasapipelinespanningloggingpractice,parsing/structuring,representation
+learning,anomaly/failuredetection,failureprediction,diagnosis,andsummarization[47].Inproductionsettings,
+however,loganalysisisconstrainedbyoperationalrealities.Incidentsunfoldundertimepressure.Logstreamsare
+interleavedacrossservices,hosts,andtenants.Failuresmanifestthroughlongcausalchains.Themostdiagnostic
+eventsareoftenrare,noisy,orburiedinhigh-volumebackgroundmessages[102,192].Moreover,engineersrarely
+relyonlogsalone.Effectivetriagerequirescorrelatinglogswithmetrics/traces,historicalincidents,runbooks,
+andcode/configurationcontext[102,192].Thesecharacteristicsmakeloganalysisnotonlyapatternrecognition
+problem,butalsoanevidence-integrationandhumandecision-support problem.Log-centricLLMsystemsare
+therefore distinct from broader LLM4AIOps settings: logs combine natural-language-like descriptions with
+code-likeidentifiers,exhibitambiguoustemplate/valueboundaries,evolveunderversionanddeploymentdrift,
+andoftencarrythechronologicalsymptomevidencethatoperatorsusetodiagnosefailures.Thechallengeisnot
+merelytoclassifypatterns,buttointerpretnoisy,long-tailruntimeevidenceinaformthatremainsusefulfor
+humandecisionmaking.
+Theclassiclog-analysispipelinewaslargelyshapedbeforeinstruction-tunedLLMsbecamewidelyavailable,
+whenmethodswereeitherrule-basedorreliedonfixedrepresentationsandtask-specificsupervision.Inrecent
+years,therehasbeenarapidmethodologicaltransition:pretrainedTransformerlanguagemodels,including
+modernLLMs,areincreasinglyusedasthebackboneforloganalysis.Unliketraditionalapproachesthatheavily
+dependontemplates,handcraftedfeatures,orpatternsinferredfrompreviouslyobservedlogoutputs,LLMs
+offer semantic generalization and can condition on heterogeneous evidence (e.g., logs together with tickets,
+traces/metrics,runbooks,configurations,andcode/configurationcontext),whichcanbeespeciallyusefulin
+modernoperationalworkflows[20,42,68].Inlog-centricsettings,thismattersbecausethesamefailuremay
+surface through heterogeneous wording across components and versions, while the most useful diagnostic
+evidenceisoftensparse,contextdependent,andembeddedinlongchainsofruntimemessagesratherthanina
+singlefixedtemplate.
+LLM-assisted Logging { } LLM-based Log Parsing Log Representation Downstream tasks
+(Logging statement
+generation & maintenance) Inputs: Raw log lines (+ headers), Inputs: Parsed events/templates Inputs: Representations + retrieved
+existing template inventory (+ parameters), windows/sessions evidence (tickets/metrics/traces)
+Inputs: Source code context, project Outputs: Event/window embeddings; Outputs: Alerts, precictions, Fanked
+conventions, historical loga/issues Outputs: Templates + parameters (+ structured features causes, summaries/actions
+Outputs: New/updated log statements event IDs)
+(level + message + variables) 2 I C N 0 o F 2 n O 3 n - e 1 [m c 0 t - a i 2 o i 7 n n , ] 1 e 0 s :1 ta 5 b :3 - 0 T " t P o C e a o m < ra n IP p m n l > e a e c t o t e t e n io : r n s p : o e r s t t < a P bl o is rt h > e " d a A n n o o m m a a ly l y s c d o e r t e e c / t l i a o b n e : l ri F sk a i f l o u r r e e c p a r s e t d / ic h t o io riz n o : n
+logging lished to 192.168.1.1 ('IP' : '192.168.1.1',
+on port 8080 'Port' : '8080') Encoder embeddings (BERT-like)
+Event ID:E123 Domain pretraining / continued
+P ho ro w m to p t lo in g g " / ICL for "where/what/ F ex e t w ra - c s t h io o n t prompting for template p C r o e n tr tr a a in s i t n iv g e learning / metric learning R r o a o n t k e c e a v u d id s c e e a n a u c n s e a e ly s s + is: L c o o g n s n c u a i m s r e r m a i a t n i r v c iz e id a e tio n n t :
+Retrieval of project-specific RAG with template inventory Parameter-aware encoding Prompting on windows
+conventions (RAG) / exemplars Retrievel index construction (for (direct inference)
+Fine-tuning on logging datasets Hybrid: regex/header extraction + downstream RAG) RAG with historical incidents
+Consistency checking / refactoring LLM parsing Tool / agent augmentation (query
+suggestions Verification / consistency checks metrics/traces)
+Policy filtering (privacy-sensitive Cost control: RAG / Grounded generation
+fields) batching, caching,fallback parsers Case base / KB retrieval Verification / uncertainty
+/ Vector index
+Fig.1. AnoverviewofLLM-basedloganalysisacrossthepipeline,fromloggingtodownstreamtasks.Notethatsome
+downstreamstudiesoperatedirectlyonraworlightlynormalizedlogwindowsandthereforebypassexplicitlogparsing.
+Thisshiftisalreadyvisibleacrosstheentirelog-analysispipeline.Figure1providesanoverviewofhowLLMs
+are applied across the log-analysis pipeline. Upstream, LLMs are used to generate and maintain logging
+2

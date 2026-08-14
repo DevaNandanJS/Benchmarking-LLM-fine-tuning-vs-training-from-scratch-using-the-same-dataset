@@ -1,0 +1,44 @@
+Log messages
+2015-10-1818:01:51INFOmainorg.apache.hadoop.http.HttpServer2Jetty bound to port 62267
+2015-10-1818:01:51INFOmainorg.apache.hadoop.http.HttpServer2Jetty bound to port 62258
+2015-10-1818:01:52INFOmainorg.apache.hadoop.yarn.WebAppsWeb app /mapreduce started at 62267
+2015-10-1818:01:53INFOmainorg.apache.hadoop. app.RMContainerRequestornodeBlacklistingEnabled:true
+2015-10-1818:01:53INFOIPC Server org.apache.hadoop.ipc.ServerIPC Server listener on 62270: starting
+Log Parsing
+Parsed logs
+Date Time Level Process Component LogTemplate
+2015-10-18 18:01:52 INFO main org.apache.hadoop.http.HttpServer2 Jetty bound to port <*>
+2015-10-18 18:01:52 INFO main org.apache.hadoop.http.HttpServer2 Jetty bound to port <*>
+2015-10-18 18:01:52 INFO main org.apache.hadoop.yarn.WebApps Web app <*> started at <*>
+2015-10-18 18:01:53 INFO main org.apache.hadoop.app.RMContainerRequestor nodeBlacklistingEnabled:<*>
+2015-10-18 18:01:53 INFO IPCServer org.apache.hadoop.ipc.Server IPC Server listener on <*>: starting
+Fig.4. AnexamplelogparsingresultfromHadoop.
+underlyingevent.Acorrectparsernormalizesthemtothesametemplate“Jettyboundtoport<*>”andextracts
+theportnumberasaparameter.Similarly,themessage“Webapp/mapreducestartedat62267”isparsedintothe
+template“Webapp<*>startedat<*>”,separatingstablekeywords(e.g.,“Webapp”,“startedat”)fromvariable
+tokens(e.g.,thepathandport).
+Inpractice,logparsingisrarelyasinglemonolithicstep.Mostpipelinesimplementitasatwo-stageprocess.
+First, a preprocessing stage extracts standard fields and isolates the message body. This stage is typically
+implemented using regular expressions or log format specifications because these header fields are usually
+emitted in a framework-controlled and relatively stable format (e.g., the timestamp/level/thread/component
+layoutisdeterminedbylogginglibrariesandconfiguration,andthuschangesslowlyandpredictably).Second,a
+messageparsingstagefocusesontheremainingfree-text-likebodyandperformstemplate–parameterseparation.
+Unlikeheaders,themessagebodyislargelydeveloper-writtenandvarieswidelyacrosscomponentsandversions.
+Itmixesnatural-language-likephraseswithproject-specifictokensandruntimevalues,anditevolvesascode
+changes.Asaresult,asinglesetofregularexpressionsisrarelysufficienttorobustlynormalizemessagebodies
+withouteitherover-generalizingtemplatesorexplodingthemintomanyvariants.Acrosstheseimplementations,
+thecoregoalremainsthesame:toproducestabletemplatesthatsupportconsistentgroupingwhileaccurately
+extractingtheparametersneededfordiagnosis.
+5.2 Challenges
+Althoughlogparsing hasbeen studied extensively,traditional(non-LLM) parsersfacepersistentdifficulties
+becauselogsaresemi-structuredartifactsproducedbyevolvingsoftware.Thesedifficultiesarisefromboththe
+data(highlyvariablemessagestylesandcontinuousdrift)andtheoperationalrequirements(lowlatency,high
+throughput,andstableeventidentitiesinonlinepipelines).Below,wesummarizefourrecurringchallengesthat
+limittherobustnessoftraditionalparsers.
+5.2.1 Structuralvariabilityandformatdrift. Logsexhibitsubstantialstructuralvariabilityacrosssystems,compo-
+nents,andlogginglibraries,andevenwithinthesamesystem,differentmodulesmayadoptdifferentwriting
+styles,delimiters,andtokenconventions.Manytraditionalparsersthereforeembedimplicitassumptionsabout
+messagestructure(e.g.,tokenpositions,separators,fixedvocabularies,orstableprefixpatterns)tomakeparsing
+tractable[21,46].Suchassumptionscanworkwellfortheformatstheyweredesignedaround,buttheydegrade
+whenencounteringunseenlayouts,rareformattingchoices,orcross-componentinconsistencies.
+21

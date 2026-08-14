@@ -1,0 +1,1136 @@
+[
+  {
+    "page": 1,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.2513,
+      "char_count": 4277
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.001,
+      "non_dict_word_ratio": 0.634,
+      "char_count": 3815
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.2513,
+      "char_count": 4277
+    }
+  },
+  {
+    "page": 2,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2726,
+      "char_count": 4883
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.4758,
+      "char_count": 4810
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2726,
+      "char_count": 4883
+    }
+  },
+  {
+    "page": 3,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.2197,
+      "char_count": 4444
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.001,
+      "non_dict_word_ratio": 0.6942,
+      "char_count": 3923
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.2197,
+      "char_count": 4444
+    }
+  },
+  {
+    "page": 4,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0149,
+      "non_dict_word_ratio": 0.2711,
+      "char_count": 2822
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0165,
+      "non_dict_word_ratio": 0.6345,
+      "char_count": 2546
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0149,
+      "non_dict_word_ratio": 0.2711,
+      "char_count": 2822
+    }
+  },
+  {
+    "page": 5,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0025,
+      "non_dict_word_ratio": 0.2373,
+      "char_count": 4419
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0028,
+      "non_dict_word_ratio": 0.6789,
+      "char_count": 3934
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0025,
+      "non_dict_word_ratio": 0.2373,
+      "char_count": 4419
+    }
+  },
+  {
+    "page": 6,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0022,
+      "non_dict_word_ratio": 0.2547,
+      "char_count": 2761
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0024,
+      "non_dict_word_ratio": 0.6053,
+      "char_count": 2497
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0022,
+      "non_dict_word_ratio": 0.2547,
+      "char_count": 2761
+    }
+  },
+  {
+    "page": 7,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2904,
+      "char_count": 3848
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.7547,
+      "char_count": 3373
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2904,
+      "char_count": 3848
+    }
+  },
+  {
+    "page": 8,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.264,
+      "char_count": 3657
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.6455,
+      "char_count": 3241
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.264,
+      "char_count": 3657
+    }
+  },
+  {
+    "page": 9,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2656,
+      "char_count": 4221
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.701,
+      "char_count": 3726
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2656,
+      "char_count": 4221
+    }
+  },
+  {
+    "page": 10,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.2413,
+      "char_count": 4298
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.7143,
+      "char_count": 3830
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.2413,
+      "char_count": 4298
+    }
+  },
+  {
+    "page": 11,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0026,
+      "non_dict_word_ratio": 0.2414,
+      "char_count": 4236
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0029,
+      "non_dict_word_ratio": 0.6518,
+      "char_count": 3802
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0026,
+      "non_dict_word_ratio": 0.2414,
+      "char_count": 4236
+    }
+  },
+  {
+    "page": 12,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2219,
+      "char_count": 4675
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.6255,
+      "char_count": 4177
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2219,
+      "char_count": 4675
+    }
+  },
+  {
+    "page": 13,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0002,
+      "non_dict_word_ratio": 0.2509,
+      "char_count": 4244
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0003,
+      "non_dict_word_ratio": 0.7836,
+      "char_count": 3759
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0002,
+      "non_dict_word_ratio": 0.2509,
+      "char_count": 4244
+    }
+  },
+  {
+    "page": 14,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2422,
+      "char_count": 3556
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.4474,
+      "char_count": 3206
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2422,
+      "char_count": 3556
+    }
+  },
+  {
+    "page": 15,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.1868,
+      "char_count": 4737
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.5277,
+      "char_count": 4226
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.1868,
+      "char_count": 4737
+    }
+  },
+  {
+    "page": 16,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0003,
+      "non_dict_word_ratio": 0.295,
+      "char_count": 3602
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0003,
+      "non_dict_word_ratio": 0.6361,
+      "char_count": 3273
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0003,
+      "non_dict_word_ratio": 0.295,
+      "char_count": 3602
+    }
+  },
+  {
+    "page": 17,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0023,
+      "non_dict_word_ratio": 0.1927,
+      "char_count": 4781
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0026,
+      "non_dict_word_ratio": 0.6524,
+      "char_count": 4167
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0023,
+      "non_dict_word_ratio": 0.1927,
+      "char_count": 4781
+    }
+  },
+  {
+    "page": 18,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0035,
+      "non_dict_word_ratio": 0.2424,
+      "char_count": 4624
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0039,
+      "non_dict_word_ratio": 0.6734,
+      "char_count": 4055
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0035,
+      "non_dict_word_ratio": 0.2424,
+      "char_count": 4624
+    }
+  },
+  {
+    "page": 19,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.1617,
+      "char_count": 4428
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.001,
+      "non_dict_word_ratio": 0.6667,
+      "char_count": 3882
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.1617,
+      "char_count": 4428
+    }
+  },
+  {
+    "page": 20,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0036,
+      "non_dict_word_ratio": 0.2162,
+      "char_count": 4394
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0041,
+      "non_dict_word_ratio": 0.5941,
+      "char_count": 3899
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0036,
+      "non_dict_word_ratio": 0.2162,
+      "char_count": 4394
+    }
+  },
+  {
+    "page": 21,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0028,
+      "non_dict_word_ratio": 0.3108,
+      "char_count": 3884
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0031,
+      "non_dict_word_ratio": 0.5976,
+      "char_count": 3554
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0028,
+      "non_dict_word_ratio": 0.3108,
+      "char_count": 3884
+    }
+  },
+  {
+    "page": 22,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0007,
+      "non_dict_word_ratio": 0.2252,
+      "char_count": 4181
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0008,
+      "non_dict_word_ratio": 0.6354,
+      "char_count": 3744
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0007,
+      "non_dict_word_ratio": 0.2252,
+      "char_count": 4181
+    }
+  },
+  {
+    "page": 23,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0056,
+      "non_dict_word_ratio": 0.4016,
+      "char_count": 4501
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.006,
+      "non_dict_word_ratio": 0.5799,
+      "char_count": 4160
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0056,
+      "non_dict_word_ratio": 0.4016,
+      "char_count": 4501
+    }
+  },
+  {
+    "page": 24,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0017,
+      "non_dict_word_ratio": 0.2488,
+      "char_count": 4737
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.7697,
+      "char_count": 4178
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0017,
+      "non_dict_word_ratio": 0.2488,
+      "char_count": 4737
+    }
+  },
+  {
+    "page": 25,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0017,
+      "non_dict_word_ratio": 0.2655,
+      "char_count": 4664
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.6147,
+      "char_count": 4178
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0017,
+      "non_dict_word_ratio": 0.2655,
+      "char_count": 4664
+    }
+  },
+  {
+    "page": 26,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0012,
+      "non_dict_word_ratio": 0.2598,
+      "char_count": 4150
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0013,
+      "non_dict_word_ratio": 0.5802,
+      "char_count": 3716
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0012,
+      "non_dict_word_ratio": 0.2598,
+      "char_count": 4150
+    }
+  },
+  {
+    "page": 27,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0018,
+      "non_dict_word_ratio": 0.2488,
+      "char_count": 3262
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4741,
+      "char_count": 3169
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0018,
+      "non_dict_word_ratio": 0.2488,
+      "char_count": 3262
+    }
+  },
+  {
+    "page": 28,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.2585,
+      "char_count": 4299
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.001,
+      "non_dict_word_ratio": 0.6652,
+      "char_count": 3856
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0009,
+      "non_dict_word_ratio": 0.2585,
+      "char_count": 4299
+    }
+  },
+  {
+    "page": 29,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0087,
+      "non_dict_word_ratio": 0.2894,
+      "char_count": 4232
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0086,
+      "non_dict_word_ratio": 0.7297,
+      "char_count": 4286
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0087,
+      "non_dict_word_ratio": 0.2894,
+      "char_count": 4232
+    }
+  },
+  {
+    "page": 30,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0074,
+      "non_dict_word_ratio": 0.2478,
+      "char_count": 4308
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0083,
+      "non_dict_word_ratio": 0.6636,
+      "char_count": 3866
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0074,
+      "non_dict_word_ratio": 0.2478,
+      "char_count": 4308
+    }
+  },
+  {
+    "page": 31,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0006,
+      "non_dict_word_ratio": 0.4327,
+      "char_count": 3122
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0007,
+      "non_dict_word_ratio": 0.5,
+      "char_count": 2906
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0006,
+      "non_dict_word_ratio": 0.4327,
+      "char_count": 3122
+    }
+  },
+  {
+    "page": 32,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.4758,
+      "char_count": 2956
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.5137,
+      "char_count": 2787
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.4758,
+      "char_count": 2956
+    }
+  },
+  {
+    "page": 33,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0007,
+      "non_dict_word_ratio": 0.2865,
+      "char_count": 4452
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0008,
+      "non_dict_word_ratio": 0.7542,
+      "char_count": 3957
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0007,
+      "non_dict_word_ratio": 0.2865,
+      "char_count": 4452
+    }
+  },
+  {
+    "page": 34,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0032,
+      "non_dict_word_ratio": 0.2465,
+      "char_count": 4378
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0036,
+      "non_dict_word_ratio": 0.6602,
+      "char_count": 3904
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0032,
+      "non_dict_word_ratio": 0.2465,
+      "char_count": 4378
+    }
+  },
+  {
+    "page": 35,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.19,
+      "char_count": 4099
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.7219,
+      "char_count": 3633
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.19,
+      "char_count": 4099
+    }
+  },
+  {
+    "page": 36,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0006,
+      "non_dict_word_ratio": 0.2734,
+      "char_count": 4739
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0007,
+      "non_dict_word_ratio": 0.7469,
+      "char_count": 4221
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0006,
+      "non_dict_word_ratio": 0.2734,
+      "char_count": 4739
+    }
+  },
+  {
+    "page": 37,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.3102,
+      "char_count": 2840
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.451,
+      "char_count": 2662
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.3102,
+      "char_count": 2840
+    }
+  },
+  {
+    "page": 38,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0012,
+      "non_dict_word_ratio": 0.3009,
+      "char_count": 4324
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0013,
+      "non_dict_word_ratio": 0.6828,
+      "char_count": 3875
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0012,
+      "non_dict_word_ratio": 0.3009,
+      "char_count": 4324
+    }
+  },
+  {
+    "page": 39,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0025,
+      "non_dict_word_ratio": 0.2256,
+      "char_count": 4028
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0028,
+      "non_dict_word_ratio": 0.6413,
+      "char_count": 3589
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0025,
+      "non_dict_word_ratio": 0.2256,
+      "char_count": 4028
+    }
+  },
+  {
+    "page": 40,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0005,
+      "non_dict_word_ratio": 0.195,
+      "char_count": 4426
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0005,
+      "non_dict_word_ratio": 0.5392,
+      "char_count": 3950
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0005,
+      "non_dict_word_ratio": 0.195,
+      "char_count": 4426
+    }
+  },
+  {
+    "page": 41,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2047,
+      "char_count": 4668
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.6848,
+      "char_count": 4096
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.2047,
+      "char_count": 4668
+    }
+  },
+  {
+    "page": 42,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.2022,
+      "char_count": 3347
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0023,
+      "non_dict_word_ratio": 0.5622,
+      "char_count": 3012
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.2022,
+      "char_count": 3347
+    }
+  },
+  {
+    "page": 43,
+    "extractor_chosen": "pypdf",
+    "reason": "fallback_pdfplumber_garbled",
+    "garbled_flag": false,
+    "final_scores": {
+      "non_ascii_ratio": 0.0015,
+      "non_dict_word_ratio": 0.3879,
+      "char_count": 4816
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0016,
+      "non_dict_word_ratio": 0.856,
+      "char_count": 4281
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0015,
+      "non_dict_word_ratio": 0.3879,
+      "char_count": 4816
+    }
+  },
+  {
+    "page": 44,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.4439,
+      "char_count": 6190
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0024,
+      "non_dict_word_ratio": 0.8866,
+      "char_count": 5469
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.4439,
+      "char_count": 6190
+    }
+  },
+  {
+    "page": 45,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0053,
+      "non_dict_word_ratio": 0.4758,
+      "char_count": 5875
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.006,
+      "non_dict_word_ratio": 0.8649,
+      "char_count": 5183
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0053,
+      "non_dict_word_ratio": 0.4758,
+      "char_count": 5875
+    }
+  },
+  {
+    "page": 46,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0017,
+      "non_dict_word_ratio": 0.4812,
+      "char_count": 5789
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.8824,
+      "char_count": 5160
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0017,
+      "non_dict_word_ratio": 0.4812,
+      "char_count": 5789
+    }
+  },
+  {
+    "page": 47,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4803,
+      "char_count": 5884
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.8215,
+      "char_count": 5262
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4803,
+      "char_count": 5884
+    }
+  },
+  {
+    "page": 48,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0032,
+      "non_dict_word_ratio": 0.4727,
+      "char_count": 5937
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0036,
+      "non_dict_word_ratio": 0.9091,
+      "char_count": 5283
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0032,
+      "non_dict_word_ratio": 0.4727,
+      "char_count": 5937
+    }
+  },
+  {
+    "page": 49,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0016,
+      "non_dict_word_ratio": 0.4606,
+      "char_count": 5547
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0018,
+      "non_dict_word_ratio": 0.9003,
+      "char_count": 4947
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0016,
+      "non_dict_word_ratio": 0.4606,
+      "char_count": 5547
+    }
+  },
+  {
+    "page": 50,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4618,
+      "char_count": 5703
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0022,
+      "non_dict_word_ratio": 0.9085,
+      "char_count": 5073
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4618,
+      "char_count": 5703
+    }
+  },
+  {
+    "page": 51,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.002,
+      "non_dict_word_ratio": 0.5034,
+      "char_count": 5934
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0023,
+      "non_dict_word_ratio": 0.9157,
+      "char_count": 5267
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.002,
+      "non_dict_word_ratio": 0.5034,
+      "char_count": 5934
+    }
+  },
+  {
+    "page": 52,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.5346,
+      "char_count": 6230
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0024,
+      "non_dict_word_ratio": 0.9064,
+      "char_count": 5514
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0021,
+      "non_dict_word_ratio": 0.5346,
+      "char_count": 6230
+    }
+  },
+  {
+    "page": 53,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4911,
+      "char_count": 5759
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0022,
+      "non_dict_word_ratio": 0.9262,
+      "char_count": 5075
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0019,
+      "non_dict_word_ratio": 0.4911,
+      "char_count": 5759
+    }
+  },
+  {
+    "page": 54,
+    "extractor_chosen": "pypdf",
+    "reason": "both_garbled_pypdf_less_bad",
+    "garbled_flag": true,
+    "final_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.6,
+      "char_count": 291
+    },
+    "pdfplumber_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.9524,
+      "char_count": 257
+    },
+    "pypdf_scores": {
+      "non_ascii_ratio": 0.0,
+      "non_dict_word_ratio": 0.6,
+      "char_count": 291
+    }
+  }
+]

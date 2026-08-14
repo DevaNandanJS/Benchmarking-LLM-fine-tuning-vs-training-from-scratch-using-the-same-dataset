@@ -1,0 +1,45 @@
+120]. Prompting and ICL support quick adaptation, yet they shift the burden toward prompt engineering and
+context management [11, 91, 113]. Retrieval-augmented approaches often provide a better balance for log-centric
+workflows because system-specific knowledge can be refreshed without retraining, but this depends on having a
+trustworthy retrieval layer [20, 42, 79, 98]. Agentic workflows extend this flexibility further, although the added
+coverage comes with higher latency, system complexity, and more opportunities for cascading errors [100, 111,
+194]. Across the corpus, the most deployment-friendly compromise is often a hybrid design in which smaller
+models or structured filters handle routine narrowing, while a stronger LLM is invoked selectively for ambiguous
+cases, explanation, or cross-source analysis [68, 98, 100]. In comparative terms, fine-tuning offers the strongest
+task-specific stability when labels and task definitions are reliable, but it is the least convenient to refresh under
+rapid drift. Prompting and ICL are easier to adapt quickly, but they are more sensitive to prompt construction
+and context quality. Retrieval-augmented methods improve freshness and grounding by injecting system-specific
+evidence at inference time, but they depend on robust indexing and retrieval quality. Agentic or hybrid designs
+are the most capable of integrating multi-step evidence across tools and artifacts, but they also carry the highest
+latency, coordination overhead, and error-propagation risk.
+The final cross-task insight concerns operator alignment. Several downstream tasks, especially RCA and
+log summarization, require outputs that humans can inspect, challenge, and act on. This creates a stronger
+requirement than predictive accuracy alone. A detector that produces a strong F1 score but cannot explain
+which evidence matters may still have limited operational value, whereas an RCA assistant or summarizer that
+produces plausible but weakly augmented narratives can actively mislead users. Accordingly, many of the most
+promising LLM4Log directions couple generation with structured extraction, retrieved evidence, tool support, or
+schema-constrained outputs so that the resulting artifacts remain inspectable and verifiable instead of purely
+free-form [20, 68, 98, 100].
+7.2 Open Challenges and Future Directions
+Despite rapid progress, the current LLM4Log literature still exhibits substantial limitations that make direct
+cross-paper comparison and real-world translation difficult. A central issue is comparability. Many papers report
+the same headline metrics, but the underlying setups often differ in ways that materially affect results: datasets
+differ, sessionization or windowing strategies vary, some pipelines depend on parsing while others operate on
+raw or lightly normalized text, anomaly ratios are inconsistent, and prompt or model settings are frequently
+under-reported [6, 20, 68]. These differences make it difficult to compare performance numbers across studies.
+For example, two papers may both report F1, AUC, ROUGE, or Acc@k, but those scores may be based on different
+label definitions, windowing or grouping strategies, anomaly ratios, parsing choices, prompt templates, model
+versions, decoding settings, or evaluation targets. These differences also make performance claims harder to
+interpret. A label may define an anomaly, root cause, or correct answer differently across datasets. Windowing
+and grouping can change what evidence is available to the model and can also change the class balance. In highly
+imbalanced anomaly-detection datasets, a single aggregate score may hide important failure cases. Similarly,
+results based only on public benchmarks may overstate how ready a method is for industrial use. For this reason,
+simple pooled rankings or broad claims about the universally best LLM4Log method would be misleading. What
+the literature currently supports more reliably is a pattern-level summary of recurring design choices, strengths,
+evaluation gaps, and failure modes, not universal leaderboard conclusions [20, 68].
+The second challenge is evaluation realism. A large fraction of the corpus still depends on a relatively small set
+of public benchmarks, especially HDFS, BGL, and a few adjacent datasets [ 20, 47, 68]. These benchmarks are
+useful for controlled comparison, but they only partially reflect the operational realities that motivate LLM-based
+log analysis in practice: long causal chains, mixed-source streams, privacy constraints, rapidly evolving software
+versions, and the need to correlate logs with tickets, runbooks, metrics, and code [42, 102, 192]. From the released
+41

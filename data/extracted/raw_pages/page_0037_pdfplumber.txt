@@ -1,0 +1,55 @@
+Table8. SummaryofLLM-basedrootcauseanalysisandfailurediagnosisstudiesorganizedbycategory.
+Paper Train? Dataset(s)type Output Metric(s) BaseModel(s)
+Prompting&In-ContextLearning(ICL)forRCA/Diagnosis
+Chenetal.[16] Yes log,traces,metrics Explanation;category MicroandmacroF1 GPT-4
+Shanetal.[145] No Log Root-cause configuration Accuracy;FP GPT-4
+location
+Zhangetal.[209] No Incident title, Inci- Rootcause ROUGE-L,ROUGE-1,ME- GPT-3.5-turbo,GPT-4
+dentsummary(logs, TEOR,GLEU,BERTScore,
+traces,etc.) Nubia
+InsightAI[28] No Log Flame graph; user Q&A F1 GPT-4o
+chatbot
+ScalaLog[201] No Log Root-causedescription F1 GPT-3.5-turbo
+Agentic&Tool-AugmentedRCA(Multi-stepReasoning)
+RCAgent[179] No Log,codebase Rootcauses,solutions,evi- METEOR, NUBIA, Vicuna-13B-V1.5-16K,
+dence,responsibilities BLEURT, BARTScore, GTE-LARGE(embedding)
+EmbScore
+OPENRCA[189] No Log,traces,metrics Root cause reasons and Accuracy Claude3.5
+components
+TAMO[208] Yes Log,traces,metrics Root cause localization; Acc@k;MiPr,MaPr,MiRe, GPT-4
+faulttypeclassification MaRe,MiF1,MaF1
+Flow-of-Action[124] No Log,traces,metrics Root cause localization; Rootcauselocationaccu- GPT-4-Turbo
+faulttypeclassification racy(LA);rootcausetype
+accuracy(TA)
+RCLAgent[203] No Metric,tracelog Rootcauselocalization Recall@k;MRR Claude-3.5-sonnet
+MicroRCA-Agent[163] Yes Log,traces,metrics Root-cause Top@K deepseek-v3
+Knowledge/Graph/Code-AugmentedDiagnosis
+ForenSiX[58] No Log Contextextraction,datade- Accuracy GPT-4o
+pendencygraph,diagnosis
+COCA[85] No Log,codebase,trace Root-cause BLEU-4, ROUGE-1, ME- GPT-4o
+TEOR, Semantics, Useful-
+ness,ExactMatch,Top-K
+AetherLog[19] Yes Log Root-cause category pre- F1 GPT-4o
+diction
+GeneralLogDiagnosis:FaultType/Resolution/Understanding
+LogSage[190] No Log Rootcauses;solutions Precision,Recall,F1 GPT-4o, Deepseek V3,
+Claude-3.7-Sonnet
+Herrmannetal.[50] Yes Issuedescription,log Rootcausedescription MSS MIXTRAL-8X7B
+files, engineer com-
+munications
+Huangetal.[53] Yes Log Fault-indicating descrip- Precision,Recall,F1 UniXcoder
+tion; fault-indicating
+parameter
+LogLM[94] Yes Log Log-problem-resolution BLEU,ROUGE-1,ROUGE- LLaMA2-7B
+2,ROUGE-L
+LogReasoner[100] Yes Log Failuretype Accuracy;Weighted-F1 Qwen2.5-1.5B
+Jietal.[62] Yes Log 0/1failuredetection;fault F1 LLaMA-2-7B
+type
+LogExpert[172] Yes Log, StackOverflow Executable resolution BLEU-4,ROUGE-L GPT-3.5-turbo,GPT-4
+issues steps,commandfilling
+KnowLog[99] Yes Log Causeranking Accuracy;WeightedF1 BERT
+AdaptiveLog[101] Yes Log Failuretype Recall@k bert,chatgpt
+Taherietal.[161] Yes Log Faultclassification F1 RoBERTa,BigBird,Flan-T5
+Benchmarks&EvaluationSuites
+LogEval[20] Yes Log Faulttypes Accuracy;F1 GPT-4
+37

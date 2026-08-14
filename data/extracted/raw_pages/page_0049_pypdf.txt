@@ -1,0 +1,55 @@
+[114] Priyanka Mudgal, Bijan Arbab, and Swaathi Sampath Kumar. Crasheventllm: Predicting system crashes with large language models. In
+2024 International Conference on Information Technology and Computing (ICITCOM), pages 72–76. IEEE, 2024.
+[115] Gunho No, Yukyung Lee, Hyeongwon Kang, and Pilsung Kang. RAPID: Training-free retrieval-based log anomaly detection with
+pre-trained language model considering token-level information.Engineering Applications of Artificial Intelligence, 133:108613, 2024.
+doi: 10.1016/j.engappai.2024.108613.
+[116] OpenAI. Gpt-4 technical report, 2023. URL https://arxiv.org/abs/2303.08774.
+[117] Oracle. Java platform, standard editionjava.util.logging. Online documentation, 2024. URL https://docs.oracle.com/en/java/javase/.
+[118] Harold Ott, Jasmin Bogatinovski, Alexander Acker, Sasho Nedelkoski, and Odej Kao. Robust and transferable anomaly detection in log
+data using pre-trained language models, 2021. URL https://arxiv.org/abs/2102.11570.
+[119] Youssef Esseddiq Ouatiti, Mohammed Sayagh, Bram Adams, and Ahmed E. Hassan. Omnillp: Enhancing llm-based log level prediction
+with context-aware retrieval, 2025. URL https://arxiv.org/abs/2508.08545.
+[120] Long Ouyang, Jeff Wu, Xu Jiang, Diogo Almeida, Carroll L. Wainwright, Pamela Mishkin, Chong Zhang, Sandhini Agarwal, Katarina
+Slama, Alex Ray, John Schulman, Jacob Hilton, Fraser Kelton, Luke Miller, Maddie Simens, Amanda Askell, Peter Welinder, Paul F.
+Christiano, Jan Leike, and Ryan Lowe. Training language models to follow instructions with human feedback, 2022. URL https:
+//arxiv.org/abs/2203.02155.
+[121] Jonathan Pan, Swee Liang Wong, and Yidi Yuan. Raglog: Log anomaly detection using retrieval augmented generation, 2023. URL
+https://arxiv.org/abs/2311.05261.
+[122] Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. Bleu: a method for automatic evaluation of machine translation. In
+Proceedings of the 40th annual meeting of the Association for Computational Linguistics, pages 311–318, 2002.
+[123] Changhua Pei, Zihan Liu, Jianhui Li, Erhan Zhang, Le Zhang, Haiming Zhang, Wei Chen, Dan Pei, and Gaogang Xie. Self-evolutionary
+group-wise log parsing based on large language model. In2024 IEEE 35th International Symposium on Software Reliability Engineering
+(ISSRE), pages 49–60. IEEE, 2024.
+[124] Changhua Pei, Zexin Wang, Fengrui Liu, Zeyan Li, Yang Liu, Xiao He, Rong Kang, Tieying Zhang, Jianjun Chen, Jianhui Li, et al.
+Flow-of-action: Sop enhanced llm-based multi-agent system for root cause analysis. InCompanion Proceedings of the ACM on Web
+Conference 2025, pages 422–431, 2025.
+[125] Matthew E. Peters, Mark Neumann, Mohit Iyyer, Matt Gardner, Christopher Clark, Kenton Lee, and Luke Zettlemoyer. Deep
+contextualized word representations. InProceedings of the 2018 Conference of the North American Chapter of the Association for
+Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers), pages 2227–2237, New Orleans, Louisiana, June 2018.
+Association for Computational Linguistics. doi: 10.18653/v1/N18-1202.
+[126] Reiner Pope, Yash Jain, Rohan Peri, Jeff Hankins, Baolin Lin, and Ion Stoica. Efficiently scaling transformer inference with pagedattention,
+2023. URL https://arxiv.org/abs/2309.06180.
+[127] Przemek Pospieszny, Wojciech Mormul, Karolina Szyndler, and Sanjeev Kumar. ADALog: Adaptive unsupervised anomaly detection in
+logs with self-attention masked language model.arXiv preprint, 2025. URL https://arxiv.org/abs/2505.13496.
+[128] Python Software Foundation. Python logging — logging facility for python. Online documentation, 2024. URL https://docs.python.org/
+3/library/logging.html.
+[129] Jiaxing Qi, Shaohan Huang, Zhongzhi Luan, Shu Yang, Carol J. Fung, Hailong Yang, Depei Qian, Jing Shang, Zhiwen Xiao, and Zhihui
+Wu. LogGPT: Exploring ChatGPT for log-based anomaly detection. In2023 IEEE International Conference on High Performance
+Computing & Communications, Data Science & Systems, Smart City & Dependability in Sensor, Cloud & Big Data Systems & Application
+(HPCC/DSS/SmartCity/DependSys), pages 273–280, 2023. doi: 10 .1109/HPCC-DSS-SMARTCITY-DEPENDSYS60770 .2023.00045. URL
+https://doi.org/10.1109/HPCC-DSS-SmartCity-DependSys60770.2023.00045.
+[130] Xipeng Qiu, Tianxiang Sun, Yige Xu, Yunfan Shao, Ning Dai, and Xuanjing Huang. Pre-trained models for natural language processing:
+A survey.Science China Technological Sciences, 63(10):1872–1897, 2020. doi: 10 .1007/s11431-020-1647-3. URL https://arxiv .org/abs/
+2003.08271.
+[131] QOS.ch. Logback. Online documentation, 2024. URL https://logback.qos.ch/.
+[132] QOS.ch. Slf4j: Simple logging facade for java. Online documentation, 2024. URL https://www.slf4j.org/.
+[133] Rafael Rafailov, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher D. Manning, and Chelsea Finn. Direct preference optimization:
+Your language model is secretly a reward model, 2023. URL https://arxiv.org/abs/2305.18290.
+[134] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J Liu.
+Exploring the limits of transfer learning with a unified text-to-text transformer.Journal of machine learning research, 21(140):1–67,
+2020.
+[135] Nils Reimers and Iryna Gurevych. Sentence-bert: Sentence embeddings using siamese bert-networks.arXiv preprint arXiv:1908.10084,
+2019.
+[136] Youcef Remil, Anes Bendimerad, Romain Mathonat, and Mehdi Kaytoue. Aiops solutions for incident management: Technical guidelines
+and a comprehensive literature review.arXiv preprint arXiv:2404.01363, 2024.
+49

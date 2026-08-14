@@ -1,0 +1,55 @@
+[93] Yilun Liu, Shimin Tao, Weibin Meng, Feiyu Yao, Xingyu Zhao, and Hao Yang. LogPrompt: Prompt engineering towards zero-shot
+and interpretable log analysis. InCompanion Proceedings of the 46th IEEE/ACM International Conference on Software Engineering
+(ICSE Companion ’24). Association for Computing Machinery, 2024. doi: 10 .1145/3639478.3643108. URL https://doi .org/10.1145/
+3639478.3643108.
+[94] Yilun Liu, Yuhe Ji, Shimin Tao, Minggui He, Weibin Meng, Shenglin Zhang, Yongqian Sun, Yuming Xie, Boxing Chen, and Hao Yang.
+Loglm: From task-based to instruction-based automated log analysis. In2025 IEEE/ACM 47th International Conference on Software
+Engineering: Software Engineering in Practice (ICSE-SEIP), pages 401–412. IEEE, 2025.
+[95] Yinhan Liu, Myle Ott, Naman Goyal, Jingfei Du, Mandar Joshi, Danqi Chen, Omer Levy, Mike Lewis, Luke Zettlemoyer, and Veselin
+Stoyanov. Roberta: A robustly optimized bert pretraining approach.arXiv preprint arXiv:1907.11692, 2019.
+[96] Yang Lu.LogSage: Log Summarization Assistant with Guided Enhancement, page 1979–1981. Association for Computing Machinery,
+New York, NY, USA, 2025. ISBN 9798400706295. URL https://doi.org/10.1145/3672608.3707990.
+[97] Wengang Lyu, Yilun Wang, Wei Wei, Runkun Xiao, Youwei Li, Gen Li, Laiyuan Yang, and Zibin Zheng. Exploring variable potential for
+llm-based log parsing efficiency and reduced costs. InProceedings of the FSE 2025 Companion, 2025. doi: 10 .1145/3696630.3728506. URL
+https://doi.org/10.1145/3696630.3728506.
+[98] Lipeng Ma, Weidong Yang, Sihang Jiang, Ben Fei, Mingjie Zhou, Shuhao Li, Mingyu Zhao, Bo Xu, and Yanghua Xiao. LUK: Empowering
+log understanding with expert knowledge from large language models, 2024.
+[99] Lipeng Ma, Weidong Yang, Bo Xu, Sihang Jiang, Ben Fei, Jiaqing Liang, Mingjie Zhou, and Yanghua Xiao. Knowlog: Knowledge enhanced
+pre-trained language model for log understanding. InProceedings of the IEEE/ACM 46th International Conference on Software Engineering,
+ICSE ’24, New York, NY, USA, 2024. Association for Computing Machinery. ISBN 9798400702174. doi: 10.1145/3597503.3623304. URL
+https://doi.org/10.1145/3597503.3623304.
+[100] Lipeng Ma, Yixuan Li, Weidong Yang, Mingjie Zhou, Xinyi Liu, Ben Fei, Shuhao Li, Xiaoyan Sun, Sihang Jiang, and Yanghua Xiao.
+LogReasoner: Empowering LLMs with expert-like coarse-to-fine reasoning for log analysis tasks, 2025.
+[101] Lipeng Ma, Weidong Yang, Yixuan Li, Ben Fei, Mingjie Zhou, Shuhao Li, Sihang Jiang, Bo Xu, and Yanghua Xiao. Adaptivelog: An
+adaptive log analysis framework with the collaboration of large and small language model.ACM Transactions on Software Engineering
+and Methodology, 2025. doi: 10.1145/3749840. URL https://doi.org/10.1145/3749840. arXiv:2501.11031.
+[102] X. Ma, Y. Li, J. Keung, X. Yu, H. Zou, Z. Yang, F. Sarro, and E. T. Barr. Practitioners’ expectations on log anomaly detection.IEEE
+Transactions on Software Engineering, 51(9):2455–2471, 2025. doi: 10.1109/TSE.2025.3586700.
+[103] Zeyang Ma, An Ran Chen, Dong Jae Kim, Tse-Hsun Chen, and Shaowei Wang. Llmparser: An exploratory study on using large
+language models for log parsing. InProceedings of the 46th IEEE/ACM International Conference on Software Engineering (ICSE 2024),
+pages 99:1–99:13, 2024. doi: 10.1145/3597503.3639150. URL https://doi.org/10.1145/3597503.3639150.
+[104] Zeyang Ma, Dong Jae Kim, and Tse-Hsun Chen. Librelog: Accurate and efficient unsupervised log parsing using open-source
+large language models. InProceedings of the 47th International Conference on Software Engineering (ICSE 2025). IEEE/ACM, 2025.
+URL https://conf.researchr.org/details/icse-2025/icse-2025-research-track/75/LibreLog-Accurate-and-Efficient-Unsupervised-Log-
+Parsing-Using-Open-Source-Large-Lan. To appear.
+[105] Potsawee Manakul, Adian Liusie, and Mark J. F. Gales. Selfcheckgpt: Zero-resource black-box hallucination detection for generative
+large language models, 2023. URL https://arxiv.org/abs/2303.08896.
+[106] Praveen Kumar Mannam. Optimizing software release management with gpt-enabled log anomaly detection. In2023 26th International
+Conference on Computer and Information Technology (ICCIT), pages 1–6. IEEE, 2023.
+[107] Mika V Mäntylä, Yuqing Wang, and Jesse Nyyssölä. Loglead-fast and integrated log loader, enhancer, and anomaly detector. In2024
+IEEE International Conference on Software Analysis, Evolution and Reengineering (SANER), pages 395–399. IEEE, 2024.
+[108] Antonio Mastropaolo, Luca Pascarella, and Gabriele Bavota. Using deep learning to generate complete log statements. InProceedings
+of the 44th International Conference on Software Engineering (ICSE ’22), pages 2279–2290, 2022. doi: 10 .1145/3510003.3511561. URL
+https://doi.org/10.1145/3510003.3511561.
+[109] Antonio Mastropaolo, Valentina Ferrari, Luca Pascarella, and Gabriele Bavota. Log statements generation via deep learning: Widening
+the support provided to developers.Journal of Systems and Software, 210:111947, 2024. doi: 10 .1016/j.jss.2023.111947. URL https:
+//doi.org/10.1016/j.jss.2023.111947.
+[110] Maryam Mehrabi, Abdelwahab Hamou-Lhadj, and Hossein Moosavi. The effectiveness of compact fine-tuned llms in log parsing. In
+2024 IEEE International Conference on Software Maintenance and Evolution (ICSME), pages 438–448. IEEE, 2024.
+[111] Grégoire Mialon, Roberto Dessì, Maria Lomeli, Christos Nalmpantis, Ram Pasunuru, Roberta Raileanu, Baptiste Rozière, Timo Schick,
+Damien Sileo, Lewis Tunstall, et al. Augmented language models: a survey, 2023. URL https://arxiv.org/abs/2302.07842.
+[112] Tomas Mikolov, Ilya Sutskever, Kai Chen, Greg S Corrado, and Jeff Dean. Distributed representations of words and phrases and their
+compositionality.Advances in neural information processing systems, 26, 2013.
+[113] Sewon Min, Mike Lewis, Luke Zettlemoyer, and Hannaneh Hajishirzi. Rethinking the role of demonstrations: What makes in-context
+learning work?, 2022. URL https://arxiv.org/abs/2202.12837.
+48

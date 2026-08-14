@@ -1,0 +1,88 @@
+Table 5. Summary of LLM-based log parsing approaches. The “LLM Technique” column describes the main learning/adaptation
+paradigm, while “Reuse / Eff. ” records orthogonal scalability, reuse, or system-level efficiency mechanisms.
+Paper Setting Superv. LLM Technique Reuse / Eff. Base Model(s) Metric(s)
+Benchmarks and empirical analyses
+Le & Zhang [73] Online Both Zero-/few-shot prompting study (capability analysis)– GPT-3.5 PA, GA, ED
+Astekin et al. [4] Online Both Few-shot prompting comparison across LLMs – CodeLlama-7B ED, PA, LCS
+LogEval [20] Offline Sup. Benchmark suite (multiple log-analysis tasks incl.
+parsing)
+– GPT-4 PA, ED
+LogBase [197] Offline – Benchmark dataset for semantic log parsing – – –
+LLMDPP [173] Online Sup. DPP-based diverse sample selection for few-shot
+parsing
+– Flan-T5-small GA, PA
+VISTA [97] Online Sup. Variable-aware ICL (efficiency/cost-oriented study) Cache GPT-3.5-Turbo PA
+Supervised and log-specific model adaptation
+GPT-2C [144] Offline Sup. Fine-tuned GPT-style parser (Q&A formulation) – GPT-2 F1
+LogStamp [164] Online Sup. Sequence labeling for template/parameter tagging – BERT-base RI
+LogPPT [72] Offline Sup. Prompt-based few-shot token labeling – RoBERTa PA, GA, ED
+LLMParser [103] Offline Sup. Few-shot fine-tuning for template generation – LLaMA-7B PA, GA
+Mehrabi et
+al. [110]
+Offline Sup. Compact fine-tuning (effectiveness study) – Mistral-7B MLA, ED, F1
+OWL [42] Offline Sup. Log foundation model training (IT operations) – OWL RI, F1
+PreLog [74] Online Sup. Log foundation model pretraining (log analytics) – PreLog-140M GA, OA, ED, uPA
+Le et al. [75] Online Sup. Few-shot tuning of semantic LLMs + adaptive
+caching
+Adap. cache RoBERTa (125M) GA, PA, FGA, FTA
+LogLM [94] Offline Sup. Instruction tuning for log tasks – LLaMA-2-7B RI, F1
+SuperLog [62] Offline Sup. Continual pretraining + interpretable domain knowl-
+edge
+– LLaMA-2-7B RI, F1
+Prompt-based and adaptive ICL parsing
+DivLog [188] Online Sup. Adaptive few-shot ICL with prompt enhancement – GPT-3 (Curie) PA, PTA, RTA
+Liu et al. [92] Online Unsup. Prompt strategies (fixed demos) for online parsing/-
+analysis
+– GPT-3.5-Turbo F1
+Xu et al. [212] Online Unsup. Zero-shot prompting for template extraction Temp. DB GPT-3.5 PA, GA, ED
+LogGenius [196] Online Unsup. Zero-shot prompting + synthetic log generation (as-
+sistance)
+– GPT-3.5-Turbo PA
+Zhou et al. [218] Online Unsup. Few-shot prompting (with a BERT-based component
+in pipeline)
+– GPT-3.5 GA, MLA, ED
+LLM-TD [169] Offline Unsup. ICL-based template detection for security event logsTemp. cand. OpenChat FGA
+Lemur [207] Online Unsup. Entropy-guided clustering + CoT template merging Cluster GPT-3.5 Template accuracy
+LogRules [57] Offline Sup. ICL enhanced with rules (case-/rule-based knowl-
+edge injection)
+Rules GPT-4o-mini +
+LLaMA-3-8B-Instruct
+PA, GA, ED, FGA, FTA
+Retrieval/refinement-oriented parsing and system-level efficiency layers
+LILAC [64] Online Sup. ICL + hierarchical demo sampling + cache refinementAdap. cache GPT-3.5 PA, GA, FGA, FTA
+LogBatcher [184] Online Unsup. Demonstration-free parsing via retrieval (no labeled
+demos)
+Cache GPT-3.5-Turbo GA, MLA, ED
+LogParser-
+LLM [213]
+Online Unsup. Grouping + multi-step prompting (RAG-style) Grouping GPT-3.5-Turbo GA, PA, FGA, FTA, GGD, PGD
+SelfLog [123] Online Both Group-wise ICL with self-evolutionary merge tree Tree GPT-3.5 GA, PA, PTA, RTA
+HELP [186] Online Both Embedding clustering + LLM template generation Cluster text-embedding-3-
+small + Claude-3.5-
+Sonnet
+GA, FGA, PA, FTA
+LibreLog [104] Offline Unsup. Retrieval-augmented parsing + self-reflection refine-
+ment
+Temp. mem. LLaMA-3-8B-Instruct PA, GA
+Parse-LLM [152] Online Unsup. Agentic decomposition with callable tools (header
+separation, etc.)
+Tools GPT-4 GA, FGA, PA, FTA
+AdaParser [182] Online Unsup. Self-generated ICL + self-correction Tree GPT-3.5 GA, FGA, PA, FTA
+Huang et al. [54] Online Unsup. Unsupervised parser with retrieval (no labeled exam-
+ples)
+Temp. DB GPT-3.5 GA, FGA, PA, FTA
+EPAS [15] Online Unsup. Asynchronous scheduling of LLM queries (tail-
+latency aware)
+Async Llama-3.1-70B-
+Instruct
+GA, FGA, PA, FTA
+SemanticLog [198] Online Unsup. Variable-aware template generation for large-scale
+parsing
+Cache LLaMA-2-7B GA, PA, FTA
+Duan et al. [26] Offline Unsup. LogBatcher-style grouping + LLM template correc-
+tion
+Cache GPT-3.5-Turbo GA, FGA, PA, FTA
+InferLog [177] Online Unsup. ICL-oriented prefix KV-cache reuse + auto-tuning KV cache Qwen2.5-14B-
+Instruct
+PA, PTA, RTA, GA
+23

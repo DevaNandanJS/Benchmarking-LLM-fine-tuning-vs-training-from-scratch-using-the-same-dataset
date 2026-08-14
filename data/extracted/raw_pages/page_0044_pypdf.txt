@@ -1,0 +1,55 @@
+[13] Mark Chen, Jerry Tworek, Heewoo Jun, Qiming Yuan, Henrique Ponde de Oliveira Pinto, Jared Kaplan, Harri Edwards, Yuri Burda,
+Nicholas Joseph, Greg Brockman, Alex Ray, Raul Puri, Gretchen Krueger, Michael Petrov, Heidy Khlaaf, Girish Sastry, Pamela Mishkin,
+Brooke Chan, Scott Gray, Nick Ryder, Mikhail Pavlov, Alethea Power, Lukasz Kaiser, Mohammad Bavarian, Clemens Winter, Philippe
+Tillet, Felipe Petroski Such, Dave Cummings, Matthias Plappert, Fotios Chantzis, Elizabeth Barnes, Ariel Herbert-Voss, William Hebgen
+Guss, Alex Nichol, Alex Paino, Nikolas Tezak, Jie Tang, Igor Babuschkin, Suchir Balaji, Shantanu Jain, William Saunders, Christopher
+Hesse, Andrew N. Carr, Jan Leike, Josh Achiam, Vedant Misra, Evan Morikawa, Alec Radford, Matthew Knight, Miles Brundage, Mira
+Murati, Katie Mayer, Peter Welinder, Bob McGrew, Dario Amodei, Sam McCandlish, Ilya Sutskever, and Wojciech Zaremba. Evaluating
+large language models trained on code. arXiv preprint arXiv:2107.03374, 2021. URL https://arxiv.org/abs/2107.03374.
+[14] Song Chen and Hai Liao. Bert-log: Anomaly detection for system logs based on pre-trained language model.Applied Artificial Intelligence,
+36(1):2145642, 2022. doi: 10 .1080/08839514.2022.2145642. URL https://www .tandfonline.com/doi/full/10.1080/08839514.2022.2145642.
+[15] Xiaolei Chen, Jie Shi, Jia Chen, Peng Wang, and Wei Wang. Epas: Efficient online log parsing via asynchronous scheduling of llm
+queries. InProceedings of the 41st IEEE International Conference on Data Engineering (ICDE 2025), pages 4025–4037. IEEE, 2025. doi:
+10.1109/ICDE.2025.00318. URL https://ieeexplore.ieee.org/abstract/document/11113127.
+[16] Yinfang Chen, Huaibing Xie, Minghua Ma, Yu Kang, Xin Gao, Liu Shi, Yunjie Cao, Xuedong Gao, Hao Fan, Ming Wen, et al. Automatic
+root cause analysis via large language models for cloud incidents. InProceedings of the Nineteenth European Conference on Computer
+Systems, pages 674–688, 2024.
+[17] Kevin Clark, Minh-Thang Luong, Quoc V Le, and Christopher D Manning. Electra: Pre-training text encoders as discriminators rather
+than generators.arXiv preprint arXiv:2003.10555, 2020.
+[18] Clara Corbelle, Victor Carneiro, and Fidel Cacheda. Semantic hierarchical classification applied to anomaly detection using system
+logs with a bert model.Applied Sciences, 14(13), 2024. ISSN 2076-3417. doi: 10 .3390/app14135388. URL https://www .mdpi.com/2076-
+3417/14/13/5388.
+[19] Tianyu Cui, Ruowei Fu, Changchang Liu, Yuhe Ji, Wenwei Gu, Shenglin Zhang, Yongqian Sun, and Dan Pei. Aetherlog: Log-based root
+cause analysis by integrating large language models with knowledge graphs. In2025 IEEE 36th International Symposium on Software
+Reliability Engineering (ISSRE), pages 49–60. IEEE, 2025.
+[20] Tianyu Cui, Shiyu Ma, Ziang Chen, Tong Xiao, Chenyu Zhao, Shimin Tao, Yilun Liu, Shenglin Zhang, Duoming Lin, Changchang Liu,
+Yuzhe Cai, Weibin Meng, Yongqian Sun, and Dan Pei. Logeval: A comprehensive benchmark suite for llms in log analysis.Empirical
+Softw. Engg., 30(6), October 2025. ISSN 1382-3256. doi: 10 .1007/s10664-025-10701-6. URL https://doi .org/10.1007/s10664-025-10701-6.
+[21] Hetong Dai, Heng Li, Che-Shao Chen, Weiyi Shang, and Tse-Hsun Chen. Logram: Efficient log parsing using 𝑛 n-gram dictionaries.
+IEEE Transactions on Software Engineering, 48(3):879–892, 2020.
+[22] Delgan and contributors. loguru: Python logging made simple. Online documentation, 2024. URL https://github .com/Delgan/loguru.
+[23] Tim Dettmers, Artidoro Pagnoni, Ari Holtzman, and Luke Zettlemoyer. Qlora: Efficient finetuning of quantized llms, 2023. URL
+https://arxiv.org/abs/2305.14314.
+[24] Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. Bert: Pre-training of deep bidirectional transformers for language
+understanding. InProceedings of the 2019 conference of the North American chapter of the association for computational linguistics: human
+language technologies, volume 1 (long and short papers), pages 4171–4186, 2019.
+[25] Shengcheng Duan, Yihua Xu, Sheng Zhang, Shen Wang, and Yue Duan. Pdlogger: Automated logging framework for practical software
+development, 2025. URL https://arxiv.org/abs/2507.19951.
+[26] Yiqi Duan, Jianliang Xu, Changyu Fan, and Zixin Liu. Unsupervised log parsing based on large language models and entropy. In2025
+11th International Symposium on System Security, Safety, and Reliability (ISSSR), pages 1–10. IEEE, 2025.
+[27] Chris Egersdoerfer, Di Zhang, and Dong Dai. Early exploration of using ChatGPT for log-based anomaly detection on parallel file systems
+logs. InProceedings of the 32nd International Symposium on High-Performance Parallel and Distributed Computing (HPDC ’23), pages
+315–316. Association for Computing Machinery, 2023. doi: 10.1145/3588195.3595943. URL https://doi.org/10.1145/3588195.3595943.
+[28] Maryam Ekhlasi, Anurag Prakash, Maxime Lamothe, and Michel Dagenais. Insightai: Root cause analysis in large log files with private
+data using large language model. In2025 IEEE/ACM 4th International Conference on AI Engineering – Software Engineering for AI (CAIN),
+pages 31–41, 2025. doi: 10.1109/CAIN66642.2025.00012.
+[29] Mahmoudreza Entezami, Shahabeddin Rahimi Harsini, David Houshangi, and Zahra Entezami. A novel framework for detecting
+anomalies in network security using LLM and deep learning.Journal of Electrical Systems, 21(1s):294–302, 2025. doi: 10 .52783/jes.8791.
+[30] Kawin Ethayarajh. How contextual are contextualized word representations? comparing the geometry of BERT, ELMo, and GPT-2
+embeddings. InProceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International
+Joint Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language
+Processing (EMNLP-IJCNLP), pages 55–65, Hong Kong, China, November 2019. Association for Computational Linguistics. doi:
+10.18653/v1/D19-1006.
+[31] European Parliament and Council of the European Union. Regulation (eu) 2016/679 of the european parliament and of the council (general
+data protection regulation). Official Journal of the European Union, L119, 2016. URL https://eur-lex.europa.eu/eli/reg/2016/679/oj.
+44

@@ -1,0 +1,70 @@
+Table 4. Summary of LLM-based automated logging studies organized by task category.
+Paper Task Paradigm Input Output Context/TechniqueBase Model(s)ComparisonsMetric(s)
+Full Logging Generation (General Purpose: Location, Message, Variables)
+LANCE [108] Full Gen Fine-tuning Java Method Log Stmt - T5 - Acc, BLEU
+FastLog [185] Full Gen Fine-tuning Method +
+AST
+Insert Point AST Locator PLBART - Acc, BLEU
+LEONID [109] Multi-Log Fine-tuning Full Method 0-N Logs - T5 - BLEU, METEOR
+ELogger [37] Block Gen Fine-tuning Code Block Single Log Block Features Enc-Dec - -
+UniLog [187] Full Gen ICL Method Loc+Level+MsgWarm-up Demos Codex, GPT-3 - PA, LA, MA
+SCLogger [83] Full Gen ICL + CoT Method Log Stmts Call Graph (2-hop) GPT-4,
+LLaMA2
+GPT-3.5 PA, AOD, F1
+PDLogger [25] Full Gen ICL + CoT Method +
+Slice
+Logs Backward Slicing o3-mini,
+DeepSeek
+LLaMA3-70B PA, L-ACC
+AUCAD [199] Align Gen Fine-tuningMethod + Is-
+sue
+Logs Issue Alignment LLaMA3.1 Magicoder PA, LA, VF1
+Zhong et al. [215] Full Gen Fine-tuning Java Method Logs Compact Model FTLLaMA-8B,
+Mistral
+GPT-4o,
+Claude
+PA, LA, F1
+Specialized Logging Generation (Test Code, File-level, Configuration)
+File-Level [138] File Gen ICL Python File Multi Logs Pipeline Stages GPT-4o-mini - L-ACC, AOD
+Test-Code [150] Test Log ICL Test Method Assert/Log Test Intent GPT-3.5,
+CodeLlama
+GPT-4o,
+Llama3
+Acc, BLEU
+ConfLogger [146] Config Log ICL + Rules Config Code Logs Config Analysis GPT-4o - LA, AOD
+Benchmarks, Empirical Studies, and Visions
+LogBench [82] Study ICL / Zero Method Level+Msg - GPT-3.5/4 InCoder, Star-
+Coder
+BLEU, ROUGE
+AL-Bench [162] Benchmark - Java Code Logs Benchmark Suite - - ALD, DEA
+Auto-Logging [8] Vision - - - AI Instrumentation - - -
+Specific Log Tasks (Level Prediction, Defect Detection, Repair, Quality)
+Heng et al. [49] Level Pred FT / Zero Snippet Level - CodeLlama-
+13B
+BERT,
+RoBERTa
+Acc, AUC
+OmniLLP [119] Level Pred RAG + ICLLog + Neigh-
+bors
+Level Cluster Retrieval CodeXEmbed - ARI, AUC
+LogUpdater [214] Log Repair Agent Defect Log Fixed Log Defect TaxonomyCodeT5+, GPT-
+4o
+Claude3.5 BLEU, ROUGE
+Defects4Log [175] Detection ICL + CoTMethod + LogDefect Type Defect Patterns DeepSeek-R1 GPT-4o Precision, Recall
+LOGIMPROVER [84] Quality - Codebase Improved
+Logs
+Proactive Analysis - - -
+4.3 LLM-based Approaches for Logging Statement Generation
+Table 4 groups recent LLM-based logging studies by task category, while the discussion below emphasizes the
+methodological paradigms behind them. Across these paradigms, the key idea is to exploit LLMs as joint models
+over code and natural language, so that the three core decisions, where to log, what level to use, and how to
+phrase the message and variables, are no longer made by hand-crafted rules or local classifiers. These logging
+decisions emerge from learned semantic patterns and in-context reasoning. Below, we organize prior work by
+how it uses LLMs and highlight the mechanisms that make each paradigm effective.
+4.3.1 Fine-tuned End-to-End Generators.Early work treats logging as a sequence-to-sequence learning problem
+and fine-tunes encoder–decoder models to transform raw code into logged code. LANCE [108] fine-tunes a T5
+model on pairs of Java methods with and without logging, so that the model learns to rewrite an input method
+into an output method containing an injected log statement. During decoding, the model jointly decides where
+to insert the statement, which level to use, which variables to log, and how to phrase the message. This joint
+modeling is precisely where LLMs outperform handcrafted AST patterns: instead of matching rigid templates,
+16

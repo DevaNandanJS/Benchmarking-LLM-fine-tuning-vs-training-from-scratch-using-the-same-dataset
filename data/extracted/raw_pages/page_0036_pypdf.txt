@@ -1,0 +1,45 @@
+Given an incident context (e.g., an anomalous time window or a set of correlated sessions), inputs commonly
+include (i) logs from multiple components/services within a time range, and optionally (ii) service topology/de-
+pendency information, deployment/change metadata, and alerts/metrics describing the incident. The output is
+typically a ranked list of candidate causes (top-𝑘 suspects), together with supporting evidence such as representa-
+tive templates/snippets, affected components, and (when available) an explanatory chain linking symptoms to
+causes. Logs are especially useful in RCA because they preserve chronological symptom evidence, error/exception
+semantics, component-local context, and operator-facing evidence chains that connect observations to candidate
+causes. The “Dataset(s) type” column in Table 8 reports whether each RCA study uses logs alone or combines
+logs with other operational artifacts, making the scope of multimodal inclusion explicit.
+6.4.2 LLM-based Approaches for Root Cause Analysis.Table 8 summarizes LLM-based root cause analysis (RCA)
+and closely related failure diagnosis studies. Overall, these works share a common goal: given heterogeneous
+operational evidence (logs and often metrics/traces, code, tickets, or knowledge bases), produce an actionable
+RCA output such as(i)a root-cause description or reason,(ii)localization to components/configurations, and
+sometimes(iii)remediation guidance and supporting evidence. Across studies, the main design differences are(1)
+how the LLM is used(prompting/ICL vs. agentic tool use vs. trained task model),(2) what external context is
+integrated(repositories, databases, SOPs, graphs, knowledge bases), and(3) what the output is optimized for
+(free-form explanation vs. structured labels/locations vs. resolutions).
+Prompting and in-context learning for incident RCA.A pragmatic line treats RCA as a text understanding
+and summarization problem and relies on prompting/ICL to map incident artifacts to root-cause statements.
+Chen et al. [16] perform automatic RCA for cloud incidents by consuming multiple incident signals (e.g., error
+logs, stack traces, socket metrics) and outputting both explanations and categories, evaluated with F1. Similarly,
+Zhang et al. [209] study ICL-based root causing for cloud incidents using incident metadata (e.g., title/summary)
+and report a suite of generation-oriented metrics. In privacy- or token-limited settings, InsightAI [28] frames
+RCA as interactive diagnosis over large private logs, producing operator-facing artifacts (e.g., flame graphs
+and Q&A-style assistance) and evaluating quality with F1. These ICL-style systems are attractive due to low
+engineering overhead (no task-specific training required), but their performance is often bounded by context
+selection, prompt robustness, and the fidelity of the provided evidence.
+Agentic and tool-augmented RCA for complex systems.When RCA requires multi-step investigation (e.g.,
+correlating signals, fetching relevant traces, querying databases, or checking code ownership), many works
+move from single-pass prompting toagenticpipelines. RCAgent [ 179] is representative: it uses autonomous
+agents and tool augmentation over logs and external artifacts (e.g., databases and code repositories) to produce
+root causes, solutions, evidence, and responsibilities, and evaluates with multiple semantic similarity metrics.
+OPENRCA [189] explicitly benchmarks the ability of agentic LLM systems to locate root causes from observability
+data (logs/metrics/traces), emphasizing accuracy on components and reasons. Other methods specialize in
+structured outputs and fine-grained localization: TAMO [208] targets cloud-native RCA with tool-assisted agents
+over multi-modality observations and evaluates localization via Acc@k alongside fault-type classification metrics,
+while Flow-of-Action [124] incorporates SOP guidance to improve location/type accuracy. RCLAgent [203] explore
+multi-agent recursion-of-thought for microservice localization, reporting ranking-style metrics (Recall@k, MRR).
+MicroRCA-Agent [163] further integrates an anomaly-identification stage (training an Isolation Forest) before
+agentic RCA, reflecting a common practical pattern:small models for fast screening, agents for evidence-driven
+explanation and attribution. Overall, agentic approaches tend to improve completeness and traceability of RCA, but
+introduce added latency/cost and require careful guardrails to avoid brittle tool use or overconfident narratives.
+Knowledge-, graph-, and code-augmented RCA.Another prominent direction strengthens RCA by explicitly
+modeling dependencies and injecting structured knowledge. ForenSiX [58] combines context extraction with a data
+36

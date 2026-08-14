@@ -1,0 +1,55 @@
+[73] Van-Hoang Le and Hongyu Zhang. Log parsing: How far can chatgpt go? InProceedings of the 38th IEEE/ACM International Conference
+on Automated Software Engineering, ASE ’23, page 1699–1704. IEEE Press, 2024. ISBN 9798350329964. doi: 10.1109/ASE56229.2023.00206.
+URL https://doi.org/10.1109/ASE56229.2023.00206.
+[74] Van-Hoang Le and Hongyu Zhang. Prelog: A pre-trained model for log analytics.Proceedings of the ACM on Management of Data, 2(3):
+1–28, 2024. doi: 10.1145/3654966. URL https://dl.acm.org/doi/10.1145/3654966. Presented at SIGMOD 2024.
+[75] Van-Hoang Le, Yi Xiao, and Hongyu Zhang. Unleashing the true potential of semantic-based log parsing with pre-trained
+language models. InProceedings of the 47th International Conference on Software Engineering (ICSE 2025). IEEE/ACM, 2025.
+URL https://conf .researchr.org/details/icse-2025/icse-2025-research-track/80/Unleashing-the-True-Potential-of-Semantic-based-Log-
+Parsing-with-Pre-trained-Language. To appear.
+[76] Juyoung Lee, Yeonsu Jeong, Taehyun Han, and Taejin Lee. Logresp-agent: A recursive ai framework for context-aware log anomaly
+detection and ttp analysis.Applied Sciences, 15(13), 2025. ISSN 2076-3417. doi: 10 .3390/app15137237. URL https://www .mdpi.com/2076-
+3417/15/13/7237.
+[77] Yukyung Lee, Jina Kim, and Pilsung Kang. Lanobert: System log anomaly detection based on bert masked language model, 2021. URL
+https://arxiv.org/abs/2111.09564.
+[78] Mike Lewis, Yinhan Liu, Naman Goyal, Marjan Ghazvininejad, Abdelrahman Mohamed, Omer Levy, Veselin Stoyanov, and Luke
+Zettlemoyer. Bart: Denoising sequence-to-sequence pre-training for natural language generation, translation, and comprehension. In
+Proceedings of the 58th annual meeting of the association for computational linguistics, pages 7871–7880, 2020.
+[79] Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich K"uttler, Mike Lewis,
+Wen-tau Yih, Tim Rockt"aschel, Sebastian Riedel, and Douwe Kiela. Retrieval-augmented generation for knowledge-intensive nlp
+tasks, 2020. URL https://arxiv.org/abs/2005.11401.
+[80] Xiaoyun Li, Pengfei Chen, Linxiao Jing, Zilong He, and Guangba Yu. Swisslog: Robust and unified deep learning based log anomaly
+detection for diverse faults. In2020 IEEE 31st International Symposium on Software Reliability Engineering (ISSRE), pages 92–103. IEEE,
+2020.
+[81] Xinyu Li, Yingtong Huo, Chenxi Mao, Shiwen Shan, Yuxin Su, Dan Li, and Zibin Zheng. AnomalyGen: An automated semantic log
+sequence generation framework with LLM for anomaly detection, 2025. URL https://arxiv.org/abs/2504.12250.
+[82] Yichen Li, Yintong Huo, Zhihan Jiang, Renyi Zhong, Pinjia He, Yuxin Su, Lionel C Briand, and Michael R Lyu. Exploring the effectiveness
+of llms in automated logging statement generation: An empirical study.IEEE Transactions on Software Engineering, 2024.
+[83] Yichen Li, Yintong Huo, Renyi Zhong, Zhihan Jiang, Jinyang Liu, Junjie Huang, Jiazhen Gu, Pinjia He, and Michael R. Lyu. Go
+static: Contextualized logging statement generation.Proceedings of the ACM on Software Engineering, 1(FSE):609–630, 2024. doi:
+10.1145/3643754. URL https://doi.org/10.1145/3643754.
+[84] Yichen Li, Jinyang Liu, Junsong Pu, Zhihan Jiang, Zhuangbin Chen, Xiao He, Tieying Zhang, Jianjun Chen, Yi Li, Rui Shi, and Michael
+Lyu. Automated proactive logging quality improvement for large-scale codebases. InProceedings of the 2025 IEEE/ACM International
+Conference on Automated Software Engineering (ASE 2025) (Industry Showcase), 2025. URL https://conf .researchr.org/details/ase-
+2025/ase-2025-industry-showcase/28/Automated-Proactive-Logging-Quality-Improvement-for-Large-Scale-Codebases.
+[85] Yichen Li, Yulun Wu, Jinyang Liu, Zhihan Jiang, Zhuangbin Chen, Guangba Yu, and Michael R Lyu. Coca: Generative root cause
+analysis for distributed systems with code knowledge.arXiv preprint arXiv:2503.23051, 2025.
+[86] Zhenhao Li, Heng Li, Tse-Hsun Chen, and Weiyi Shang. Deeplv: Suggesting log levels using ordinal based neural networks. In2021
+IEEE/ACM 43rd International Conference on Software Engineering (ICSE), pages 1461–1472. IEEE, 2021.
+[87] Zhenhao Li, An Ran Chen, Xing Hu, Xin Xia, Tse-Hsun Chen, and Weiyi Shang. Are they all good? studying practitioners’ expectations
+on the readability of log messages. InProceedings of the 38th IEEE/ACM International Conference on Automated Software Engineering
+(ASE 2023), 2023. doi: 10.48550/arXiv.2308.08836. URL https://arxiv.org/abs/2308.08836.
+[88] Yifan Liao, Ming Xu, Yun Lin, Xiwen Teoh, Xiaofei Xie, Ruitao Feng, Frank Liaw, Hongyu Zhang, and Jin Song Dong. Detecting and
+explaining anomalies caused by web tamper attacks via building consistency-based normality. InProceedings of the 39th IEEE/ACM
+International Conference on Automated Software Engineering, pages 531–543, 2024.
+[89] Ying Fu Lim, Jiawen Zhu, and Guansong Pang. Adapting large language models for parameter-efficient log anomaly detection. arXiv
+preprint, 2025. URL https://arxiv.org/abs/2503.08045. arXiv:2503.08045.
+[90] Yifei Lin, H. Deng, and X. Li. Fastlogad: Log anomaly detection with mask-guided pseudo anomaly generation and discrimination,
+2024. URL https://arxiv.org/abs/2404.08750.
+[91] Pengfei Liu, Weizhe Yuan, Jinlan Fu, Zhengbao Jiang, Hiroaki Hayashi, and Graham Neubig. Pre-train, prompt, and predict: A systematic
+survey of prompting methods in natural language processing, 2021. URL https://arxiv.org/abs/2107.13586.
+[92] Yilun Liu, Shimin Tao, Weibin Meng, Jingyu Wang, Wenbing Ma, Yuhang Chen, Yanqing Zhao, Hao Yang, and Yanfei Jiang. Interpretable
+online log analysis using large language models with prompt strategies. InProceedings of the 32nd IEEE/ACM International Conference
+on Program Comprehension (ICPC ’24), pages 35–46. Association for Computing Machinery, 2024. doi: 10 .1145/3643916.3644408. URL
+https://doi.org/10.1145/3643916.3644408.
+47

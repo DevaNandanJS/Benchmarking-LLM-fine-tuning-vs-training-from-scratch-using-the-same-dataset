@@ -1,0 +1,56 @@
+Machinery.ISBN9798400719264.doi:10.1145/3755881.3755889.URLhttps://doi.org/10.1145/3755881.3755889.
+[200] LingzheZhang,TongJia,MengxiJia,YifanWu,AiweiLiu,YongYang,ZhonghaiWu,XumingHu,PhilipYu,andYingLi.Asurveyof
+aiopsintheeraoflargelanguagemodels.ACMComputingSurveys,2025.
+[201] LingzheZhang,TongJia,MengxiJia,YifanWu,HongyiLiu,andYingLi. Scalalog:Scalablelog-basedfailurediagnosisusing
+llm. InICASSP2025-2025IEEEInternationalConferenceonAcoustics,SpeechandSignalProcessing(ICASSP),pages1–5,2025. doi:
+10.1109/ICASSP49660.2025.10888670.
+[202] LingzheZhang,TongJia,MengxiJia,YifanWu,HongyiLiu,andYingLi. Xraglog:Aresource-efficientandcontext-awarelog-
+basedanomalydetectionmethodusingretrieval-augmentedgeneration. InAAAI2025WorkshoponPreventingandDetectingLLM
+Misinformation(PDLM),2025.
+[203] LingzheZhang,TongJia,KangjinWang,WeijieHong,ChimingDuan,MinghuaHe,andYingLi.Adaptiverootcauselocalizationfor
+microservicesystemswithmulti-agentrecursion-of-thought.arXivpreprintarXiv:2508.20370,2025.
+[204] TianyiZhang,VarshaKishore,FelixWu,KilianQWeinberger,andYoavArtzi.Bertscore:Evaluatingtextgenerationwithbert.arXiv
+preprintarXiv:1904.09675,2019.
+[205] TingZhang,XinHuang,WenZhao,ShaohuangBian,andPengDu. Logprompt:Alog-basedanomalydetectionframeworkusing
+prompts.In2023InternationalJointConferenceonNeuralNetworks(IJCNN),pages1–8,2023.doi:10.1109/IJCNN54540.2023.10191948.
+[206] WanhaoZhang,QianliZhang,EnyuYu,YuxiangRen,YeqingMeng,MingxiQiu,andJilongWang.Leveragingrag-enhancedlarge
+languagemodelforsemi-supervisedloganomalydetection. In2024IEEE35thInternationalSymposiumonSoftwareReliability
+Engineering(ISSRE),pages168–179,2024.doi:10.1109/ISSRE62328.2024.00026.
+[207] WeiZhang,XiangyuanGuan,LuYunhong,JieZhang,ShuangyongSong,XianfuCheng,ZhenheWu,andZhoujunLi.Lemur:Log
+parsingwithentropysamplingandchain-of-thoughtmerging,2025.URLhttps://arxiv.org/abs/2402.18205.
+[208] XiaoZhang,QiWang,MingyiLi,YuanYuan,MengbaiXiao,FuzhenZhuang,andDongxiaoYu.Tamo:Fine-grainedrootcauseanalysis
+viatool-assistedllmagentwithmulti-modalityobservationdataincloud-nativesystems.IEEETransactionsonServicesComputing,18
+(6):4221–4233,2025.
+[209] XuchaoZhang,SupriyoGhosh,ChetanBansal,RujiaWang,MinghuaMa,YuKang,andSaravanRajmohan.Automatedrootcausing
+ofcloudincidentsusingin-contextlearningwithgpt-4.InCompanionProceedingsofthe32ndACMInternationalConferenceonthe
+FoundationsofSoftwareEngineering,pages266–277,2024.
+[210] ZhaohuiZhang,ShuChen,andDandanShi.LogST:Logsemi-supervisedanomalydetectionbasedonsentence-BERT.In20226th
+InternationalConferenceonSystemInnovation(ICSIP),pages356–361,2022.doi:10.1109/ICSIP55141.2022.9886069.
+[211] HaoyuZheng,GuojunChu,HaifengSun,JingyuWang,ShiminTao,andHaoYang.LogDAPT:Logdataanomalydetectionwithdomain-
+adaptivepretraining(industrytrack). InProceedingsofthe24thInternationalMiddlewareConference:IndustrialTrack(Middleware
+’23Industry),pages15–21.AssociationforComputingMachinery,2023.doi:10.1145/3626562.3626830.URLhttps://doi.org/10.1145/
+3626562.3626830.
+[212] ChenZhi,LiyeCheng,MeilinLiu,XinkuiZhao,YueshenXu,andShuiguangDeng.Llm-poweredzero-shotonlinelogparsing.In2024
+IEEEInternationalConferenceonWebServices(ICWS),pages877–887.IEEE,2024.
+[213] AoxiaoZhong,DengyaoMo,GuiyangLiu,JinbuLiu,QingdaLu,QiZhou,JieshengWu,QuanzhengLi,andQingsongWen.Logparser-
+llm:Advancingefficientlogparsingwithlargelanguagemodels.InProceedingsofthe30thACMSIGKDDConferenceonKnowledge
+DiscoveryandDataMining,pages4559–4570,2024.
+[214] RenyiZhong,YichenLi,JinxiKuang,WenweiGu,YintongHuo,andMichaelR.Lyu.Logupdater:Automateddetectionandrepairof
+specificdefectsinloggingstatements.ACMTransactionsonSoftwareEngineeringandMethodology,2025.doi:10.1145/3731754.
+[215] RenyiZhong,YichenLi,GuangbaYu,WenweiGu,JinxiKuang,YintongHuo,andMichaelR.Lyu.Largerisnotalwaysbetter:Exploring
+smallopen-sourcelanguagemodelsinloggingstatementgeneration.ACMTrans.Softw.Eng.Methodol.,October2025.ISSN1049-331X.
+doi:10.1145/3773287.URLhttps://doi.org/10.1145/3773287.JustAccepted.
+[216] DahliaZiqiZhouandMariosFokaefs.Aiassistantsforincidentlifecycleinamicroserviceenvironment:Asystematicliteraturereview.
+arXivpreprintarXiv:2410.04334,2024.
+[217] DennyZhou,NathanaelSch"arli,LeHou,JasonWei,NathanScales,XuezhiWang,DaleSchuurmans,ClaireCui,OlivierBousquet,
+QuocV.Le,andEdChi.Least-to-mostpromptingenablescomplexreasoninginlargelanguagemodels,2022.URLhttps://arxiv.org/
+abs/2205.10625.
+[218] YihanZhou,YanChen,XuanmingRao,YukangZhou,YuxinLi,andChaoHu.Leveraginglargelanguagemodelsandbertforlogparsing
+andanomalydetection.Mathematics,12(17),2024.ISSN2227-7390.doi:10.3390/math12172758.URLhttps://www.mdpi.com/2227-
+7390/12/17/2758.
+[219] JiemingZhu,PinjiaHe,QiangFu,HongyuZhang,MichaelR.Lyu,andDongmeiZhang.Learningtolog:Helpingdevelopersmake
+informedloggingdecisions.InProceedingsofthe37thIEEE/ACMInternationalConferenceonSoftwareEngineering.IEEE/ACM,2015.
+doi:10.1109/ICSE.2015.60.
+[220] XuhangZhu,XiuTang,SaiWu,GangChen,HaoboWang,ChangYao,QuanqingXu,andJichenLi.CoLA:Modelcollaborationfor
+log-basedanomalydetection.ProceedingsoftheVLDBEndowment,18(11):3979–3987,2025.doi:10.14778/3749646.3749668.
+53

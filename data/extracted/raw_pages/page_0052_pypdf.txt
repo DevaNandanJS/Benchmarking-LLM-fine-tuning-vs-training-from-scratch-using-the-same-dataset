@@ -1,0 +1,56 @@
+International Conference on Information and Knowledge Management, pages 4966–4974, 2024.
+[180] Jason Wei, Rishi Bommasani, Colin Raffel, Barret Zoph, Sebastian Borgeaud, Jeff Dean, Yuhuai Li, Adam Roberts, Anna Rumshisky, Noam
+Shazeer, et al. Emergent abilities of large language models. arXiv preprint arXiv:2206.07682, 2022. URL https://arxiv.org/abs/2206.07682.
+[181] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V. Le, and Denny Zhou. Chain-of-thought prompting
+elicits reasoning in large language models, 2022. URL https://arxiv.org/abs/2201.11903.
+[182] Yifan Wu, Siyu Yu, and Ying Li. Log parsing using llms with self-generated in-context learning and self-correction. InProceedings of the
+33rd IEEE/ACM International Conference on Program Comprehension (ICPC 2025). IEEE/ACM, 2025. URL https://arxiv.org/abs/2406.03376.
+Method name: AdaParser.
+[183] Pei Xiao, Tong Jia, Chiming Duan, Minghua He, Weijie Hong, Xixuan Yang, Yihan Wu, Ying Li, and Gang Huang. Clslog: Collaborating
+large and small models for log-based anomaly detection. InCompanion Proceedings of the 33rd ACM International Conference on
+the Foundations of Software Engineering (FSE Companion ’25), pages 686–690, Trondheim, Norway, June 2025. ACM. doi: 10 .1145/
+3696630.3728524. URL https://doi.org/10.1145/3696630.3728524.
+[184] Yi Xiao, Van-Hoang Le, and Hongyu Zhang. Demonstration-free: Towards more practical log parsing with large language models. In
+Proceedings of the 39th IEEE/ACM International Conference on Automated Software Engineering (ASE 2024), pages 1243–1255. ACM, 2024.
+doi: 10.1145/3691620.3694994. URL https://dl.acm.org/doi/10.1145/3691620.3694994. Method name: LogBatcher.
+[185] Xiaoyuan Xie, Zhipeng Cai, Songqiang Chen, and Jifeng Xuan. Fastlog: An end-to-end method to efficiently generate and insert logging
+statements. InProceedings of the 33rd ACM SIGSOFT International Symposium on Software Testing and Analysis (ISSTA ’24), pages 26–37.
+ACM, 2024. doi: 10.1145/3650212.3652107. URL https://arxiv.org/abs/2311.02862.
+[186] Andy Xu and Arno Gau. Help: Hierarchical embeddings-based log parsing. arXiv preprint arXiv:2408.08300, 2024. URL https:
+//arxiv.org/abs/2408.08300.
+[187] Junjielong Xu, Ziang Cui, Yuan Zhao, Xu Zhang, Shilin He, Pinjia He, Liqun Li, Yu Kang, Qingwei Lin, Yingnong Dang, Saravan
+Rajmohan, and Dongmei Zhang. Unilog: Automatic logging via LLM and in-context learning. InProceedings of the 46th IEEE/ACM
+International Conference on Software Engineering (ICSE ’24). ACM, 2024. doi: 10.1145/3597503.3623326.
+[188] Junjielong Xu, Ruichun Yang, Yintong Huo, Chengyu Zhang, and Pinjia He. Divlog: Log parsing with prompt enhanced in-context
+learning. InProceedings of the 46th IEEE/ACM International Conference on Software Engineering (ICSE ’24), pages 199:1–199:12, 2024.
+doi: 10.1145/3597503.3639155. URL https://doi.org/10.1145/3597503.3639155.
+[189] Junjielong Xu, Qinan Zhang, Zhiqing Zhong, Shilin He, Chaoyun Zhang, Qingwei Lin, Dan Pei, Pinjia He, Dongmei Zhang, and
+Qi Zhang. Openrca: Can large language models locate the root cause of software failures? InThe Thirteenth International Conference
+on Learning Representations, 2025.
+[190] Weiyuan Xu, Juntao Luo, Tao Huang, Kaixin Sui, Jie Geng, Qijun Ma, Isami Akasaka, Xiaoxue Shi, Jing Tang, and Peng Cai. A two-staged
+llm-based framework for ci/cd failure detection and remediation with industrial validation.arXiv preprint arXiv:2506.03691, 2025.
+[191] Yuuki Yamanaka, Tomokatsu Takahashi, Takuya Minami, and Yoshiaki Nakajima. LogELECTRA: Self-supervised anomaly detection
+for unstructured logs.arXiv preprint, 2024. URL https://arxiv.org/abs/2402.10397.
+[192] N. Yang, P. J. L. Cuijpers, D. Hendriks, R. Schiffelers, J. Lukkien, and A. Serebrenik. An interview study about the use of logs in
+embedded software engineering.Empirical Software Engineering, 28(2):43, 2023. doi: 10.1007/s10664-022-10258-8.
+[193] Tiankai Yang, Yi Nian, Li Li, Ruiyao Xu, Yuangang Li, Jiaqi Li, Zhuo Xiao, Xiyang Hu, Ryan A. Rossi, Kaize Ding, Xia Hu, and Yue Zhao.
+AD-LLM: Benchmarking large language models for anomaly detection. InFindings of the Association for Computational Linguistics: ACL
+2025, pages 1524–1547, Vienna, Austria, July 2025. Association for Computational Linguistics. doi: 10.18653/v1/2025.findings-acl.79.
+URL https://aclanthology.org/2025.findings-acl.79/.
+[194] Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, and Yuan Cao. React: Synergizing reasoning and
+acting in language models, 2022. URL https://arxiv.org/abs/2210.03629.
+[195] Shunyu Yao, Dian Yu, Jeffrey Zhao, Izhak Shafran, Thomas L. Griffiths, Yuan Cao, and Karthik Narasimhan. Tree of thoughts: Deliberate
+problem solving with large language models, 2023. URL https://arxiv.org/abs/2305.10601.
+[196] Xian Yu, Shengxi Nong, Dongbiao He, Weijie Zheng, Teng Ma, Ning Liu, Jianhui Li, and Gaogang Xie. Loggenius: An unsupervised log
+parsing framework with zero-shot prompt engineering. In2024 IEEE International Conference on Web Services (ICWS), pages 1321–1328,
+2024. doi: 10.1109/ICWS62655.2024.00159. URL https://doi.org/10.1109/ICWS62655.2024.00159.
+[197] Chenbo Zhang, Wenying Xu, Jinbu Liu, Lu Zhang, Guiyang Liu, Jihong Guan, Qi Zhou, and Shuigeng Zhou. Logbase: A large-scale
+benchmark for semantic log parsing. InProceedings of the 34th ACM SIGSOFT International Symposium on Software Testing and Analysis
+(ISSTA 2025). ACM, 2025. doi: 10.1145/3728969. URL https://dl.acm.org/doi/10.1145/3728969.
+[198] Chenbo Zhang, Wenying Xu, Jinbu Liu, Lu Zhang, Guiyang Liu, Jihong Guan, Qi Zhou, and Shuigeng Zhou. Semanticlog: Towards
+effective and efficient large-scale semantic log parsing.IEEE Transactions on Software Engineering, 2025. doi: 10 .1109/TSE.2025.3524891.
+URL https://ieeexplore.ieee.org/abstract/document/11216353.
+[199] Hao Zhang, Dongjun Yu, Lei Zhang, Guoping Rong, Yongda Yu, Haifeng Shen, He Zhang, Dong Shao, and Hongyu Kuang. Aucad:
+Automated construction of alignment dataset from log-related issues for enhancing llm-based log generation. InProceedings of the
+16th International Conference on Internetware, Internetware ’25, page 413–425, New York, NY, USA, 2025. Association for Computing
+52

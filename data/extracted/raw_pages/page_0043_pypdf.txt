@@ -1,0 +1,49 @@
+faithfulness instead of plausibility alone [20, 68, 98, 100]. Fourth, long-context compression, memory, and adaptive
+evidence selection remain central challenges because incident-relevant signals are often sparse and distributed
+across long noisy histories [42, 111, 126]. Fifth, the field needs broader industrial-scale evaluation beyond the
+standard public benchmarks, including richer multimodal settings and operator-centered studies [20, 102, 192].
+Finally, human-in-the-loop support is likely to be more practical than full autonomy in many settings: future
+systems should help engineers inspect evidence faster, compare likely causes, summarize timelines, and decide
+where to look next while remaining transparent about uncertainty and evidence provenance [98, 102, 192].
+8 Conclusion
+This survey presented a systematic review ofLLM-based log analysisacross the log-analysis pipeline, covering
+logging statement generation and maintenance, log parsing, and downstream tasks such as anomaly detection,
+failure prediction, root cause analysis, and log summarization. Across these areas, the literature shows that LLMs
+offer clear advantages in semantic generalization, evidence integration, and operator-facing assistance, while
+also introducing important challenges in evaluation, grounding, privacy, cost, and deployment practicality. As
+discussed in Section 7, progress in LLM4Log will depend not only on stronger models, but also on more rigorous
+cross-paper evaluation, better grounding and verification for operator-facing outputs, and system designs that
+remain reliable under real-world operational constraints.
+References
+[1] Siraaj Akhtar, Saad Khan, and Simon Parkinson. Llm-based event log analysis techniques: A survey.arXiv preprint arXiv:2502.00677,
+2025.
+[2] Crispin Almodovar, Fariza Sabrina, Sarvnaz Karimi, and Salahuddin Azad. Logfit: Log anomaly detection using fine-tuned language
+models.IEEE Transactions on Network and Service Management, 21(2):1715–1723, 2024.
+[3] Apache Software Foundation. Apache log4j 2. Online documentation, 2024. URL https://logging.apache.org/log4j/2.x/.
+[4] Merve Astekin, Max Hort, and Leon Moonen. A comparative study on large language models for log parsing. InProceedings of the 18th
+ACM/IEEE International Symposium on Empirical Software Engineering and Measurement (ESEM 2024), pages 36–47. ACM, 2024. doi:
+10.1145/3674805.3686684. URL https://doi.org/10.1145/3674805.3686684.
+[5] Prasasthy Balasubramanian, Dumindu Kankanamge, Ekaterina Gilman, and Mourad Oussalah. AnomalyExplainerBot: Explainable AI
+for LLM-based anomaly detection using BERTViz & Captum, 2025.
+[6] Viktor Beck, Max Landauer, Markus Wurzenberger, Florian Skopik, and Andreas Rauber. System log parsing with large language
+models: A review.arXiv preprint arXiv:2504.04877, 2025.
+[7] Sidahmed Benabderrahmane, Petko Valtchev, James Cheney, and Talal Rahwan. APT-LLM: Embedding-based anomaly detection of
+cyber advanced persistent threats using large language models. InProceedings of the 13th International Symposium on Digital Forensics
+and Security (ISDFS 2025), pages 1–6, 2025. doi: 10.1109/ISDFS65363.2025.11011912.
+[8] Jasmin Bogatinovski and Odej Kao. Auto-logging: Ai-centred logging instrumentation. In2023 IEEE/ACM 45th International Conference
+on Software Engineering: New Ideas and Emerging Results (ICSE-NIER), pages 95–100, 2023. doi: 10 .1109/ICSE-NIER58687.2023.00023.
+URL https://doi.org/10.1109/ICSE-NIER58687.2023.00023.
+[9] Bogdan Bogdan, Arina Cazacu, and Laura Vasilie. Good enough to learn: LLM-based anomaly detection in ECU logs without reliable
+labels, 2025. URL https://arxiv.org/abs/2507.01077. Accepted to IEEE Intelligent Vehicles Symposium (IV) 2025.
+[10] Rishi Bommasani, Drew A. Hudson, Ehsan Adeli, Russ Altman, Simran Arora, Sydney von Arx, Michael S. Bernstein, Jeannette
+Bohg, Antoine Bosselut, Emma Brunskill, Erik Brynjolfsson, Shyamal Buch, Dallas Card, Rodrigo Castellon, Niladri Chatterji, Annie
+Chen, Kathleen Creel, Jared Quincy Davis, Jeff Dean, et al. On the opportunities and risks of foundation models, 2021. URL
+https://arxiv.org/abs/2108.07258.
+[11] Tom Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared D Kaplan, Prafulla Dhariwal, Arvind Neelakantan, Pranav Shyam,
+Girish Sastry, Amanda Askell, et al. Language models are few-shot learners.Advances in neural information processing systems, 33:
+1877–1901, 2020.
+[12] Nicholas Carlini, Florian Tramer, Eric Wallace, Matthew Jagielski, Ariel Herbert-Voss, Katherine Lee, Adam Roberts, Tom Brown, Dawn
+Song, Úlfar Erlingsson, Alina Oprea, and Colin Raffel. Extracting training data from large language models. In30th USENIX Security
+Symposium (USENIX Security 21), pages 2633–2650, 2021. URL https://www .usenix.org/conference/usenixsecurity21/presentation/
+carlini-extracting.
+43

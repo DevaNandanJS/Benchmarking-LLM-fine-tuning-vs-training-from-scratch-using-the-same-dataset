@@ -1,0 +1,55 @@
+[137] HengyiRen,KunLan,ZhiSun,andShanLiao. Clogllm:Alargelanguagemodelenabledapproachtocybersecurityloganomaly
+analysis. In20244thInternationalConferenceonElectronicInformationEngineeringandComputerCommunication(EIECC),pages
+963–970.IEEE,2024.
+[138] MayraSofiaRuizRodriguez,SayedHassanKhatoonabadi,andEmadShihab. Automatedfile-levellogginggenerationformachine
+learningapplicationsusingllms:Acasestudyusinggpt-4omini,2025.URLhttps://arxiv.org/abs/2508.04820.
+[139] GuopingRong,ShenghuiGu,HaifengShen,HeZhang,andHongyuKuang.Howdodevelopers’profilesandexperiencesinfluence
+theirloggingpractices?anempiricalstudyofindustrialpractitioners.InProceedingsofthe45thInternationalConferenceonSoftware
+Engineering,2023.
+[140] TimoSchick,JaneDwivedi-Yu,RobertoDessì,RobertaRaileanu,MariaLomeli,EricHambro,LukeZettlemoyer,NicolaCancedda,and
+ThomasScialom.Toolformer:Languagemodelscanteachthemselvestousetools,2023.URLhttps://arxiv.org/abs/2302.04761.
+[141] Hynek Schlawack and contributors. structlog: Structured logging for python. Online documentation, 2024. URL https://
+www.structlog.org/.
+[142] AbigailSee,PeterJ.Liu,andChristopherD.Manning. Gettothepoint:Summarizationwithpointer-generatornetworks. In
+Proceedingsofthe55thAnnualMeetingoftheAssociationforComputationalLinguistics(ACL),volume1,pages1073–1083,2017.doi:
+10.18653/v1/P17-1099.
+[143] PratheekSenevirathne,SaminduCooray,JeromeDinalHerath,andDinuniFernando.Virtualmachineproactivefaulttoleranceusing
+log-basedanomalydetection.IEEEAccess,2024.
+[144] FebrianSetianto,ErionTsani,FatimaSadiq,GeorgiosDomalis,DimitrisTsakalidis,andPanosKostakos. Gpt-2c:Aparserfor
+honeypotlogsusinglargepre-trainedlanguagemodels.InProceedingsofthe2021IEEE/ACMInternationalConferenceonAdvances
+inSocialNetworksAnalysisandMining(ASONAM2021),pages649–653.ACM,2021. doi:10.1145/3487351.3492723. URLhttps:
+//dl.acm.org/doi/10.1145/3487351.3492723.
+[145] ShiwenShan,YintongHuo,YuxinSu,YichenLi,DanLi,andZibinZheng. Faceityourselves:Anllm-basedtwo-stagestrategyto
+localizeconfigurationerrorsvialogs.InProceedingsofthe33rdACMSIGSOFTInternationalSymposiumonSoftwareTestingandAnalysis,
+pages13–25,2024.
+[146] ShiwenShan,YintongHuo,YuxinSu,ZhiningWang,DanLi,andZibinZheng. Conflogger:Enhancesystems’configuration
+diagnosabilitythroughconfigurationlogging.InProceedingsofthe48thIEEE/ACMInternationalConferenceonSoftwareEngineering
+(ICSE’26).ACM,2026.doi:10.1145/3744916.3764570.URLhttps://arxiv.org/abs/2508.20977.
+[147] YangyiShao,WenbinZhang,PeishunLiu,RenHuyue,RuichunTang,QilinYin,andQiLi.Loganomalydetectionmethodbasedon
+bertmodeloptimization.In20227thInternationalconferenceoncloudcomputingandbigdataanalytics(ICCCBDA),pages161–166.
+IEEE,2022.
+[148] NoahShinn,BeckLabash,AshwinGopinath,KarthikNarasimhan,andShunyuYao.Reflexion:Languageagentswithverbalreinforce-
+mentlearning,2023.URLhttps://arxiv.org/abs/2303.11366.
+[149] MohammadShoeybi,MostofaPatwary,RaulPuri,PatrickLeGresley,JaredCasper,andBryanCatanzaro. Megatron-lm:Training
+multi-billionparameterlanguagemodelsusingmodelparallelism,2019.URLhttps://arxiv.org/abs/1909.08053.
+[150] HonglinShu,DongWang,AntonioMastropaolo,GabrieleBavota,andYasutakaKamei.Anempiricalstudyonlanguagemodelsfor
+generatinglogstatementsintestcode.ACMTransactionsonSoftwareEngineeringandMethodology,2025.doi:10.1145/3759915.
+[151] ChengyuSong,LinruMa,JianmingZheng,JinzhiLiao,HongyuKuang,andLinYang. Audit-LLM:Multi-agentcollaborationfor
+log-basedinsiderthreatdetection.arXivpreprint,2024.URLhttps://arxiv.org/abs/2408.08902.
+[152] ChengyuSong,LinYang,JianmingZheng,andFeiCai.Parse-llm:Aprior-freellmparserforunknownsystemlogs.InProceedingsofthe
+34thACMInternationalConferenceonInformationandKnowledgeManagement(CIKM2025).ACM,2025.doi:10.1145/3746252.3761363.
+URLhttps://dl.acm.org/doi/10.1145/3746252.3761363.
+[153] ShuangSong,YifeiZhang,andNengGao.Confrontinsiderthreat:PreciseanomalydetectioninbehaviorlogsbasedonLLMfine-tuning.
+InOwenRambow,LeoWanner,MariannaApidianaki,HendAl-Khalifa,BarbaraDiEugenio,andStevenSchockaert,editors,Proceedings
+ofthe31stInternationalConferenceonComputationalLinguistics,pages8589–8601,AbuDhabi,UAE,January2025.Associationfor
+ComputationalLinguistics.URLhttps://aclanthology.org/2025.coling-main.574/.
+[154] AbhaySrivatsaandVenkatasaiGudisa.Logsense:Scalablereal-timeloganomalydetectionarchitecture.
+[155] YichengSui,XiaotianWang,TianyuCui,TongXiao,ChenghaoHe,ShenglinZhang,YuzhiZhang,XiaoYang,YongqianSun,andDan
+Pei.Bridgingthegap:LLM-poweredtransferlearningforloganomalydetectioninnewsoftwaresystems.In41stIEEEInternational
+ConferenceonDataEngineering,ICDE2025,HongKong,May19-23,2025,pages4414–4427.IEEE,2025.doi:10.1109/ICDE65448.2025.00331.
+URLhttps://doi.org/10.1109/ICDE65448.2025.00331.
+[156] DanyuSun,JinghuaiZhang,JiacenXu,YuZheng,YuanTian,andZhouLi.Fromalertstointelligence:AnovelLLM-aidedframework
+forhost-basedintrusiondetection,2025.
+[157] YichengSun,JackyWaiKeung,ZhenYang,ShuoLiu,andYihanLiao.SemiSMAC:Asemi-supervisedframeworkforloganomalydetec-
+tionwithautomatedhyperparametertuning.InformationandSoftwareTechnology,187:107869,2025.doi:10.1016/j.infsof.2025.107869.
+50

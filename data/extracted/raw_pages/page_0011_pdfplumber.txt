@@ -1,0 +1,44 @@
+General-purposeLLMsaretrainedbroadlyonlarge-scale,diversetextcorporaandexcelatnatural-languagein-
+terpretation,summarization,andinteractiveassistance[11,116].Theyareusefulforprompt-basedlogunderstand-
+ing,RCAnarratives,andincidentreporting,butusuallyneedretrievedcontexttohandleorganization-specific
+terminology,componentnames,andoperationalconventions[43,79,116,120].
+Code-orientedLLMsaretrainedorfine-tunedheavilyoncodeandtechnicalcorpora,improvingperformance
+onstacktraces,errormessages,configurationfiles,andprogram-contextreasoning[13,33,178].Theyarea
+betterfitwhenloginterpretationdependsonlinkingsymptomstocode/config,callstacks,APIs,orremediation
+commands[13].
+Domain-tailoredLLMsadaptabackbonetoaspecificoperationaldomain(e.g.,AIOpsforcloudplatforms,
+networkdiagnostics,ICSsecurity)viacontinuedpretraining,instructiontuning,orexplicitknowledgeintegra-
+tion[43,120].Theyaremostvaluablewhenlogscontainspecializedvocabularies,recurringincidentpatterns,
+andinternaloperationalproceduresthatgeneral-purposemodelscannotinferreliably[43].
+3.4 AdaptationandEnhancementParadigms
+Off-the-shelfLLMsareoftennottrainedspecificallyforloganalysis:theyrarelyseeanorganization’sproprietary
+logvocabulary,evolvingcomponenttaxonomy,oroperationalground-truthdata(incidents,runbooks,andon-call
+decisions)[10,43].Therefore,LLM-basedloganalysisapproachestypicallyimprovereliabilitybycontrolling
+what themodelsees(contextandretrievedevidence)andhowitdecides(prompting,reasoningscaffolds,tuning,
+tools,andverification)[79,120,181,194].Below,wesummarizethemostcommonparadigmsintermsofthe
+log-specifictrade-offstheyaddress:labelscarcity,drift,grounding,controllability,inferencecost,anddeployment
+practicality[10].
+Promptingandin-contextlearning(ICL),includingretrievalgrounding.ICLtreatstheLLMasatraining-
+freelearner:promptsprovidetaskinstructions,outputconstraints,andasmallsetofdemonstrations[11,91,113].
+In log settings, effective ICL is rarely a single “classify this log” instruction. It typically includes: (i) input
+normalization(variablemasking,deduplication,component/timegrouping),(ii)boundedevidence(top-𝑘
+suspiciouslines/windowsratherthanfullstreams),(iii)schema-constrainedoutputs(labels,rankedcandidates,
+JSONfields),and(iv)system-specificexemplars(afewrepresentativenormal/failurepatternsfromthesame
+environment)[91,113].
+Acommonextensionisretrieval-augmentedgeneration(RAG),whichretrievesrelevantcontext(e.g.,
+similarhistoricalwindows/incidents,runbookpassages,knownsignatures,orindexedsummaries)andinjects
+itintothepromptasadditionaldemonstrationsorevidence[79].Inmanylog-analysispipelines,RAGcanbe
+viewedasanICLenabler ratherthanaseparateparadigm:retrievalsupplieshigh-qualityin-contextexamples
+andsystemknowledgeatinferencetime,withoutchangingmodelweights[79].This“retrieve→prompt→
+decide”patternimprovesbothgrounding (anchoringoutputstoconcreteevidence)andadaptation(bringing
+system-specificknowledgeunderdrift)[43,79].
+ICLremainsattractiveforrapiddeploymentandheterogeneoustasks,butitissensitivetopromptquality,
+contextselection,anddistributionshift.Asaresult,manypracticalapproachescombineRAG-augmentedICL
+with lightweight filtering (to reduce prompt noise) and downstream verification (to prevent overconfident
+hallucinations)[91,113]. Reasoningscaffolds:CoT,ToT,andstructureddecomposition.Manylogtasks
+(especiallydiagnosisandremediation)benefitfromexplicitdecompositionratherthanone-shotgeneration[181,
+217].Chain-of-Thought(CoT)promptingencouragesstepwisereasoning(e.g.,identifykeysymptoms→map
+tocomponents→hypothesizecauses→justifywithevidence)[181].Inlogsettings,CoTismostusefulwhen
+intermediateartifactsarecheckableandgrounded (e.g.,extractedentities,citedloglines,matchedtemplates),
+not when it produces purely speculative narratives [176, 181]. Tree-of-Thought (ToT) generalizes CoT by
+11

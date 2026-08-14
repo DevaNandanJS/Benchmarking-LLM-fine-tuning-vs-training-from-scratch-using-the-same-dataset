@@ -1,0 +1,46 @@
+Table6. SummaryofLLM-basedanomalydetectionstudiesorganizedbytaskcategory.(continuedinTable7)
+Paper Supervised? Train? Dataset(s)evaluated Parsing? Metric(s) BaseModel(s)
+Discriminative&RepresentationLearning(Encoder-based)
+HitAnomaly[55] Supervised Yes HDFS,BGL,OpenStack Yes F1 BERT
+SwissLog[80] Supervised Yes HDFS,BGL Yes F1 BERT
+Ottetal.[118] Semi-Sup Yes OpenStack Yes F1 BERT
+LogBert[40] Semi-Sup Yes HDFS,BGL,Thunderbird Yes F1 BERT
+NeuralLog[71] Supervised Yes HDFS,BGL,TB,Spirit No F1 BERT
+BERT-Log[14] Supervised Yes HDFS,BGL Yes F1 BERT-110M
+LogST[210] Semi-Sup Yes HDFS Yes F1 Sentence-BERT
+Prog-BERT-LSTM[147] Semi-Sup Yes HDFS,BGL,Thunderbird Yes F1 BERT
+HilBERT[56] Supervised Yes HDFS,BGL Yes F1 BERT
+LogBP-LORA[48] Supervised Yes BGL,Thunderbird Yes F1 BERT-base
+LogDAPT[211] Supervised Yes HDFS,BGL,Thunderbird Yes F1 BERT
+LogADSBERT[52] Semi-Sup Yes HDFS, Hadoop, Open- Yes F1 Sentence-BERT
+Stack
+Karlsenetal.[67] Unsup No ECML,CSIC,Access Yes F1 DistilRoBERTa
+FastLogAD[90] Semi-Sup Yes HDFS,BGL,Thunderbird Yes F1 ELECTRA
+LAnoBERT[77] Semi-Sup Yes HDFS,BGL,Thunderbird No F1,AUC BERT
+Corbelleetal.[18] Supervised Yes HDFS Yes F1 BERT-base
+Zhouetal.[218] Supervised Yes HDFS,BGL Yes F1 BERT
+LogELECTRA[191] Semi-Sup Yes BGL,Thunderbird,Spirit No F1 ELECTRA
+LogFiT[2] Semi-Sup Yes HDFS,BGL,Thunderbird No F1 BERT
+LogRoBERTa[159] Supervised Yes HDFS,BGL No F1 RoBERTa
+ADALog[127] Unsup Yes BGL,Thunderbird,Spirit No F1 DistilBERT
+Thalietal.[166] Supervised Yes SWaT,MorrisICS No F1 BERT
+APT-LLM[7] Semi-Sup Yes Android,Linux,Win Yes AUC BERT
+Entezamietal.[29] Supervised Yes KDD99,UNSW,CICIDS Yes F1 BERT
+AnomalyExplainerBot[5] Supervised Yes HDFS Yes F1 RoBERTa
+Horváthetal.[51] Supervised Yes BGL,Thunderbird Yes F1,Acc LLaMA
+GenerativeForecasting&Next-TokenPrediction(Decoder-based)
+LogGPT(BigData)[168] Supervised Yes HDFS,BGL,Thunderbird No F1 GPT-2
+LogSense[154] Semi-Sup Yes - Yes - GPT-2
+PreLog[74] Supervised Yes HDFS,BGL,Spirit No F1 FLAN-T5(140M)
+Bogdanetal.[9] Supervised Yes ECUComm.Logs Yes Top-k Qwen2-0.4B
+LogLM[94] Supervised Yes BGL,Spirit Yes F1 LLaMA-2-7B
+NLPLog[62] Supervised Yes NLPLog Yes F1 LLaMA-2-7B
+hierarchicalcompaction+BERT-baseddetectionbyCorbelleetal.[18].Otherworksemphasizerobustnessand
+transferacrosssystemsandunstablelogvocabularies.Forinstance,Ottetal.studyrobustnessandtransferability
+withpretrainedlanguagemodels[118],andAPT-LLMappliesembedding-baseddetectiontoadvancedpersistent
+threatsincyberlogs[7].SomepapersexplicitlyinvestigateLLM-assistedparsing+embeddingpipelinesbefore
+detection(e.g.,Zhouetal.[218]),whileothersevaluatebroaderlog/securitysettingswithencoderbackbones(e.g.,
+Thalietal.[166]andEntezamietal.[29]).Finally,asLLM-eraanomalydetectionexpandsbeyondclassicsystem
+logs,recentlarge-scalestudiesalsoincludeLLaMA-familybackbonesinsupervisedpipelines(e.g.,Horváthet
+al.[51])andexplanation-orientedadd-ons(e.g.,AnomalyExplainerBot[5]).
+31

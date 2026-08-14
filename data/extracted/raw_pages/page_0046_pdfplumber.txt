@@ -1,0 +1,56 @@
+SymposiumonSoftwareReliabilityEngineering(ISSRE),pages511–522.IEEE,2024.
+[54] JunjieHuang,ZhihanJiang,ZhuangbinChen,andMichaelR.Lyu. Nomorelabelledexamples?anunsupervisedlogparserwith
+llms. InProceedingsoftheACMonSoftwareEngineering(FSE2025),numberFSE.ACM,2025. doi:10.1145/3729377. URLhttps:
+//dl.acm.org/doi/10.1145/3729377.
+[55] ShaohanHuang,YiLiu,CarolJ.Fung,RongHe,YiningZhao,HailongYang,andZhongzhiLuan.Hitanomaly:Hierarchicaltransformers
+foranomalydetectioninsystemlog. IEEETransactionsonNetworkandServiceManagement,17(2):2064–2076,2020. doi:10.1109/
+TNSM.2020.3034647.
+[56] ShaohanHuang,YiLiu,CarolJ.Fung,HeWang,HailongYang,andZhongzhiLuan. Improvinglog-basedanomalydetectionby
+pre-traininghierarchicaltransformers.IEEETransactionsonComputers,72(9):2656–2667,2023.doi:10.1109/TC.2023.3257518.
+[57] XinHuang,TingZhang,andWenZhao. LogRules:Enhancingloganalysiscapabilityoflargelanguagemodelsthroughrules. In
+LuisChiruzzo,AlanRitter,andLuWang,editors,FindingsoftheAssociationforComputationalLinguistics:NAACL2025,pages452–
+470,Albuquerque,NewMexico,April2025.AssociationforComputationalLinguistics. ISBN979-8-89176-195-7. doi:10.18653/v1/
+2025.findings-naacl.28.URLhttps://aclanthology.org/2025.findings-naacl.28/.
+[58] XuanboHuang,KaipingXue,LutongChen,JiangpingHan,JianLi,andDavidS.L.Wei. Forensix:Automatednetworkforensics
+anddiagnosticsforbeyond-5gand6gnetworksusinglargelanguagemodels. IEEENetwork,39(5):74–80,2025. doi:10.1109/
+MNET.2025.3579925.
+[59] YintongHuo,CherylLee,YuxinSu,ShiwenShan,JinyangLiu,andMichaelR.Lyu.Evlog:Evolvingloganalyzerforanomalouslogs
+identification.arXivpreprintarXiv:2306.01509,2023.
+[60] JaeyoonJeong,InsungBaek,ByungwooBang,JunyeonLee,UiseokSong,andSeoungBumKim. Fall:Priorfailuredetectionin
+largescalesystembasedonlanguagemodel. IEEETransactionsonDependableandSecureComputing,22(1):279–291,2025. doi:
+10.1109/TDSC.2024.3396166.
+[61] XinJi,LeZhang,WenyaZhang,FangPeng,YifanMao,XingchuangLiao,andKuiZhang. Lemad:LLM-empoweredmulti-agent
+systemforanomalydetectioninpowergridservices. Electronics,14(15):3008,2025. doi:10.3390/electronics14153008. URLhttps:
+//doi.org/10.3390/electronics14153008.
+[62] YuheJi,YilunLiu,FeiyuYao,MingguiHe,ShiminTao,XiaofengZhao,ChangSu,XinhuaYang,WeibinMeng,YumingXie,Boxing
+Chen,ShenglinZhang,andYongqianSun. Adaptinglargelanguagemodelstologanalysiswithinterpretabledomainknowledge.
+InProceedingsofthe34thACMInternationalConferenceonInformationandKnowledgeManagement,CIKM’25,page1135–1144,
+NewYork,NY,USA,2025.AssociationforComputingMachinery. ISBN9798400720406. doi:10.1145/3746252.3761189. URLhttps:
+//doi.org/10.1145/3746252.3761189.
+[63] ZiweiJi,NayeonLee,RitaFrieske,TianleYu,DanSu,YanXu,EtsukoIshii,YejinBang,AndreaMadotto,andPascaleFung.Surveyof
+hallucinationinnaturallanguagegeneration,2023.URLhttps://arxiv.org/abs/2304.04710.
+[64] ZhihanJiang,JinyangLiu,ZhuangbinChen,YichenLi,JunjieHuang,YintongHuo,PinjiaHe,JiazhenGu,andMichaelR.Lyu.Lilac:
+Logparsingusingllmswithadaptiveparsingcache.ProceedingsoftheACMonSoftwareEngineering,1(FSE),2024.doi:10.1145/3643733.
+URLhttps://doi.org/10.1145/3643733.
+[65] SauravKadavath,TomConerly,AmandaAskell,TomHenighan,AndyJones,NicholasJoseph,BenMann,NovaDasSarma,Dawn
+Drain,NelsonChen,YuntaoBai,JaredKaplan,SamMcCandlish,DarioAmodei,EthanChen,andCatherineOlsson.Languagemodels
+(mostly)knowwhattheyknow,2022.URLhttps://arxiv.org/abs/2207.05221.
+[66] JaredKaplan,SamMcCandlish,TomHenighan,TomB.Brown,BenjaminChess,RewonChild,ScottGray,AlecRadford,JeffreyWu,and
+DarioAmodei.Scalinglawsforneurallanguagemodels.arXivpreprintarXiv:2001.08361,2020.URLhttps://arxiv.org/abs/2001.08361.
+[67] CrystalKarlsen,DenisCopstein,YueLuo,BenjaminSchwartzentruber,TimNiblett,andOlivierRouyer. Exploringsemanticvs.
+syntacticfeaturesforunsupervisedlearningonapplicationlogfiles.In2023InternationalConferenceonCyberSecurityandNetworks
+(CSNet),2023.doi:10.1109/CSNet59123.2023.10339765.
+[68] EgilKarlsen,XiaoLuo,NurZincir-Heywood,andMalcolmHeywood.Benchmarkinglargelanguagemodelsforloganalysis,security,
+andinterpretation.JournalofNetworkandSystemsManagement,32:59,2024.doi:10.1007/s10922-024-09831-x.
+[69] VladimirKarpukhin,BarlasOguz,SewonMin,PatrickLewis,LedellWu,SergeyEdunov,DanqiChen,andWen-tauYih. Dense
+passageretrievalforopen-domainquestionanswering.InProceedingsofthe2020ConferenceonEmpiricalMethodsinNaturalLanguage
+Processing(EMNLP),pages6769–6781.AssociationforComputationalLinguistics,2020.doi:10.18653/v1/2020.emnlp-main.550.URL
+https://aclanthology.org/2020.emnlp-main.550/.
+[70] KarenKentandMurugiahSouppaya. Nistspecialpublication800-92:Guidetocomputersecuritylogmanagement,2006. URL
+https://csrc.nist.gov/publications/detail/sp/800-92/final.
+[71] Van-HoangLeandHongyuZhang.Log-basedanomalydetectionwithoutlogparsing.In202136thIEEE/ACMInternationalConference
+onAutomatedSoftwareEngineering(ASE).IEEE/ACM,2021.
+[72] Van-HoangLeandHongyuZhang.Logparsingwithprompt-basedfew-shotlearning.InProceedingsofthe45thInternationalConference
+onSoftwareEngineering(ICSE2023),pages2438–2449.IEEE,2023.doi:10.1109/ICSE48619.2023.00204.URLhttps://conf.researchr.org/
+details/icse-2023/icse-2023-technical-track/165/Log-Parsing-with-Prompt-based-Few-shot-Learning.
+46

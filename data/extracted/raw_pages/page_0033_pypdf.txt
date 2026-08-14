@@ -1,0 +1,45 @@
+Masked-LM and self-/semi-supervised normality modeling.A closely related family modelsnormallog
+patterns using self-supervised objectives and flags deviations as anomalies, which is well-suited to rare-anomaly
+regimes. LogBert [40] and LAnoBERT [77] exemplify masked-language-model training on normal sequences,
+producing anomaly scores via reconstruction/prediction errors. Recent variants continue this direction with
+alternative backbones and training strategies, such as LogELECTRA [191], LogFiT [2], and ADALog [127]. FastLo-
+gAD [90] further augments semi-supervised learning by generating pseudo anomalies to strengthen discrimination.
+In practice, these methods often reduce label requirements but still rely on careful sessionization/windowing and
+calibration to control false positives across evolving software versions.
+Reducing reliance on log parsing: from templates to raw text.Because parsing errors and format drift can
+directly harm downstream detectors, multiple works explicitly minimize or remove template parsing. Neural-
+Log [71] studies anomaly detection without conventional log parsing, and LogRoBERTa [159] further reduces
+parser reliance via hybrid language modeling. In addition, several prompt- or LLM-assisted pipelines still use
+lightweight normalization (e.g., regex-based variable masking) as a middle ground between full template parsing
+and raw text, especially when deploying at scale under frequent log evolution.
+Decoder-style generative forecasting and likelihood-based scoring.Instead of classification, decoder LMs
+treat anomaly detection as alanguage modelingproblem: a sequence is anomalous if it is hard to predict under a
+model trained (or adapted) on normal behavior. LogGPT [168] is a representative GPT-style next-token prediction
+approach, while PreLog [74] explores a pretrained model tailored for log analytics tasks (including anomaly
+detection) using a compact generative backbone. Instruction-centric systems also evaluate anomaly detection
+within a broader log analysis interface (e.g., LogLM [94] and knowledge-augmented adaptation in NLPLog [62]).
+Beyond system logs, “Good Enough to Learn” investigates anomaly detection in ECU logs under unreliable labels
+with small LMs [9], highlighting a practical trend toward smaller, cheaper generative models for edge/embedded
+scenarios.
+Prompting and in-context learning for training-free detection and interpretation.With instruction-tuned
+LLMs, several works bypass explicit model training and instead prompt an LLM to classify sequences or explain
+suspicious patterns. LogPrompt-style prompt engineering emphasizes interpretability and online usage [92, 93],
+while feasibility studies explore ChatGPT-style models for anomaly detection under different settings and log
+sources [27, 106, 129]. Some lines treat LLMs as anoperations foundation modelthat supports multiple tasks,
+including anomaly detection, under a unified interface (e.g., OWL [42]). At the benchmark level, large-context
+prompting is also evaluated in broad suites (e.g., LogEval [20]), clarifying how far prompting alone can go without
+task-specific training.
+Retrieval-augmented detection: comparing against a memory of normality.Retrieval-based methods treat
+anomaly detection asnearest-neighbor comparisonin an embedding space of normal sequences and often provide
+evidence by returning similar historical cases. RAPID [115] embeds normal windows using a pretrained encoder
+and flags anomalies by distance/neighborhood structure, while RAGLog [121] frames detection through retrieval-
+augmented generation by retrieving similar normal cases and judging the target’s consistency. XRAGLog [202]
+further targets resource efficiency and context awareness in RAG-style pipelines. This family is especially
+compatible with semi-supervised settings (normal-only data) and naturally supports operator-facing justifications
+through retrieved exemplars.
+Hybrid and collaborative frameworks: small models for scoring, LLMs for enrichment, verification, or
+rules.Many practical designs combine a lightweight detector with an LLM component that improves robustness
+or interpretability. LLMeLog [45] enriches log events with LLM-derived semantics before training a smaller
+classifier. LogFormer [41] combines representation learning with LLM assistance, and LogLLM [ 39] explores
+joint use of encoders with larger LMs. AdaptiveLog [101] explicitly frames anomaly detection as collaboration
+33

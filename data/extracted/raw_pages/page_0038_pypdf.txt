@@ -1,0 +1,43 @@
+dependency graph for network diagnostics and reports accuracy, illustrating how graph structure can constrain
+reasoning and improve interpretability. COCA [85] augments RCA with code knowledge (logs + codebase + stack
+traces) to produce root-cause outputs and evaluates with both lexical and human-centric measures, reflecting the
+intuition that many failures are only disambiguated with code-level context. AetherLog [19] integrates knowledge
+graphs with LLMs for log-based RCA category prediction, evaluated with F1. These systems highlight that,
+beyond raw language ability,external structure(code, graphs, KBs) is a key ingredient for reliable RCA—especially
+when symptoms are ambiguous or multiple plausible causes exist.
+RCA-adjacent diagnosis: fault types, resolutions, and log understanding.Several studies expand beyond
+pinpointing a cause and instead aim to complete the diagnosis loop: identifying fault types, extracting fault-
+indicating evidence, or generating resolutions. Huang et al. [53] extract fault-indicating descriptions and parame-
+ters from logs (precision/recall/F1), which can be viewed as a complementary capability that improves downstream
+RCA quality by distilling salient evidence. LogExpert [172] focuses on generating executable resolution steps
+grounded in external knowledge (StackOverflow), while LogLM [94] frames log analysis as instruction-following
+and outputs problem resolutions, evaluated with text generation metrics. For broader diagnostic labeling, Lo-
+gReasoner [100] predicts failure types, and Ji et al. [62] adapt LLMs to log analysis with interpretable domain
+knowledge for failure detection and fault typing (F1). At the representation level, KnowLog [99] enhances log
+understanding and supports cause ranking, and AdaptiveLog [ 101] emphasizes collaboration between small
+and large models for failure-type identification (Recall@k). In telecom diagnostics, Taheri et al. [ 161] study
+domain-tailored models for log mask prediction used for fault classification (F1), reinforcing the importance of
+domain adaptation in operational contexts. Finally, in less standardized environments, Herrmann et al. [50] show
+a case study for robotics support tickets (including logs and human communications), indicating RCA often spans
+heterogeneous, partially structured evidence beyond pure log streams.
+Benchmarks and evaluation: what “good RCA” means.As methods diversify, benchmark efforts help clarify
+evaluation targets. LogEval [ 20] provides a broader suite for LLM-based log analysis (including fault types),
+using accuracy/F1, and complements RCA-focused studies by stressing comparability and coverage. Across
+the table, evaluation remains fragmented. Incident RCA often uses semantic similarity metrics. Localization
+prefers rank/Acc@k. Categorization uses accuracy/F1, and resolution generation uses ROUGE/BLEU. This metric
+diversity reflects different operational definitions of RCA (explanation vs. localization vs. remediation), and
+suggests that future work may benefit from task-specific, operator-aligned evaluation protocols.
+Across RCA studies, LLMs matter less as standalone “reasoners” and more as components that unify heteroge-
+neous evidence (logs, metrics, traces, code, and KBs) into a structured hypothesis with supporting traces. The
+most reliable designs constrain generation through retrieval, tools, SOPs, or graphs. This shifts the core chal-
+lenge from modeling toevidence selection, grounding, and verifiable outputs, and makes hybrid, tool-augmented
+pipelines a practical pattern.
+6.5 Log Summarization
+6.5.1 Task definition.Log summarizationcompresses high-volume logs into a concise, human-consumable
+artifact that helps engineers quickly understandwhat happenedandwhat matters. It is commonly used for on-call
+handoff, incident reports, and rapid situational awareness, where reading raw logs is too costly.
+Given a set/sequence of logs associated with a session/window (often an incident window), the task outputs a
+natural-language summary and/or a compact structured summary (e.g., a short timeline of key events, prominent
+error templates, involved components, and extracted entities such as IDs/paths). Two common instantiations
+are:extractivesummarization (select representative lines/templates) andabstractivesummarization (generate a
+38

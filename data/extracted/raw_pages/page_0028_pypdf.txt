@@ -1,0 +1,45 @@
+motivating more interpretable and interaction-oriented log analysis workflows [68, 92]. In the LLM era, researchers
+increasingly leverage models’ semantic generalization to (i) better tolerate heterogeneous phrasing and evolution,
+and (ii) generate explanation-oriented outputs that help operators understand not onlywhathappened but also
+why[20, 42].
+A common workflow: partition→ representation→ task inference→ action.In practice, downstream
+analysis is rarely performed on a monolithic log file. Instead, logs are firstpartitionedinto sessions or windows
+to separate mixed sources (modules/threads/processes) into coherent log sequences. Partitioning can be driven
+by identifiers (e.g., request ID, trace/span ID, block ID) or by time- or count-based windowing when identifiers
+are unavailable. After sequences are formed, a pipeline may parse events, derive embeddings or otherlog
+representations, select salient context, or directly prompt an LLM, and then apply task-specific approaches to
+trigger alerts, rank suspected causes, predict upcoming failures, or summarize incidents for operators. Figure 5
+summarizes this workflow and highlights where LLMs are commonly integrated to improve failure perception,
+diagnosis, and operator-facing actions.
+We organize the rest of this section following the workflow in Figure 5. Section 6.1 discusseslog representation,
+which largely determines what any downstream model can learn or infer. Sections 6.2, 6.3, 6.4, and 6.5 then cover
+four representative LLM-enabled tasks:anomaly detection,failure prediction,root cause analysis, andlog
+summarization.
+6.1 Log Representation
+Given a sessionized (or windowed) log sequence, typically a sequence of parsed events/templates with optional
+parameters and timestamps,log representationmaps it into machine-consumable features that preserve task-
+relevant signals while suppressing nuisance variability. Depending on the downstream task, the representation
+can be (i) a discrete symbolic sequence (event IDs/templates), (ii) a fixed-length feature vector (counts, n-grams,
+parameter statistics), or (iii) a continuous embedding sequence or sequence embedding produced by neural
+encoders. Logs contribute information that is difficult to replace with metrics, traces, or code alone: symptom
+wording, exception/error text, component-local execution narratives, chronological evidence trails, and sparse
+but informative runtime context. Representation choice is also a major source of cross-paper incomparability
+because studies differ in whether they use raw messages, parsed templates, event IDs, parameters, embeddings,
+or direct prompt inputs. Figure 6 illustrates a log window and how it can be mapped into different representation
+types.
+Traditional representations: statistical, parameter-aware, and semantic sequence features.A common
+starting point isstatistics-basedrepresentation, which converts each log sequence into a feature vector by
+counting event occurrences (bag-of-events) or short patterns such as n-grams. This view is compact and efficient,
+but it can lose semantic similarity between differently worded events and captures ordering only shallowly. A
+closely related line isparameter-awarerepresentation, which augments event statistics with counts/patterns
+over extracted parameter values (IDs, paths, codes), useful when diagnosis depends onwhich entities/values
+appear, but potentially brittle under drift and high-cardinality parameters.
+The most widely usedsemanticrepresentations in traditional pipelines build embeddings from the mes-
+sage/template text. A typical workflow is to map each token in a log event to a word embedding (e.g., word2vec
+algorithm [112]), aggregate token vectors into anevent embedding(often by weighted averaging), and then
+compose asequence embeddingby pooling or concatenating embeddings across events in the window. This family
+is attractive because it provides a continuous semantic space while remaining lightweight.
+LLM-era representations: reuse classic features or switch to contextual encoders.Many recent LLM-based
+log analytics approaches still reuse classic representations (event-count vectors, parameter statistics, n-grams, or
+word-embedding-based features) as inputs to downstream models because they are cheap, stable, and compatible
+28

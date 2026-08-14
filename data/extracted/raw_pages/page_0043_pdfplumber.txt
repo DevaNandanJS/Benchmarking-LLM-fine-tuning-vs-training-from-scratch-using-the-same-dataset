@@ -1,0 +1,49 @@
+faithfulnessinsteadofplausibilityalone[20,68,98,100].Fourth,long-contextcompression,memory,andadaptive
+evidenceselectionremaincentralchallengesbecauseincident-relevantsignalsareoftensparseanddistributed
+acrosslongnoisyhistories[42,111,126].Fifth,thefieldneedsbroaderindustrial-scaleevaluationbeyondthe
+standardpublicbenchmarks,includingrichermultimodalsettingsandoperator-centeredstudies[20,102,192].
+Finally,human-in-the-loopsupportislikelytobemorepracticalthanfullautonomyinmanysettings:future
+systemsshouldhelpengineersinspectevidencefaster,comparelikelycauses,summarizetimelines,anddecide
+wheretolooknextwhileremainingtransparentaboutuncertaintyandevidenceprovenance[98,102,192].
+8 Conclusion
+ThissurveypresentedasystematicreviewofLLM-basedloganalysisacrossthelog-analysispipeline,covering
+loggingstatementgenerationandmaintenance,logparsing,anddownstreamtaskssuchasanomalydetection,
+failureprediction,rootcauseanalysis,andlogsummarization.Acrosstheseareas,theliteratureshowsthatLLMs
+offerclearadvantagesinsemanticgeneralization,evidenceintegration,andoperator-facingassistance,while
+alsointroducingimportantchallengesinevaluation,grounding,privacy,cost,anddeploymentpracticality.As
+discussedinSection7,progressinLLM4Logwilldependnotonlyonstrongermodels,butalsoonmorerigorous
+cross-paperevaluation,bettergroundingandverificationforoperator-facingoutputs,andsystemdesignsthat
+remainreliableunderreal-worldoperationalconstraints.
+References
+[1] SiraajAkhtar,SaadKhan,andSimonParkinson.Llm-basedeventloganalysistechniques:Asurvey.arXivpreprintarXiv:2502.00677,
+2025.
+[2] CrispinAlmodovar,FarizaSabrina,SarvnazKarimi,andSalahuddinAzad.Logfit:Loganomalydetectionusingfine-tunedlanguage
+models.IEEETransactionsonNetworkandServiceManagement,21(2):1715–1723,2024.
+[3] ApacheSoftwareFoundation.Apachelog4j2.Onlinedocumentation,2024.URLhttps://logging.apache.org/log4j/2.x/.
+[4] MerveAstekin,MaxHort,andLeonMoonen.Acomparativestudyonlargelanguagemodelsforlogparsing.InProceedingsofthe18th
+ACM/IEEEInternationalSymposiumonEmpiricalSoftwareEngineeringandMeasurement(ESEM2024),pages36–47.ACM,2024.doi:
+10.1145/3674805.3686684.URLhttps://doi.org/10.1145/3674805.3686684.
+[5] PrasasthyBalasubramanian,DuminduKankanamge,EkaterinaGilman,andMouradOussalah.AnomalyExplainerBot:ExplainableAI
+forLLM-basedanomalydetectionusingBERTViz&Captum,2025.
+[6] ViktorBeck,MaxLandauer,MarkusWurzenberger,FlorianSkopik,andAndreasRauber. Systemlogparsingwithlargelanguage
+models:Areview.arXivpreprintarXiv:2504.04877,2025.
+[7] SidahmedBenabderrahmane,PetkoValtchev,JamesCheney,andTalalRahwan.APT-LLM:Embedding-basedanomalydetectionof
+cyberadvancedpersistentthreatsusinglargelanguagemodels.InProceedingsofthe13thInternationalSymposiumonDigitalForensics
+andSecurity(ISDFS2025),pages1–6,2025.doi:10.1109/ISDFS65363.2025.11011912.
+[8] JasminBogatinovskiandOdejKao.Auto-logging:Ai-centredlogginginstrumentation.In2023IEEE/ACM45thInternationalConference
+onSoftwareEngineering:NewIdeasandEmergingResults(ICSE-NIER),pages95–100,2023.doi:10.1109/ICSE-NIER58687.2023.00023.
+URLhttps://doi.org/10.1109/ICSE-NIER58687.2023.00023.
+[9] BogdanBogdan,ArinaCazacu,andLauraVasilie.Goodenoughtolearn:LLM-basedanomalydetectioninECUlogswithoutreliable
+labels,2025.URLhttps://arxiv.org/abs/2507.01077.AcceptedtoIEEEIntelligentVehiclesSymposium(IV)2025.
+[10] RishiBommasani,DrewA.Hudson,EhsanAdeli,RussAltman,SimranArora,SydneyvonArx,MichaelS.Bernstein,Jeannette
+Bohg,AntoineBosselut,EmmaBrunskill,ErikBrynjolfsson,ShyamalBuch,DallasCard,RodrigoCastellon,NiladriChatterji,Annie
+Chen,KathleenCreel,JaredQuincyDavis,JeffDean,etal. Ontheopportunitiesandrisksoffoundationmodels,2021. URL
+https://arxiv.org/abs/2108.07258.
+[11] TomBrown,BenjaminMann,NickRyder,MelanieSubbiah,JaredDKaplan,PrafullaDhariwal,ArvindNeelakantan,PranavShyam,
+GirishSastry,AmandaAskell,etal.Languagemodelsarefew-shotlearners.Advancesinneuralinformationprocessingsystems,33:
+1877–1901,2020.
+[12] NicholasCarlini,FlorianTramer,EricWallace,MatthewJagielski,ArielHerbert-Voss,KatherineLee,AdamRoberts,TomBrown,Dawn
+Song,ÚlfarErlingsson,AlinaOprea,andColinRaffel.Extractingtrainingdatafromlargelanguagemodels.In30thUSENIXSecurity
+Symposium(USENIXSecurity21),pages2633–2650,2021.URLhttps://www.usenix.org/conference/usenixsecurity21/presentation/
+carlini-extracting.
+43

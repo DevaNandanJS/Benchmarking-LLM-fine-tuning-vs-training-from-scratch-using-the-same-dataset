@@ -1,0 +1,56 @@
+[158] Yicheng Sun, Jacky Wai Keung, Zhen Yang, Shuo Liu, and Hi Kuen Yu. Semirald: A semi-supervised hybrid language model for
+robust anomalous log detection.Information and Software Technology, 183:107743, July 2025. doi: 10 .1016/j.infsof .2025.107743. URL
+https://doi.org/10.1016/j.infsof.2025.107743.
+[159] Yicheng Sun, Jacky Keung, Zhen Yang, Shuo Liu, and Hi Kuen Yu. Improving anomaly detection in software logs through hybrid
+language modeling and reduced reliance on parser.Automated Software Engineering, 33(1):12, 2026.
+[160] Ilya Sutskever, Oriol Vinyals, and Quoc V. Le. Sequence to sequence learning with neural networks. InAdvances in Neural Information
+Processing Systems (NeurIPS), volume 27, 2014.
+[161] Sayed Taheri, Achintha Ihalage, Prateek Mishra, Sean Coaker, Faris Muhammad, and Hamed Al-Raweshidy. Domain tailored large
+language models for log mask prediction in cellular network diagnostics.IEEE Transactions on Network and Service Management, 22(3):
+2370–2381, 2025. doi: 10.1109/TNSM.2025.3541384.
+[162] Boyin Tan, Junjielong Xu, Zhouruixing Zhu, and Pinjia He. Al-bench: A benchmark for automatic logging, 2025. URL https:
+//arxiv.org/abs/2502.03160.
+[163] Pan Tang, Shixiang Tang, Huanqi Pu, Zhiqing Miao, and Zhixing Wang. Microrca-agent: Microservice root cause analysis method
+based on large language model agents.arXiv preprint arXiv:2509.15635, 2025.
+[164] Shimin Tao, Weibin Meng, Yimeng Chen, Yichen Zhu, Ying Liu, Chunning Du, Tao Han, Yongpeng Zhao, Xiangguang Wang, and Hao
+Yang. Logstamp: Automatic online log parsing based on sequence labelling.ACM SIGMETRICS Performance Evaluation Review, 49(4):
+93–98, 2022. doi: 10.1145/3543146.3543168. URL https://dl.acm.org/doi/10.1145/3543146.3543168.
+[165] Shimin Tao, Yilun Liu, Weibin Meng, Zuomin Ren, Hao Yang, Xun Chen, Liang Zhang, Yuming Xie, Chang Su, Xiaosong Oiao, Weinan
+Tian, Yichen Zhu, Tao Han, Ying Qin, and Yun Li. Biglog: Unsupervised large-scale pre-training for a unified log representation. In
+2023 IEEE/ACM 31st International Symposium on Quality of Service (IWQoS), pages 1–11, 2023. doi: 10 .1109/IWQoS57198.2023.10188759.
+[166] Subin Thali, R. Chethan, G. Supreeth, M. Sangamesh, and S. Swami. LLM-based detection of cyber anomalies in industrial control
+systems.Zhuzao/Foundry, 28(6):237–241, 2025. doi: 10.29014/FJ-2025-1001-4977.2073.
+[167] Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, Naman
+Goyal, Eric Hambro, Faisal Azhar, et al. Llama: Open and efficient foundation language models.arXiv preprint arXiv:2302.13971, 2023.
+[168] Mohamed Trabelsi, Zenghui Yuan, Jiuyong Han, and Fatima Zohra Ros. LogGPT: Log anomaly detection via GPT.arXiv preprint, 2023.
+URL https://arxiv.org/abs/2309.14482.
+[169] Risto Vaarandi and Hayretdin Bahsi. Using large language models for template detection from security event logs.International Journal
+of Information Security, 24, 2025. doi: 10.1007/s10207-025-01018-y. URL https://doi.org/10.1007/s10207-025-01018-y.
+[170] Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin.
+Attention is all you need.Advances in neural information processing systems, 30, 2017.
+[171] Pascal Vincent, Hugo Larochelle, Yoshua Bengio, and Pierre-Antoine Manzagol. Extracting and composing robust features with
+denoising autoencoders. InProceedings of the 25th International Conference on Machine Learning (ICML), pages 1096–1103, 2008. doi:
+10.1145/1390156.1390294.
+[172] Jiabo Wang, Guojun Chu, Jingyu Wang, Haifeng Sun, Qi Qi, Yuanyi Wang, Ji Qi, and Jianxin Liao. Logexpert: Log-based recommended
+resolutions generation using large language model. InProceedings of the 2024 ACM/IEEE 44th International Conference on Software
+Engineering: New Ideas and Emerging Results, ICSE-NIER’24, page 42–46, New York, NY, USA, 2024. Association for Computing
+Machinery. ISBN 9798400705007. doi: 10.1145/3639476.3639773. URL https://doi.org/10.1145/3639476.3639773.
+[173] Kehan Wang, Siqin Zhang, Haijing Nan, Xueyu Hou, Jiaqi Zou, and Zicong Miao.Empirical Analysis of LLMDPP: Advancing Log
+Parsing in the LLM Era, page 753–758. Association for Computing Machinery, New York, NY, USA, 2025. ISBN 9798400714535. URL
+https://doi.org/10.1145/3711875.3736683.
+[174] Tingting Wang and Guilin Qi. A comprehensive survey on root cause analysis in (micro) services: Methodologies, challenges, and
+trends.arXiv preprint arXiv:2408.00803, 2024.
+[175] Xin Wang, Zhenhao Li, and Zishuo Ding. Defects4log: Benchmarking llms for logging code defect detection and reasoning, 2025. URL
+https://arxiv.org/abs/2508.11305.
+[176] Xuezhi Wang, Jason Wei, Dale Schuurmans, Quoc Le, Ed Chi, Sharan Narang, Aakanksha Chowdhery, and Denny Zhou. Self-consistency
+improves chain of thought reasoning in language models, 2022. URL https://arxiv.org/abs/2203.11171.
+[177] Yilun Wang, Pengfei Chen, Haiyu Huang, Zilong He, Gou Tan, Chuanfu Zhang, Jingkai He, and Zibin Zheng. Inferlog: Accelerating
+llm inference for online log parsing via icl-oriented prefix caching. InProceedings of the 48th International Conference on Software
+Engineering (ICSE 2026), 2026. URL https://arxiv.org/abs/2507.08523. Accepted.
+[178] Yue Wang, Weishi Wang, Shafiq Joty, and Steven C. H. Hoi. Codet5: Identifier-aware unified pre-trained encoder-decoder models
+for code understanding and generation. InProceedings of the 2021 Conference on Empirical Methods in Natural Language Processing
+(EMNLP), pages 8696–8708. Association for Computational Linguistics, 2021. doi: 10 .18653/v1/2021.emnlp-main.685. URL https:
+//aclanthology.org/2021.emnlp-main.685/.
+[179] Zefan Wang, Zichuan Liu, Yingying Zhang, Aoxiao Zhong, Jihong Wang, Fengbin Yin, Lunting Fan, Lingfei Wu, and Qingsong Wen.
+Rcagent: Cloud root cause analysis by autonomous agents with tool-augmented large language models. InProceedings of the 33rd ACM
+51

@@ -1,0 +1,48 @@
+4.1 TaskDefinition
+Logging statement generation is the task of inserting and updating log statements into source code so that,
+duringexecution,thesystememitstextualrecords(logs)describinginternalstatesandruntimeevents.Given
+a code context (e.g., a method, a basic block, or a file), automated logging must decide where to place logs,
+whattorecord,andhowtophrasemessagesinareadableandmaintainableway.Alogstatementisahybrid
+artifactthatcombinesacode-levelloggingAPIcall(e.g.,logger.info(...))withaconcisenatural-language
+messageandselectedprogramvariables.Effectivegeneration,therefore,requiresaligningprogrambehavior
+withproject-specificconventions,suchasnaming,verbosity,andseverity-levelusage,typicallyimplemented
+throughstandardloggingframeworks.Thismakesautomatedloggingnotonlyacode-generationproblem,but
+alsoanobservability-designproblemshapedbydeveloperintent,codecontext,messagereadability,andruntime
+diagnosticvalue[36,87,139,219].
+1 public User getUser(String userId) {
+2 logger.info("Fetching user with id={}", userId);
+3 try {
+4 User user = userRepository.find(userId);
+5 if (user == null) {
+6 logger.warn("User not found: id={}", userId);
+7 }
+8 return user;
+9 } catch (DatabaseException ex) {
+10 logger.error("Failed to fetch user: id={}, error={}", userId, ex.getMessage());
+11 throw ex;
+12 }
+13 }
+Listing1. Asimplifiedexampleofsingle-linelogginginJava
+Listing1illustratesasimplifiedJavamethodinstrumentedwiththreelogstatements,andListing2showsthe
+correspondingruntimelogs.ThemethodlogsanINFOmessagebeforeaccessingtherepository,emitsaWARN
+whentherequesteduserismissing,andrecordsanERRORuponadatabaseexception.Eachstatementpairsa
+conciseeventdescriptionwithasmallsetofdiagnosticvariables(e.g.,theuseridentifierandexceptionmessage),
+enablingdeveloperstoreconstructkeycontrol-flowdecisionsandfailurecontextfromthelogstream.
+1 INFO 2025-05-12 10:15:03 UserService - Fetching user with id=U1024
+2 WARN 2025-05-12 10:15:03 UserService - User not found: id=U1024
+3 ERROR 2025-05-12 10:15:04 UserService - Failed to fetch user: id=U1024, error=connection timeout
+Listing2. Examplesingle-lineruntimelogsemittedbyListing1
+Inpractice,logsarecommonlyplacedatexecutionmilestones,boundaryinteractionswithexternalcomponents,
+andexception-handlingpaths,whererecordedcontextismostusefulfordiagnosis[36,219].Mostsystemsrelyon
+standardloggingframeworksthatprovideunifiedAPIsandconfigurableformatting.InJava,widelyusedoptions
+include java.util.logging [117], Log4j 2 [3], SLF4J [132], and Logback [131], while Python typically uses
+thebuilt-inloggingmodule[128],sometimescomplementedbystructlog[141]orloguru[22].Accordingly,
+automatedloggingtechniquesgenerallyassumetheseAPIsandaimtogeneratestatementsthatcanbedirectly
+insertedandcompiledinrealprojects.
+4.2 Challenges
+Although logging is essential for observability, producing high-quality logs in practice is non-trivial. Prior
+automatedapproaches,typicallybasedonheuristics,staticanalysis,andtraditionalmachine-learningmodels,
+havethereforefacedpersistentlimitations.Existingstudiesconsistentlysuggestthatloggingusefulnessislargely
+determined by three intertwined decisions: where to log, what to log, and how to keep logs effective over
+time[36,84,214,219].
+14

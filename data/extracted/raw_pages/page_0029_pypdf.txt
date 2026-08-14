@@ -1,0 +1,74 @@
+Raw logs (window)
+10:12:03.120 INFO OrderSvc recv request id=42
+10:12:03.128 INFO OrderSvc GET /api/orders?id=42
+10:12:03.311 WARN DB timeout conn=7 (3000ms)
+10:12:03.540 INFO OrderSvc retry query attempt=1
+10:12:03.905 ERROR Gateway upstream failed code=504
+Parsed events(templates + parameters)
+𝑆=⟨(𝑒𝑖, 𝑡𝑖, 𝑝𝑖)⟩
+𝑒1:recv request id=*𝑝1={id=42}
+𝑒2:GET /api/orders?id=*𝑝2={id=42}
+𝑒3:timeout conn=* (#ms)𝑝3={conn=7,ms=3000}
+𝑒4:retry query attempt=*𝑝4={attempt=1}
+𝑒5:upstream failed code=*𝑝5={code=504}
+parsing
+Log window
+Word embeddings
+token vectors→
+avg / TF-IDF
+Classic counts
+bag-of-events / n-grams
+param statistics
+Contextual encoder
+BERT/SBERT/log enc.
+event embedding
+Direct LLM
+raw window text
+prompt & reason
+Word-avg event embsz(𝑤)𝑖
+z(𝑤)3 =avg(timeout,conn,ms)
+≈[0.12,−0.03,0.44]
+(context-free tokens)
+Vector featuresx
+counts over templates
+[𝑐(𝑒1), . . . , 𝑐(𝑒5)]=[1,1,1,1,1]
++ param stats (e.g.,𝜇(ms)=3000)
+Contextual event embsz(𝑐)𝑖
+embed full template+params
+z(𝑐)3 ≈[0.08,0.51,−0.11]
+(context-sensitive)
+Prompt output
+Likely DB timeout caused 504.
+Retries observed (attempt=1).
+Downstream tasks
+AD / FP / RCA / Sum
+Fig. 6. An illustrative overview of log window representations: raw logs are parsed into templates and parameters, then
+mapped to (i) classic feature vectors, (ii) context-free word-averaged embeddings, (iii) contextual event embeddings, or (iv)
+direct prompt-based LLM outputs. Numeric vectors are schematic to highlight different representations.
+with existing monitoring pipelines. In these hybrid designs, LLMs may serve only as an auxiliary component
+(e.g., to improve parsing quality or provide explanations), while the anomaly detector/predictor still relies on
+traditional features and machine-learning models.
+At the same time, many recent pipelines adoptcontextual event embeddings. Instead of averaging context-free
+word vectors, they embed each entire log event with a pretrained encoder. The main advantage is robustness:
+contextual encoders model word order and compositional meaning within an event, and they can assign different
+representations to the same token across different contexts (which is common in fast-evolving software logs) [30,
+125]. As a result, semantically equivalent events with heterogeneous phrasing tend to stay closer in the embedding
+space, while subtle boundary or wording changes are less likely to break downstream models, a property that is
+particularly useful under drift, long-tail patterns, and limited supervision.
+In practice, the workflow is lightweight. Each parsed event (often the template text, optionally concatenated
+with selected parameters) is converted to a short input string and encoded with a contextual model such as
+BERT [24] and Sentence-BERT [135], or with log-oriented encoders (e.g., PreLog [74] and OWL [42]) to obtain a
+fixed-lengthevent embedding. For sequence-level tasks, event embeddings within a session/window are then
+aggregated (e.g., pooling/attention or a lightweight sequential model) into awindow representation. Downstream
+modules use these representations either for (i) similarity-based retrieval/matching (nearest-neighbor search for
+related events/windows) or (ii) training detectors/predictors for anomaly detection and failure prediction, often
+with improved tolerance to wording variation compared to word-embedding pipelines.
+Unified log representations via large-scale pretraining.Beyond “using a general-purpose encoder, ” BigLog [165]
+advocatesunsupervised large-scale pre-trainingto learn aunifiedrepresentation space for logs. The core idea
+is to pretrain on massive, heterogeneous log corpora so that a single encoder can produce transferable embed-
+dings across systems and log styles, reducing the reliance on per-system feature engineering or task-specific
+representation tuning. This perspective is especially relevant in LLM-era pipelines where the bottleneck often
+shifts from model capacity torepresentation compatibility: when logs change frequently or when operators need
+cross-service retrieval and correlation, a unified embedding space enables (i) more reliable similarity search
+over historical windows, (ii) easier cross-system transfer/bootstrapping under limited labels, and (iii) a common
+29

@@ -1,0 +1,56 @@
+InternationalConferenceonInformationandKnowledgeManagement,pages4966–4974,2024.
+[180] JasonWei,RishiBommasani,ColinRaffel,BarretZoph,SebastianBorgeaud,JeffDean,YuhuaiLi,AdamRoberts,AnnaRumshisky,Noam
+Shazeer,etal.Emergentabilitiesoflargelanguagemodels.arXivpreprintarXiv:2206.07682,2022.URLhttps://arxiv.org/abs/2206.07682.
+[181] JasonWei,XuezhiWang,DaleSchuurmans,MaartenBosma,FeiXia,EdChi,QuocV.Le,andDennyZhou.Chain-of-thoughtprompting
+elicitsreasoninginlargelanguagemodels,2022.URLhttps://arxiv.org/abs/2201.11903.
+[182] YifanWu,SiyuYu,andYingLi.Logparsingusingllmswithself-generatedin-contextlearningandself-correction.InProceedingsofthe
+33rdIEEE/ACMInternationalConferenceonProgramComprehension(ICPC2025).IEEE/ACM,2025.URLhttps://arxiv.org/abs/2406.03376.
+Methodname:AdaParser.
+[183] PeiXiao,TongJia,ChimingDuan,MinghuaHe,WeijieHong,XixuanYang,YihanWu,YingLi,andGangHuang.Clslog:Collaborating
+largeandsmallmodelsforlog-basedanomalydetection. InCompanionProceedingsofthe33rdACMInternationalConferenceon
+theFoundationsofSoftwareEngineering(FSECompanion’25),pages686–690,Trondheim,Norway,June2025.ACM. doi:10.1145/
+3696630.3728524.URLhttps://doi.org/10.1145/3696630.3728524.
+[184] YiXiao,Van-HoangLe,andHongyuZhang.Demonstration-free:Towardsmorepracticallogparsingwithlargelanguagemodels.In
+Proceedingsofthe39thIEEE/ACMInternationalConferenceonAutomatedSoftwareEngineering(ASE2024),pages1243–1255.ACM,2024.
+doi:10.1145/3691620.3694994.URLhttps://dl.acm.org/doi/10.1145/3691620.3694994.Methodname:LogBatcher.
+[185] XiaoyuanXie,ZhipengCai,SongqiangChen,andJifengXuan.Fastlog:Anend-to-endmethodtoefficientlygenerateandinsertlogging
+statements.InProceedingsofthe33rdACMSIGSOFTInternationalSymposiumonSoftwareTestingandAnalysis(ISSTA’24),pages26–37.
+ACM,2024.doi:10.1145/3650212.3652107.URLhttps://arxiv.org/abs/2311.02862.
+[186] AndyXuandArnoGau. Help:Hierarchicalembeddings-basedlogparsing. arXivpreprintarXiv:2408.08300,2024. URLhttps:
+//arxiv.org/abs/2408.08300.
+[187] JunjielongXu,ZiangCui,YuanZhao,XuZhang,ShilinHe,PinjiaHe,LiqunLi,YuKang,QingweiLin,YingnongDang,Saravan
+Rajmohan,andDongmeiZhang.Unilog:AutomaticloggingviaLLMandin-contextlearning.InProceedingsofthe46thIEEE/ACM
+InternationalConferenceonSoftwareEngineering(ICSE’24).ACM,2024.doi:10.1145/3597503.3623326.
+[188] JunjielongXu,RuichunYang,YintongHuo,ChengyuZhang,andPinjiaHe.Divlog:Logparsingwithpromptenhancedin-context
+learning.InProceedingsofthe46thIEEE/ACMInternationalConferenceonSoftwareEngineering(ICSE’24),pages199:1–199:12,2024.
+doi:10.1145/3597503.3639155.URLhttps://doi.org/10.1145/3597503.3639155.
+[189] JunjielongXu,QinanZhang,ZhiqingZhong,ShilinHe,ChaoyunZhang,QingweiLin,DanPei,PinjiaHe,DongmeiZhang,and
+QiZhang.Openrca:Canlargelanguagemodelslocatetherootcauseofsoftwarefailures?InTheThirteenthInternationalConference
+onLearningRepresentations,2025.
+[190] WeiyuanXu,JuntaoLuo,TaoHuang,KaixinSui,JieGeng,QijunMa,IsamiAkasaka,XiaoxueShi,JingTang,andPengCai.Atwo-staged
+llm-basedframeworkforci/cdfailuredetectionandremediationwithindustrialvalidation.arXivpreprintarXiv:2506.03691,2025.
+[191] YuukiYamanaka,TomokatsuTakahashi,TakuyaMinami,andYoshiakiNakajima.LogELECTRA:Self-supervisedanomalydetection
+forunstructuredlogs.arXivpreprint,2024.URLhttps://arxiv.org/abs/2402.10397.
+[192] N.Yang,P.J.L.Cuijpers,D.Hendriks,R.Schiffelers,J.Lukkien,andA.Serebrenik. Aninterviewstudyabouttheuseoflogsin
+embeddedsoftwareengineering.EmpiricalSoftwareEngineering,28(2):43,2023.doi:10.1007/s10664-022-10258-8.
+[193] TiankaiYang,YiNian,LiLi,RuiyaoXu,YuangangLi,JiaqiLi,ZhuoXiao,XiyangHu,RyanA.Rossi,KaizeDing,XiaHu,andYueZhao.
+AD-LLM:Benchmarkinglargelanguagemodelsforanomalydetection.InFindingsoftheAssociationforComputationalLinguistics:ACL
+2025,pages1524–1547,Vienna,Austria,July2025.AssociationforComputationalLinguistics.doi:10.18653/v1/2025.findings-acl.79.
+URLhttps://aclanthology.org/2025.findings-acl.79/.
+[194] ShunyuYao,JeffreyZhao,DianYu,NanDu,IzhakShafran,KarthikNarasimhan,andYuanCao.React:Synergizingreasoningand
+actinginlanguagemodels,2022.URLhttps://arxiv.org/abs/2210.03629.
+[195] ShunyuYao,DianYu,JeffreyZhao,IzhakShafran,ThomasL.Griffiths,YuanCao,andKarthikNarasimhan.Treeofthoughts:Deliberate
+problemsolvingwithlargelanguagemodels,2023.URLhttps://arxiv.org/abs/2305.10601.
+[196] XianYu,ShengxiNong,DongbiaoHe,WeijieZheng,TengMa,NingLiu,JianhuiLi,andGaogangXie.Loggenius:Anunsupervisedlog
+parsingframeworkwithzero-shotpromptengineering.In2024IEEEInternationalConferenceonWebServices(ICWS),pages1321–1328,
+2024.doi:10.1109/ICWS62655.2024.00159.URLhttps://doi.org/10.1109/ICWS62655.2024.00159.
+[197] ChenboZhang,WenyingXu,JinbuLiu,LuZhang,GuiyangLiu,JihongGuan,QiZhou,andShuigengZhou.Logbase:Alarge-scale
+benchmarkforsemanticlogparsing.InProceedingsofthe34thACMSIGSOFTInternationalSymposiumonSoftwareTestingandAnalysis
+(ISSTA2025).ACM,2025.doi:10.1145/3728969.URLhttps://dl.acm.org/doi/10.1145/3728969.
+[198] ChenboZhang,WenyingXu,JinbuLiu,LuZhang,GuiyangLiu,JihongGuan,QiZhou,andShuigengZhou.Semanticlog:Towards
+effectiveandefficientlarge-scalesemanticlogparsing.IEEETransactionsonSoftwareEngineering,2025.doi:10.1109/TSE.2025.3524891.
+URLhttps://ieeexplore.ieee.org/abstract/document/11216353.
+[199] HaoZhang,DongjunYu,LeiZhang,GuopingRong,YongdaYu,HaifengShen,HeZhang,DongShao,andHongyuKuang.Aucad:
+Automatedconstructionofalignmentdatasetfromlog-relatedissuesforenhancingllm-basedloggeneration.InProceedingsofthe
+16thInternationalConferenceonInternetware,Internetware’25,page413–425,NewYork,NY,USA,2025.AssociationforComputing
+52

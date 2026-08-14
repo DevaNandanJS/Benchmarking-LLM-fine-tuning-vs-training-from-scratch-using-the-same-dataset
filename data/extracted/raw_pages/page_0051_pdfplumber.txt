@@ -1,0 +1,56 @@
+[158] YichengSun,JackyWaiKeung,ZhenYang,ShuoLiu,andHiKuenYu. Semirald:Asemi-supervisedhybridlanguagemodelfor
+robustanomalouslogdetection.InformationandSoftwareTechnology,183:107743,July2025.doi:10.1016/j.infsof.2025.107743.URL
+https://doi.org/10.1016/j.infsof.2025.107743.
+[159] YichengSun,JackyKeung,ZhenYang,ShuoLiu,andHiKuenYu. Improvinganomalydetectioninsoftwarelogsthroughhybrid
+languagemodelingandreducedrelianceonparser.AutomatedSoftwareEngineering,33(1):12,2026.
+[160] IlyaSutskever,OriolVinyals,andQuocV.Le.Sequencetosequencelearningwithneuralnetworks.InAdvancesinNeuralInformation
+ProcessingSystems(NeurIPS),volume27,2014.
+[161] SayedTaheri,AchinthaIhalage,PrateekMishra,SeanCoaker,FarisMuhammad,andHamedAl-Raweshidy.Domaintailoredlarge
+languagemodelsforlogmaskpredictionincellularnetworkdiagnostics.IEEETransactionsonNetworkandServiceManagement,22(3):
+2370–2381,2025.doi:10.1109/TNSM.2025.3541384.
+[162] BoyinTan,JunjielongXu,ZhouruixingZhu,andPinjiaHe. Al-bench:Abenchmarkforautomaticlogging,2025. URLhttps:
+//arxiv.org/abs/2502.03160.
+[163] PanTang,ShixiangTang,HuanqiPu,ZhiqingMiao,andZhixingWang.Microrca-agent:Microservicerootcauseanalysismethod
+basedonlargelanguagemodelagents.arXivpreprintarXiv:2509.15635,2025.
+[164] ShiminTao,WeibinMeng,YimengChen,YichenZhu,YingLiu,ChunningDu,TaoHan,YongpengZhao,XiangguangWang,andHao
+Yang.Logstamp:Automaticonlinelogparsingbasedonsequencelabelling.ACMSIGMETRICSPerformanceEvaluationReview,49(4):
+93–98,2022.doi:10.1145/3543146.3543168.URLhttps://dl.acm.org/doi/10.1145/3543146.3543168.
+[165] ShiminTao,YilunLiu,WeibinMeng,ZuominRen,HaoYang,XunChen,LiangZhang,YumingXie,ChangSu,XiaosongOiao,Weinan
+Tian,YichenZhu,TaoHan,YingQin,andYunLi.Biglog:Unsupervisedlarge-scalepre-trainingforaunifiedlogrepresentation.In
+2023IEEE/ACM31stInternationalSymposiumonQualityofService(IWQoS),pages1–11,2023.doi:10.1109/IWQoS57198.2023.10188759.
+[166] SubinThali,R.Chethan,G.Supreeth,M.Sangamesh,andS.Swami. LLM-baseddetectionofcyberanomaliesinindustrialcontrol
+systems.Zhuzao/Foundry,28(6):237–241,2025.doi:10.29014/FJ-2025-1001-4977.2073.
+[167] HugoTouvron,ThibautLavril,GautierIzacard,XavierMartinet,Marie-AnneLachaux,TimothéeLacroix,BaptisteRozière,Naman
+Goyal,EricHambro,FaisalAzhar,etal.Llama:Openandefficientfoundationlanguagemodels.arXivpreprintarXiv:2302.13971,2023.
+[168] MohamedTrabelsi,ZenghuiYuan,JiuyongHan,andFatimaZohraRos.LogGPT:LoganomalydetectionviaGPT.arXivpreprint,2023.
+URLhttps://arxiv.org/abs/2309.14482.
+[169] RistoVaarandiandHayretdinBahsi.Usinglargelanguagemodelsfortemplatedetectionfromsecurityeventlogs.InternationalJournal
+ofInformationSecurity,24,2025.doi:10.1007/s10207-025-01018-y.URLhttps://doi.org/10.1007/s10207-025-01018-y.
+[170] AshishVaswani,NoamShazeer,NikiParmar,JakobUszkoreit,LlionJones,AidanNGomez,ŁukaszKaiser,andIlliaPolosukhin.
+Attentionisallyouneed.Advancesinneuralinformationprocessingsystems,30,2017.
+[171] PascalVincent,HugoLarochelle,YoshuaBengio,andPierre-AntoineManzagol. Extractingandcomposingrobustfeatureswith
+denoisingautoencoders.InProceedingsofthe25thInternationalConferenceonMachineLearning(ICML),pages1096–1103,2008.doi:
+10.1145/1390156.1390294.
+[172] JiaboWang,GuojunChu,JingyuWang,HaifengSun,QiQi,YuanyiWang,JiQi,andJianxinLiao.Logexpert:Log-basedrecommended
+resolutionsgenerationusinglargelanguagemodel. InProceedingsofthe2024ACM/IEEE44thInternationalConferenceonSoftware
+Engineering:NewIdeasandEmergingResults,ICSE-NIER’24,page42–46,NewYork,NY,USA,2024.AssociationforComputing
+Machinery.ISBN9798400705007.doi:10.1145/3639476.3639773.URLhttps://doi.org/10.1145/3639476.3639773.
+[173] KehanWang,SiqinZhang,HaijingNan,XueyuHou,JiaqiZou,andZicongMiao. EmpiricalAnalysisofLLMDPP:AdvancingLog
+ParsingintheLLMEra,page753–758.AssociationforComputingMachinery,NewYork,NY,USA,2025.ISBN9798400714535.URL
+https://doi.org/10.1145/3711875.3736683.
+[174] TingtingWangandGuilinQi.Acomprehensivesurveyonrootcauseanalysisin(micro)services:Methodologies,challenges,and
+trends.arXivpreprintarXiv:2408.00803,2024.
+[175] XinWang,ZhenhaoLi,andZishuoDing.Defects4log:Benchmarkingllmsforloggingcodedefectdetectionandreasoning,2025.URL
+https://arxiv.org/abs/2508.11305.
+[176] XuezhiWang,JasonWei,DaleSchuurmans,QuocLe,EdChi,SharanNarang,AakankshaChowdhery,andDennyZhou.Self-consistency
+improveschainofthoughtreasoninginlanguagemodels,2022.URLhttps://arxiv.org/abs/2203.11171.
+[177] YilunWang,PengfeiChen,HaiyuHuang,ZilongHe,GouTan,ChuanfuZhang,JingkaiHe,andZibinZheng.Inferlog:Accelerating
+llminferenceforonlinelogparsingviaicl-orientedprefixcaching. InProceedingsofthe48thInternationalConferenceonSoftware
+Engineering(ICSE2026),2026.URLhttps://arxiv.org/abs/2507.08523.Accepted.
+[178] YueWang,WeishiWang,ShafiqJoty,andStevenC.H.Hoi. Codet5:Identifier-awareunifiedpre-trainedencoder-decodermodels
+forcodeunderstandingandgeneration.InProceedingsofthe2021ConferenceonEmpiricalMethodsinNaturalLanguageProcessing
+(EMNLP),pages8696–8708.AssociationforComputationalLinguistics,2021. doi:10.18653/v1/2021.emnlp-main.685. URLhttps:
+//aclanthology.org/2021.emnlp-main.685/.
+[179] ZefanWang,ZichuanLiu,YingyingZhang,AoxiaoZhong,JihongWang,FengbinYin,LuntingFan,LingfeiWu,andQingsongWen.
+Rcagent:Cloudrootcauseanalysisbyautonomousagentswithtool-augmentedlargelanguagemodels.InProceedingsofthe33rdACM
+51

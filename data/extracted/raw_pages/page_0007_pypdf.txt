@@ -1,0 +1,39 @@
+pipelines (detection/parsing) and then progressively pushed them toward higher-level operational assistance as
+models and prompting/retrieval techniques matured.
+Finally, the venue landscape indicates both broad dissemination and strong SE anchoring. As summarized
+in Table 2, a noticeable fraction of the corpus appears as preprints (reflecting the fast-moving nature of LLM
+research), while many peer-reviewed papers are mainly published in software engineering venues. Interestingly,
+the venue concentration differs by task: papers on anomaly detection are much more widely distributed across
+research communities and venues (e.g., systems, security, networking, data mining, and AI), whereas topics closer
+to software engineering practice (e.g., logging and some parsing work) are more likely to appear in SE-focused
+outlets. This cross-venue spread reinforces that LLM4Log is inherently interdisciplinary: it inherits operational
+problems from SE while drawing methods and evaluation norms from multiple adjacent fields.
+2.3 Relation to existing surveys.
+In recent years, several surveys and reviews have summarized progress in automated log analysis and related
+LLM-based operational analytics. He et al. [47] offered a broad survey of automated log analysis for reliability
+engineering, summarizing established pipelines spanning logging practice, compression, parsing, anomaly
+detection, failure prediction, and diagnosis, and largely reflecting the pre-instruction-tuned-LLM era. As LLMs
+entered log analytics, more focused surveys emerged. Beck et al. [ 6] concentrated onsystem log parsing with
+large language models, emphasizing how LLMs convert raw logs into structured templates and fields and how
+such parsers are evaluated. Akhtar et al. [1] reviewedLLM-based event log analysisin a broader sense, motivated
+primarily by the needs of security professionals and covering event logs from multiple computing contexts,
+including system, application, and network logs. Their survey mainly summarizes what LLM techniques have
+been applied to event logs, while our work uses software runtime logs as the organizing lens for task structure,
+evaluation practice, and open challenges.
+Several adjacent surveys also provide useful comparison points without being log-centric in the same way as
+our work. Remil et al. [136] reviewed AIOps solutions for incident management across tasks, data sources, and
+technical approaches. Zhou and Fokaefs [216] surveyed AI assistants for the incident lifecycle in microservice
+environments, considering observability data such as logs, traces, and metrics. Wang and Qi [174] surveyed root
+cause analysis in (micro)services across logs, traces, metrics, and multimodal data. From the operational analytics
+side, Zhang et al. [200] discussed AIOps in the LLM era at a broader reliability-engineering level, where logs are
+one type of operational data among metrics, traces, alerts, incidents, and other signals.
+Overall, our survey complements these efforts by focusing specifically onLLM4Log. Compared with prior
+surveys, our scope is defined by treating software runtime logs as the central evidence source across the workflow,
+while still accounting for multimodal settings in which logs may be used directly or indirectly through derived
+operational artifacts. By contrast with the broader event-log, incident-management, and RCA surveys above,
+our emphasis is the end-to-end software/system runtime log workflow, not a wider observability or incident-
+response problem setting. As summarized in Table 3, our survey differs from prior work in three ways: it is
+log-centric, not modality-agnostic, it spans the workflow from logging and parsing to downstream analysis tasks,
+and it emphasizes how LLM-based methods interact with deployment constraints and evidence quality in real
+operational settings.
+7

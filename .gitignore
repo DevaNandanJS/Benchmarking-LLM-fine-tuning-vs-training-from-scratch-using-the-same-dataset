@@ -5,16 +5,16 @@ __pycache__/
 
 # Large binary artifacts (kept out of git; see Phase 0 step 4 for Drive-backed persistence)
 
-data/extracted/*
+
 
 !data/raw/.gitkeep
 !data/extracted/.gitkeep
 !data/processed/.gitkeep
 
-TASK1_TASK1_finetuning_model/checkpoints/*
-!TASK1_TASK1_finetuning_model/checkpoints/.gitkeep
-TASK2_TASK2_slm_from_scratch/checkpoints/*
-!TASK2_TASK2_slm_from_scratch/checkpoints/.gitkeep
+TASK1_finetuning_model/checkpoints/*
+!TASK1_finetuning_model/checkpoints/.gitkeep
+TASK2_slm_from_scratch/checkpoints/*
+!TASK2_slm_from_scratch/checkpoints/.gitkeep
 
 
 *.bin

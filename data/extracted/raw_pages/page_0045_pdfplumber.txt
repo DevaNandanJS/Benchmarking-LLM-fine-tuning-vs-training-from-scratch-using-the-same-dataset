@@ -1,0 +1,56 @@
+[32] AsmaFariha,VidaGharavian,MasoudMakrehchi,ShahryarRahnamayan,SanaaAlwidian,andAkramulAzim.Loganomalydetection
+byleveragingllm-basedparsingandembeddingwithattentionmechanism. In2024IEEECanadianConferenceonElectricaland
+ComputerEngineering(CCECE),pages859–863.IEEE,2024.
+[33] ZhangyinFeng,DayaGuo,DuyuTang,NanDuan,XiaochengFeng,MingGong,LinjunShou,BingQin,TingLiu,DaxinJiang,and
+MingZhou.Codebert:Apre-trainedmodelforprogrammingandnaturallanguages.InFindingsoftheAssociationforComputational
+Linguistics:EMNLP2020,pages1536–1547.AssociationforComputationalLinguistics,2020.doi:10.18653/v1/2020.findings-emnlp.139.
+URLhttps://aclanthology.org/2020.findings-emnlp.139/.
+[34] JointTaskForce.Securityandprivacycontrolsforinformationsystemsandorganizations(nistspecialpublication800-53revision5),
+2020.URLhttps://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final.
+[35] AmyFosterandSelvaKumar.COMBININGLLMSANDSHELLLOGSTOPREDICTBACKUPFAILURES.072025.
+[36] QiangFu,JiemingZhu,WenluHu,Jian-GuangLou,RuiDing,QingweiLin,DongmeiZhang,andTaoXie.Wheredodeveloperslog?an
+empiricalstudyonloggingpracticesinindustry.InCompanionProceedingsofthe36thInternationalConferenceonSoftwareEngineering,
+pages24–33.ACM,2014.doi:10.1145/2591062.2591175.
+[37] YingFu,MengYan,PinjiaHe,ChaoLiu,XiaohongZhang,andDanYang.End-to-endlogstatementgenerationatblock-level.Journal
+ofSystemsandSoftware,216:112146,2024.doi:10.1016/j.jss.2024.112146.
+[38] KaiGreshake,SaharAbdelnabi,ShaileshMishra,ChristopherEndres,ThorstenHolz,andMarioFritz.Notwhatyouv´esignedupfor:
+Compromisingreal-worldLLM-integratedapplicationswithindirectpromptinjection,2023.URLhttps://arxiv.org/abs/2302.12173.
+[39] WeiGuan,JianCao,ShiyouQian,andJianqiGao.LogLLM:Log-basedanomalydetectionusinglargelanguagemodels.arXivpreprint,
+2024.URLhttps://arxiv.org/abs/2411.08561.
+[40] H.Guo,S.Yuan,andX.Wu.Logbert:Loganomalydetectionviabert.In2021InternationalJointConferenceonNeuralNetworks(IJCNN),
+pages1–8.IEEE,2021.
+[41] HongchengGuo,JianYang,JiahengLiu,JiaqiBai,BoyangWang,ZhoujunLi,TieqiaoZheng,BoZhang,JunranPeng,andQiTian.
+Logformer:Apre-trainandtuningpipelineforloganomalydetection.InProceedingsoftheAAAIConferenceonArtificialIntelligence
+(AAAI),pages135–143,2024.
+[42] HongchengGuo,JianYang,JiahengLiu,LiqunYang,LinzhengChai,JiaqiBai,JunranPeng,XiaorongHu,ChaoChen,DongfengZhang,
+XuShi,TieqiaoZheng,LiangfanZheng,BoZhang,KeXu,andZhoujunLi.Owl:Alargelanguagemodelforitoperations.InProceedingsof
+theTwelfthInternationalConferenceonLearningRepresentations(ICLR2024),2024.URLhttps://openreview.net/forum?id=SZOQ9RKYJu.
+[43] SuchinGururangan,AnaMarasović,SwabhaSwayamdipta,KyleLo,IzBeltagy,DougDowney,andNoahA.Smith. Don’tstop
+pretraining:Adaptlanguagemodelstodomainsandtasks.InProceedingsofthe58thAnnualMeetingoftheAssociationforComputational
+Linguistics(ACL),pages8342–8360.AssociationforComputationalLinguistics,2020. doi:10.18653/v1/2020.acl-main.740. URL
+https://aclanthology.org/2020.acl-main.740/.
+[44] FatemehHadadi,QinghuaXu,DomenicoBianculli,andLionelBriand.Llmmeetsml:Data-efficientanomalydetectiononunstable
+logs.ACMTransactionsonSoftwareEngineeringandMethodology,2025.doi:10.1145/3771283.URLhttps://doi.org/10.1145/3771283.
+arXiv:2406.07467.
+[45] MinghuaHe,TongJia,ChimingDuan,HuaqianCai,YingLi,andGangHuang.Llmelog:Anapproachforanomalydetectionbasedon
+llm-enrichedlogevents.In2024IEEE35thInternationalSymposiumonSoftwareReliabilityEngineering(ISSRE),pages132–143.IEEE,
+2024.
+[46] PinjiaHe,JiemingZhu,ZibinZheng,andMichaelR.Lyu.Drain:Anonlinelogparsingapproachwithfixeddepthtree.In2017IEEE
+InternationalConferenceonWebServices(ICWS),pages33–40,2017.doi:10.1109/ICWS.2017.13.
+[47] ShilinHe,PinjiaHe,ZhuangbinChen,TianyiYang,YuxinSu,andMichaelRLyu.Asurveyonautomatedloganalysisforreliability
+engineering.ACMcomputingsurveys(CSUR),54(6):1–37,2021.
+[48] ShimingHe,YingLei,YingZhang,KunXie,andPradipKumarSharma.Parameter-efficientloganomalydetectionbasedonpre-training
+modelandlora.In2023IEEE34thInternationalSymposiumonSoftwareReliabilityEngineering(ISSRE),pages207–217.IEEE,2023.
+[49] YiWenHeng,ZeyangMa,ZhenhaoLi,DongJaeKim,andTse-HsunChen. Benchmarkingopen-sourcelargelanguagemodels
+forloglevelsuggestion. In2025IEEEConferenceonSoftwareTesting,VerificationandValidation(ICST),pages314–325,2025. doi:
+10.1109/ICST62969.2025.10988921.
+[50] JordisEmiliaHerrmann,AswathMandakathGopinath,MikaelNorrlof,andMarkNiklasMueller.Diagnosingroboticssystemsissues
+withlargelanguagemodels–acasestudy.InICLR2025WorkshoponFoundationModelsintheWild.
+[51] AndrásHorváth,AndrásOláh,AttilaPintér,BálintSiklósi,GergelyLukács,IstvánZ.Reguly,KálmánTornai,TamásZsedrovits,and
+ZoltánMáthé. Anomalydetectionalgorithmsforreal-timelogdataanalysisatscale. IEEEAccess,13:136288–136311,2025. doi:
+10.1109/ACCESS.2025.3565575.
+[52] ChangzeHu,YuFang,JinhuaWu,HaoyangLi,andGengWang.Researchonloganomalydetectionbasedonsentence-BERT.Electronics,
+12(17):3580,2023.doi:10.3390/electronics12173580.URLhttps://www.mdpi.com/2079-9292/12/17/3580.
+[53] JunjieHuang,ZhihanJiang,JinyangLiu,YintongHuo,JiazhenGu,ZhuangbinChen,CongFeng,HuiDong,ZengyinYang,and
+MichaelRLyu.Demystifyingandextractingfault-indicatinginformationfromlogsforfailurediagnosis.In2024IEEE35thInternational
+45

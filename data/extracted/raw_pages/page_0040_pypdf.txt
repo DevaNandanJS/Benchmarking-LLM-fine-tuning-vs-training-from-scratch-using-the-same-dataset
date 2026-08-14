@@ -1,0 +1,44 @@
+Across log summarization studies, the key contribution of LLMs is turning noisy, heterogeneous log streams
+into coherent narratives and structured incident briefs. The most effective systems do not summarize “raw logs”
+directly. They first impose structure through grouping, salience selection, and evidence extraction, and then
+generate a constrained summary. This shifts the main challenge from generation tofaithful context curation
+and evaluationunder operator-centric criteria.
+7 Cross-Cutting Insights and Future Directions
+The preceding sections reviewed LLM-based work across the log-analysis pipeline, from logging statement
+generation to parsing and downstream operational tasks. Our findings suggest that LLM4Log should not be
+understood as a collection of isolated task-specific upgrades. Instead, the same challenges appear across tasks:
+semantic flexibility versus controllability, richer evidence integration versus higher cost and latency, and more
+operator-friendly outputs versus a greater need for grounding and verification. This section summarizes these
+recurring patterns and highlights the most important open directions for reliable real-world adoption.
+7.1 Cross-cutting Insights and Trade-offs
+Table 9 summarizes the comparison by linking recurring challenges to the main method families and their
+practical use. In practice, this means no single paradigm dominates across the whole workflow. Different tasks
+and constraints favor different combinations of supervision, retrieval, control, and system design.
+The first cross-cutting observation is thatlog-centricLLM systems are distinct from broader LLM4AIOps
+settings because logs are both semantically rich and operationally noisy. Unlike metrics or traces, logs often
+contain the chronological symptom evidence that operators read directly during debugging and incident triage,
+but they also mix free-form descriptions with identifiers, stack frames, configuration keys, and other code-like
+tokens. This makes log analysis not only a pattern-recognition problem, but also an evidence-integration and
+decision-support problem where the quality of the final operator-facing output matters as much as the underlying
+prediction [20, 42, 68].
+The second recurring insight is that LLMs are most beneficial when the main challenge is semantic variation
+under drift, not stable repeated syntax. In logging-related tasks, this appears when developers need help generating
+or revising informative logging statements across evolving codebases and conventions [36, 87, 139, 219]. In parsing,
+it appears when template boundaries are ambiguous, delimiters are unstable, or previously unseen messages
+emerge under version and deployment drift [6, 64, 103, 188]. In downstream tasks, it appears when semantically
+related failures surface through heterogeneous wording across components, or when weak signals must be
+integrated across long sequences instead of being recognized from a single fixed pattern [20, 42, 68, 100]. Across
+these settings, the main value of LLMs is not that they eliminate preprocessing, but that they tolerate variation
+better than approaches tightly coupled to historically observed surface forms [68, 103, 188].
+The third pattern is that successful LLM4Log systems rarely rely on unconstrained, end-to-end generation
+alone. Across tasks, the most practical designs are selective and layered: they first reduce the search space
+through preprocessing, retrieval, filtering, grouping, or lightweight scoring, and only then use a stronger LLM for
+semantic interpretation, explanation, or reporting [42, 98, 100, 103]. This pattern is visible in parsing researches
+that combine grouping and cache reuse with selective LLM calls, in anomaly detection pipelines that let smaller
+encoders or classical models narrow candidate windows before explanation, and in RCA or summarization
+systems that retrieve historical incidents, runbooks, or correlated artifacts before generating hypotheses or
+reports [20, 42, 98, 100, 103]. The broader lesson is that LLMs are most useful as a high-value reasoning and
+explanation component inside a larger pipeline. They are not a drop-in replacement for every stage [20, 42, 68].
+These observations also clarify the main trade-offs across current LLM4Log paradigms. Fine-tuning is attractive
+when task boundaries are stable and enough supervision exists, but it is harder to refresh under rapid drift [43,
+40

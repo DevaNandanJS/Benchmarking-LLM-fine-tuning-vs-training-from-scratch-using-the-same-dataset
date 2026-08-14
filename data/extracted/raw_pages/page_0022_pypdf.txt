@@ -1,0 +1,44 @@
+Crucially, this variability is not static: log formats drift over time as code evolves, dependencies are upgraded,
+configuration changes alter logging layouts, and developers revise wording for readability or diagnostics [64, 104,
+198]. Under drift, an initially accurate template inventory can become stale, causing template fragmentation (the
+same event being split into multiple templates) or erroneous merges (different events being grouped together).
+Rule-based parsers then require continuous maintenance, while data-driven parsers trained on historical logs can
+suffer when the distribution of templates or vocabulary shifts.
+5.2.2 Ambiguous template–variable boundaries.Even with a stable structure, deciding which tokens areinvariant
+versusvariableis inherently ambiguous. Runtime values have various forms (IDs, UUIDs, paths, IP addresses,
+error codes), and some values may appear constant within a single deployment but should be treated as variables
+across runs (e.g., stable ports or hostnames in a fixed environment). Conversely, some numeric tokens or symbols
+are semantically meaningful constants (e.g., HTTP status classes or well-known error codes) that should remain
+in templates.
+As a result, common heuristics such as “all digits are variables” or delimiter-based splitting can lead to either
+over-general templates (too many placeholders, losing discriminative semantics) or over-specific templates
+(template explosion). Both outcomes reduce downstream utility: overgeneralization blurs distinct events, whereas
+over-specificity fragments event types, harming aggregation and anomaly detection.
+5.2.3 Long-tail patterns and coverage gaps.Real log streams often follow a heavy-tailed distribution: a small
+number of frequent templates dominate the volume. In contrast, rare templates may be crucial for diagnosis (e.g.,
+exception paths and failure-handling branches). Traditional parsers that rely on frequency cues or stable clustering
+can underperform on the long tail. Rare patterns may be misclassified into frequent templates (degrading precision)
+or split into many singletons (degrading recall and inventory usefulness), resulting in poor coverage precisely
+where operators most need structured signals.
+This long-tail effect also interacts with drift and boundary ambiguity: rare events provide fewer repetitive
+examples to stabilize grouping, making them more vulnerable to mis-parsing when wording changes or when
+variable boundaries are subtle.
+5.2.4 Operational constraints and stability requirements.Operational log parsing is commonly performed at a
+large scale, where millions of log lines must be processed with low latency, high throughput, and predictable
+resource usage. Traditional parsers are attractive in production usages because they provide deterministic
+execution and low per-line cost, but achievingbothhigh throughput and high accuracy becomes difficult as
+structural variability and drift increase.
+Moreover, many downstream pipelines assume that event identities remain stable across time windows (e.g.,
+for alerting, dashboards, and anomaly detectors trained on historical event sequences) [47, 64]. Template churn
+caused by drift, boundary ambiguity, or long-tail fragmentation can propagate instability into downstream
+analytics, degrading both monitoring reliability and cross-run comparability.
+5.3 LLM-based Approaches for Log Parsing
+Table 5 shows that LLM-based log parsing has expanded from early capability probes into several reusable
+methodological families. Across these families, the core idea is to trade brittle, log-specific heuristics (e.g.,
+delimiter rules and fixed similarity thresholds) for semantic generalization: LLMs can better infer which spans
+belong to the stable event skeleton versus instance-specific parameters, even when surface forms vary across
+environments and versions. We distinguish the main learning/adaptation paradigm from orthogonal reuse and
+efficiency mechanisms: a parser may be supervised, prompt-based, or retrieval/refinement-oriented, while still
+using caches, grouping, scheduling, template memories, or tool-based decomposition to reduce cost and stabilize
+online behavior.
+22

@@ -1,0 +1,55 @@
+[93] YilunLiu,ShiminTao,WeibinMeng,FeiyuYao,XingyuZhao,andHaoYang. LogPrompt:Promptengineeringtowardszero-shot
+andinterpretableloganalysis. InCompanionProceedingsofthe46thIEEE/ACMInternationalConferenceonSoftwareEngineering
+(ICSECompanion’24).AssociationforComputingMachinery,2024. doi:10.1145/3639478.3643108. URLhttps://doi.org/10.1145/
+3639478.3643108.
+[94] YilunLiu,YuheJi,ShiminTao,MingguiHe,WeibinMeng,ShenglinZhang,YongqianSun,YumingXie,BoxingChen,andHaoYang.
+Loglm:Fromtask-basedtoinstruction-basedautomatedloganalysis. In2025IEEE/ACM47thInternationalConferenceonSoftware
+Engineering:SoftwareEngineeringinPractice(ICSE-SEIP),pages401–412.IEEE,2025.
+[95] YinhanLiu,MyleOtt,NamanGoyal,JingfeiDu,MandarJoshi,DanqiChen,OmerLevy,MikeLewis,LukeZettlemoyer,andVeselin
+Stoyanov.Roberta:Arobustlyoptimizedbertpretrainingapproach.arXivpreprintarXiv:1907.11692,2019.
+[96] YangLu.LogSage:LogSummarizationAssistantwithGuidedEnhancement,page1979–1981.AssociationforComputingMachinery,
+NewYork,NY,USA,2025.ISBN9798400706295.URLhttps://doi.org/10.1145/3672608.3707990.
+[97] WengangLyu,YilunWang,WeiWei,RunkunXiao,YouweiLi,GenLi,LaiyuanYang,andZibinZheng.Exploringvariablepotentialfor
+llm-basedlogparsingefficiencyandreducedcosts.InProceedingsoftheFSE2025Companion,2025.doi:10.1145/3696630.3728506.URL
+https://doi.org/10.1145/3696630.3728506.
+[98] LipengMa,WeidongYang,SihangJiang,BenFei,MingjieZhou,ShuhaoLi,MingyuZhao,BoXu,andYanghuaXiao.LUK:Empowering
+logunderstandingwithexpertknowledgefromlargelanguagemodels,2024.
+[99] LipengMa,WeidongYang,BoXu,SihangJiang,BenFei,JiaqingLiang,MingjieZhou,andYanghuaXiao.Knowlog:Knowledgeenhanced
+pre-trainedlanguagemodelforlogunderstanding.InProceedingsoftheIEEE/ACM46thInternationalConferenceonSoftwareEngineering,
+ICSE’24,NewYork,NY,USA,2024.AssociationforComputingMachinery.ISBN9798400702174.doi:10.1145/3597503.3623304.URL
+https://doi.org/10.1145/3597503.3623304.
+[100] LipengMa,YixuanLi,WeidongYang,MingjieZhou,XinyiLiu,BenFei,ShuhaoLi,XiaoyanSun,SihangJiang,andYanghuaXiao.
+LogReasoner:EmpoweringLLMswithexpert-likecoarse-to-finereasoningforloganalysistasks,2025.
+[101] LipengMa,WeidongYang,YixuanLi,BenFei,MingjieZhou,ShuhaoLi,SihangJiang,BoXu,andYanghuaXiao.Adaptivelog:An
+adaptiveloganalysisframeworkwiththecollaborationoflargeandsmalllanguagemodel.ACMTransactionsonSoftwareEngineering
+andMethodology,2025.doi:10.1145/3749840.URLhttps://doi.org/10.1145/3749840.arXiv:2501.11031.
+[102] X.Ma,Y.Li,J.Keung,X.Yu,H.Zou,Z.Yang,F.Sarro,andE.T.Barr. Practitioners’expectationsonloganomalydetection. IEEE
+TransactionsonSoftwareEngineering,51(9):2455–2471,2025.doi:10.1109/TSE.2025.3586700.
+[103] ZeyangMa,AnRanChen,DongJaeKim,Tse-HsunChen,andShaoweiWang. Llmparser:Anexploratorystudyonusinglarge
+languagemodelsforlogparsing.InProceedingsofthe46thIEEE/ACMInternationalConferenceonSoftwareEngineering(ICSE2024),
+pages99:1–99:13,2024.doi:10.1145/3597503.3639150.URLhttps://doi.org/10.1145/3597503.3639150.
+[104] ZeyangMa,DongJaeKim,andTse-HsunChen. Librelog:Accurateandefficientunsupervisedlogparsingusingopen-source
+largelanguagemodels. InProceedingsofthe47thInternationalConferenceonSoftwareEngineering(ICSE2025).IEEE/ACM,2025.
+URLhttps://conf.researchr.org/details/icse-2025/icse-2025-research-track/75/LibreLog-Accurate-and-Efficient-Unsupervised-Log-
+Parsing-Using-Open-Source-Large-Lan.Toappear.
+[105] PotsaweeManakul,AdianLiusie,andMarkJ.F.Gales.Selfcheckgpt:Zero-resourceblack-boxhallucinationdetectionforgenerative
+largelanguagemodels,2023.URLhttps://arxiv.org/abs/2303.08896.
+[106] PraveenKumarMannam.Optimizingsoftwarereleasemanagementwithgpt-enabledloganomalydetection.In202326thInternational
+ConferenceonComputerandInformationTechnology(ICCIT),pages1–6.IEEE,2023.
+[107] MikaVMäntylä,YuqingWang,andJesseNyyssölä.Loglead-fastandintegratedlogloader,enhancer,andanomalydetector.In2024
+IEEEInternationalConferenceonSoftwareAnalysis,EvolutionandReengineering(SANER),pages395–399.IEEE,2024.
+[108] AntonioMastropaolo,LucaPascarella,andGabrieleBavota.Usingdeeplearningtogeneratecompletelogstatements.InProceedings
+ofthe44thInternationalConferenceonSoftwareEngineering(ICSE’22),pages2279–2290,2022. doi:10.1145/3510003.3511561. URL
+https://doi.org/10.1145/3510003.3511561.
+[109] AntonioMastropaolo,ValentinaFerrari,LucaPascarella,andGabrieleBavota.Logstatementsgenerationviadeeplearning:Widening
+thesupportprovidedtodevelopers. JournalofSystemsandSoftware,210:111947,2024. doi:10.1016/j.jss.2023.111947. URLhttps:
+//doi.org/10.1016/j.jss.2023.111947.
+[110] MaryamMehrabi,AbdelwahabHamou-Lhadj,andHosseinMoosavi.Theeffectivenessofcompactfine-tunedllmsinlogparsing.In
+2024IEEEInternationalConferenceonSoftwareMaintenanceandEvolution(ICSME),pages438–448.IEEE,2024.
+[111] GrégoireMialon,RobertoDessì,MariaLomeli,ChristosNalmpantis,RamPasunuru,RobertaRaileanu,BaptisteRozière,TimoSchick,
+DamienSileo,LewisTunstall,etal.Augmentedlanguagemodels:asurvey,2023.URLhttps://arxiv.org/abs/2302.07842.
+[112] TomasMikolov,IlyaSutskever,KaiChen,GregSCorrado,andJeffDean.Distributedrepresentationsofwordsandphrasesandtheir
+compositionality.Advancesinneuralinformationprocessingsystems,26,2013.
+[113] SewonMin,MikeLewis,LukeZettlemoyer,andHannanehHajishirzi.Rethinkingtheroleofdemonstrations:Whatmakesin-context
+learningwork?,2022.URLhttps://arxiv.org/abs/2202.12837.
+48

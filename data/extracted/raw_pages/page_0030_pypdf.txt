@@ -1,0 +1,45 @@
+interface that multiple downstream tasks (anomaly detection, failure diagnosis, summarization) can share. In
+practice, BigLog-style pretraining can be viewed as a middle ground between “classic features” and “prompt
+on raw text”: it keeps inference efficient (fixed-length embeddings) while improving semantic robustness and
+portability at scale.
+Skipping explicit features: direct raw-text or event-sequence text as input.Finally, some LLM-based
+approaches partially or fully bypass handcrafted feature construction by feeding an LLM theraw log window(or a
+text form of theevent sequence) and prompting it to perform the downstream task directly. This design can preserve
+richer context and enable explanation-oriented outputs, but it introduces new constraints: long contexts require
+careful windowing, summarization, or retrieval to control noise and cost, and online deployment may demand
+additional compression or caching mechanisms. Overall, representation choices trade off efficiency, robustness,
+and fidelity. Thus, many recent approaches combine compact classic features with contextual embeddings or
+selective raw-text reasoning, depending on task requirements and operational budgets.
+6.2 Anomaly Detection
+6.2.1 Task definition.Log anomaly detection identifiesunexpectedorundesiredsystem behavior patterns from
+logs. Such anomalies typically indicate potential faults, misconfigurations, performance regressions, or other
+conditions that violate the expected normal execution, and thus serve as early signals for reliability triage.
+Given a sessionized (or windowed) log sequence𝑆=⟨(𝑒 𝑖,𝑡 𝑖,𝑝 𝑖)⟩𝑛
+𝑖=1, where𝑒𝑖 is a parsed event/template (or
+the raw log message),𝑡𝑖 is the timestamp, and𝑝𝑖 are optional parameters, the task outputs either (i) an anomaly
+score𝑎(𝑆) or a binary label𝑦∈{ 0, 1} indicating whether the sequence is abnormal, and optionally (ii) localized
+evidence such as suspicious positionsI⊆{1,...,𝑛}(or key templates/snippets) to support debugging.
+In practice, anomaly detection is usuallyreactive: it flags abnormal states or behavior patterns in observed logs
+(often in unsupervised or weakly supervised settings), without necessarily predicting whether/when a concrete
+failure will occur.
+6.2.2 LLM-based Approaches for Anomaly Detection.Table 6–7 summarizes LLM-based anomaly detection
+studies. Across these works, a common pipeline is: (i) partition logs into sessions/windows, (ii) encode each
+sequence into a representation (templates, embeddings, or raw text), (iii) compute an anomaly signal (score/label),
+and (iv) optionally returnevidence(highlighted lines, retrieved neighbors, or explanations) to support triage.
+Existing approaches mainly differ along four design axes:(1) representation interface(parsed templates vs.
+raw text),(2) supervision setting(fully supervised with both normal/anomalous labels vs. semi-supervised/one-
+class settings that train mostly or only onnormaldata, vs. unsupervised settings),(3) adaptation/training
+strategy(fine-tuning/prompt-tuning vs. keeping the LLM frozen and using it in a training-free manner), and(4)
+inference form(discriminative classification, likelihood/perplexity scoring, prompting/ICL, retrieval, or agentic
+reasoning). Notably, prompting/in-context learning (ICL) is largely orthogonal to supervision, and “training”
+is not synonymous with “supervision”: (i) many methodstrainmodels without using task labels (e.g., further
+pretraining or contrastive learning on related unlabeled logs/corpora), and (ii) some methods aretraining-free
+but still supervised at inference time by using labeled exemplars as demonstrations in ICL. Note that boundaries
+are not strict: many systems combine multiple mechanisms (e.g., encoder embeddings + prompting, or retrieval +
+generation).
+Discriminative and representation-learning encoders.A large body of work uses pretrained encoders
+(typically BERT-like) to map log events or event sequences into embeddings, followed by a classifier or sequence
+model for anomaly prediction. Representative examples that operate on parsed templates and learn discriminative
+decision boundaries include HitAnomaly [55], SwissLog [80], and HilBERT [56]. Several studies adapt or optimize
+the encoder/sequence modeling pipeline, such as BERT-Log [ 14], Prog-BERT-LSTM [147], and the semantic
+30

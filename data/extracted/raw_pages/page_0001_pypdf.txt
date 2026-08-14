@@ -1,0 +1,44 @@
+LLM4Log: A Systematic Review of Large Language Model-based Log
+Analysis
+ZEYANG MA,Software PErformance, Analysis, and Reliability (SPEAR) lab, Concordia University, Canada
+JINQIU YANG,Department of Computer Science and Software Engineering, Concordia University, Canada
+TSE-HSUN (PETER) CHEN,Software PErformance, Analysis, and Reliability (SPEAR) lab, Concordia
+University, Canada
+Software systems generate massive, evolving, semi-structured logs that are central to reliability engineering and AIOps, yet
+difficult to analyze at scale under drift and limited labels. Recent advances in pretrained Transformer models and instruction-
+tuned large language models (LLMs) have reshaped log analysis by enabling semantic generalization and cross-source
+evidence integration, but also introducing deployment risks such as context limits, latency and cost, privacy constraints, and
+hallucinations. This paper presentsLLM4Log, a systematic review of LLM-based log analysis across the end-to-end pipeline,
+from upstream logging-statement generation and maintenance to log parsing/structuring and downstream tasks including
+anomaly detection, failure prediction, root cause analysis, and log summarization. Following a structured search and manual
+screening protocol, we completed literature collection in November 2025 and identified 145 unique papers across seven
+logging tasks. We organize the research area through a unified, task-driven taxonomy, summarize common design patterns
+(prompting/ICL, retrieval grounding, fine-tuning, tool/agent augmentation, and verification), and analyze evaluation practices,
+datasets, metrics, and reproducibility. Based on these cross-paper analyses, we summarize key lessons and open challenges
+for reliable real-world adoption. We emphasize robustness under drift and long-tail events, grounding and faithfulness for
+operator-facing outputs, and deployment-oriented designs with verifiable behavior.
+CCS Concepts:•Software and its engineering→Software maintenance tools.
+Additional Key Words and Phrases: Log analysis, Software logs, Large language models
+1 Introduction
+Software systems, from cloud services and microservices to networked and cyber-physical infrastructures, emit
+massive volumes of execution logs that record runtime states, events, and failures. Logs are a primary source of
+evidence for reliability engineering and operations: they support debugging, monitoring, incident triage, and
+postmortem analysis [36, 192, 219]. However, modern log streams are notoriously difficult to analyze at scale. They
+aresemi-structured(mixing free-form text with identifiers and code-like tokens),high-volume/high-velocity, and
+continuously evolvingdue to software updates, configuration changes, and deployment diversity. Consequently,
+manual inspection and keyword search remain common yet brittle, while automated pipelines often suffer from
+format drift, long-tail behaviors, limited labeled data, and inconsistent logging quality [21, 46, 47, 87, 139].
+Authors’ Contact Information: Zeyang Ma, Software PErformance, Analysis, and Reliability (SPEAR) lab, Concordia University, Montreal,
+Canada, m_zeyang@encs.concordia.ca; Jinqiu Yang, Department of Computer Science and Software Engineering, Concordia University,
+Montreal, Canada, jinqiu.yang@concordia.ca; Tse-Hsun (Peter) Chen, Software PErformance, Analysis, and Reliability (SPEAR) lab, Concordia
+University, Montreal, Canada, peterc@encs.concordia.ca.
+Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that
+copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page.
+Copyrights for components of this work owned by others than the author(s) must be honored. Abstracting with credit is permitted. To copy
+otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from
+permissions@acm.org.
+©2026 Copyright held by the owner/author(s). Publication rights licensed to ACM.
+ACM XXXX-XXXX/2026/5-ART
+https://doi.org/10.1145/nnnnnnn.nnnnnnn
+, Vol. 1, No. 1, Article . Publication date: May 2026.
+arXiv:2604.16359v2  [cs.SE]  19 May 2026

@@ -1,0 +1,45 @@
+Stage 2: snowballing to extend coverage.From the seed set obtained in Stage 1, we performed backward
+snowballing by inspecting references and forward snowballing by checking citations to discover additional
+relevant papers that may not be easily retrieved via keyword queries, such as papers using non-standard
+task names or papers emphasizing systems and operations rather than “log” in titles or abstracts. We also
+tracked community resources that aggregate log-analysis and LLM-for-operations literature, such as benchmarks,
+dataset/toolkit papers, and curated lists, as auxiliary entry points. This stage contributed 70 additional unique
+included papers (Figure 2).
+Stage 3: digital-library cross-check.To reduce omission risk and broaden coverage beyond the Stage-1 venue
+set, we cross-checked our corpus using major digital libraries and preprint servers (i.e., IEEE Xplore, ACM Digital
+Library, SpringerLink, Elsevier/ScienceDirect, Wiley Online Library, arXiv, and OpenReview), and used Google
+Scholar for additional coverage checks and citation tracing. This stage contributed the remaining 23 unique
+included papers, completing the final corpus of 145 unique papers shown in Figure 2. We report the number of
+included papers added at each stage because the search and screening process was iterative across venue search,
+snowballing, and digital-library cross-checking.
+Scope control and manual screening.Keyword searches inevitably return false positives due to term ambiguity
+and task overlap. For example, some papers include both“root cause analysis”and“LLM”keywords, but their
+methods are not sufficiently log-relevant for our scope, whereas other multimodal papers use logs indirectly
+through derived operational artifacts such as incident summaries. Similarly, the term “log” can refer to non-runtime
+logs (e.g., query logs, change logs, process mining event logs) or even mathematical “log” usage. Therefore, after
+retrieving candidates, we manually screened each paper by reading the title, abstract, and the method/evaluation
+sections, and included studies as long as software/system runtime logs were used directly or indirectly. Because
+some multimodal operational-analysis papers incorporate logs indirectly, not as a standalone explicit modality,
+inclusion sometimes required manual judgment based on the task definition, system description, and evaluation
+setup.
+Inclusion and exclusion criteria.A paper is included if it satisfies all of the following: (1) it targets one or
+morelog analysistasks (e.g., parsing/representation, anomaly/failure detection, failure prediction, diagnosis/RCA,
+summarization, or related operational assistance); (2) it uses a Transformer-based pretrained language model
+(encoder-only, encoder–decoder, or decoder-only) via prompting/ICL, retrieval grounding, fine-tuning/post-
+training, tool augmentation/agents, or representation learning; and (3) it reports an empirical evaluation, abla-
+tion/analysis, or a concrete case study that directly or indirectly uses logs. We exclude work where logs are only
+mentioned hypothetically, are clearly peripheral, focus on non-runtime log types, or are not meaningfully used
+in the method or evaluation.
+Data extraction protocol.For each included paper, we extracted structured information to support later taxon-
+omy construction and cross-paper comparison. Importantly, the extracted fields depend on thetask typeof the
+paper. Across tasks, we recorded: (i) target task(s), (ii) dataset type and whether logs were used alone or with
+auxiliary artifacts (e.g., metrics/traces/tickets/runbooks/code/config), and (iii) evaluation setup. In addition, for
+each task, we explicitly extracted task-relevant technical details, such as:baseline LLM(s),LLM enhancement/adap-
+tation paradigm(s)(e.g., ICL, retrieval grounding/RAG, fine-tuning, tool/agent augmentation, verification), and
+evaluation metric(s). When a paper addressed multiple tasks, we categorized it by its primary contribution while
+retaining cross-references to its secondary tasks and extracted fields accordingly. The complete paper list and
+extracted metadata are available in our online repository.
+2.2 Corpus summary and categorization.
+Based on our task-driven screening, we identified 162 relevant studies spanning seven log-analysis tasks, published
+between 2020 and 2025. The literature search was completed in November 2025. Because some papers cover
+5

@@ -1,0 +1,44 @@
+between large and small models, while CoLA [ 220] studies model collaboration at scale with multiple LLMs.
+Knowledge and control signals are also injected via rules or domain constraints (e.g., LogRules [57]), and tuning
+procedures aim to stabilize performance (e.g., SemiSMAC [ 157] and SemiRALD [ 158]). Finally, cross-system
+generalization and “new system” adaptation are increasingly important, motivating transfer-focused designs
+such as LogSynergy [155].
+Agentic and multi-step reasoning for complex security/incident contexts.A growing line of work frames
+anomaly detection as a multi-step investigation that iteratively retrieves context, applies tools, and produces
+both predictions and narratives. Examples include multi-agent collaboration for threat/anomaly scenarios (Audit-
+LLM [151]), consistency-based detection with evidence building (WebNorm [88]), and recursive/agentic pipelines
+for context-aware detection and response (LogRESP-Agent [ 76]). Related systems emphasize turning alerts
+into operator-facing intelligence (SHIELD [156]) or improving reasoning structure and controllability (LogRea-
+soner [100]), while insider-threat anomaly detection appears as another domain where agentic reasoning is
+natural (Song et al. [ 153]). Agentic methods can improve interpretability and reduce analyst workload, but
+introduce additional latency/cost and require careful guardrails for reliable deployment.
+Benchmarks and data generation.As the space expands, benchmarks and data-centric efforts have become
+important for fair comparison and stress-testing. Karlsen et al. benchmark LLMs for log analysis tasks including
+anomaly detection [68], and LogEval provides a broader benchmark suite for LLM-based log analysis [20]. Beyond
+logs, AD-LLM benchmarks LLM-based anomaly detection across multiple text anomaly domains [193], helping
+disentangle what improvements come from stronger backbones versus prompting/retrieval. Complementarily,
+AnomalyGen [81] explores LLM-driven generation of anomalous log sequences, reflecting an emerging direction
+where synthetic anomalies and augmentation are used to improve coverage of rare patterns and unstable logs.
+Across LLM-based anomaly detection studies, the main shift is not just higher accuracy. It is also a move
+toward treating anomalies asevidence-grounded inconsistencieswith expected behavior, such as deviations
+from retrieved “normal” cases, violations of explicit rules, or unusually high calibrated anomaly scores. The
+strongest systems therefore constrain LLMs with stable interfaces (templates, embeddings, or normalized text)
+and use them mainly to explain, verify, or enrich lightweight detectors. LLMs do not remove the ambiguity
+of what counts as an anomaly. Instead, they shift effort from feature design to normality curation, context
+selection (windowing or retrieval), and operational guardrails that control false alarms and cost. This makes
+hybrid, evidence-driven workflows a practical deployment pattern.
+6.3 Failure Prediction
+6.3.1 Task definition.Log-based failure prediction is a proactive early-warning task: it forecasts whether the
+system (or a component) will experience afuture failurewithin a horizon, so operators can take preventive actions
+(e.g., mitigation, rollback, or resource reallocation) before the system enters an unrecoverable or user-visible
+failure state. Given logs observed up to the current time 𝑡 (often represented as a session/window𝑆𝑡−𝐿:𝑡 or a
+prefix of an ongoing session), the task outputs a probabilityPr(failure in[𝑡,𝑡+𝐻]) (or a binary label) for a future
+horizon𝐻, and sometimes additional signals such as predicted time-to-failure or early-warning decisions under
+different lead-time budgets.
+Compared with anomaly detection, failure prediction is explicitlyforward-lookingand tied to an operational
+failure definition (e.g., crash, outage, severe SLO violation, incident ticket). Its difficulty depends on the prediction
+horizon: useful early signals in logs may be weak, sparse, and distributed across components or long time ranges,
+while short-horizon signals can be clearer but less actionable. Depending on the environment, prediction may
+focus on (i) failures of similar components in homogeneous systems (sequence-centric modeling), or (ii) failures
+driven by interactions among heterogeneous components (leveraging cross-component correlations).
+34

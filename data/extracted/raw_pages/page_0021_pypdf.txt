@@ -1,0 +1,43 @@
+Date Time Level Process Component Log Template
+2015-10-18 18:01:52 INFO main org.apache.hadoop.http.HttpServer2 Jetty bound to port <*>
+2015-10-18 18:01:52 INFO main org.apache.hadoop.http.HttpServer2 Jetty bound to port <*>
+2015-10-18 18:01:52 INFO main org.apache.hadoop.yarn.WebApps Web app <*> started at <*>
+2015-10-18 18:01:53 INFO main org.apache.hadoop.app.RMContainerRequestor nodeBlacklistingEnabled:<*>
+2015-10-18 18:01:53 INFO IPC Server org.apache.hadoop.ipc.Server IPC Server listener on <*>: starting
+2015-10-18 18:01:51 INFO main org.apache.hadoop.http.HttpServer2Jetty bound to port 62267
+2015-10-18 18:01:51 INFO main org.apache.hadoop.http.HttpServer2Jetty bound to port 62258
+2015-10-18 18:01:52 INFO main org.apache.hadoop.yarn.WebAppsWeb app /mapreduce started at 62267
+2015-10-18 18:01:53 INFO main org.apache.hadoop. app.RMContainerRequestornodeBlacklistingEnabled:true
+2015-10-18 18:01:53 INFO IPC Server org.apache.hadoop.ipc.ServerIPC Server listener on 62270: starting
+Log ParsingParsed logs
+Log messages
+Fig. 4. An example log parsing result from Hadoop.
+underlying event. A correct parser normalizes them to the same template “Jetty bound to port <*>” and extracts
+the port number as a parameter. Similarly, the message “Web app /mapreduce started at 62267” is parsed into the
+template “Web app <*> started at <*>”, separating stable keywords (e.g., “Web app”, “started at”) from variable
+tokens (e.g., the path and port).
+In practice, log parsing is rarely a single monolithic step. Most pipelines implement it as a two-stage process.
+First, apreprocessingstage extracts standard fields and isolates the message body. This stage is typically
+implemented using regular expressions or log format specifications because these header fields are usually
+emitted in a framework-controlled and relatively stable format (e.g., the timestamp/level/thread/component
+layout is determined by logging libraries and configuration, and thus changes slowly and predictably). Second, a
+message parsingstage focuses on the remaining free-text-like body and performs template–parameter separation.
+Unlike headers, the message body is largely developer-written and varies widely across components and versions.
+It mixes natural-language-like phrases with project-specific tokens and runtime values, and it evolves as code
+changes. As a result, a single set of regular expressions is rarely sufficient to robustly normalize message bodies
+without either over-generalizing templates or exploding them into many variants. Across these implementations,
+the core goal remains the same: to produce stable templates that support consistent grouping while accurately
+extracting the parameters needed for diagnosis.
+5.2 Challenges
+Although log parsing has been studied extensively, traditional (non-LLM) parsers face persistent difficulties
+because logs are semi-structured artifacts produced by evolving software. These difficulties arise from both the
+data(highly variable message styles and continuous drift) and theoperational requirements(low latency, high
+throughput, and stable event identities in online pipelines). Below, we summarize four recurring challenges that
+limit the robustness of traditional parsers.
+5.2.1 Structural variability and format drift.Logs exhibit substantial structural variability across systems, compo-
+nents, and logging libraries, and even within the same system, different modules may adopt different writing
+styles, delimiters, and token conventions. Many traditional parsers therefore embed implicit assumptions about
+message structure (e.g., token positions, separators, fixed vocabularies, or stable prefix patterns) to make parsing
+tractable [21, 46]. Such assumptions can work well for the formats they were designed around, but they degrade
+when encountering unseen layouts, rare formatting choices, or cross-component inconsistencies.
+21

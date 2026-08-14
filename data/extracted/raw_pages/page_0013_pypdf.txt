@@ -1,0 +1,43 @@
+requirements [31, 34]. These concerns are widely recognized in the literature, but rigorous production-scale
+validation remains limited and uneven across tasks.
+Commercial LLMs vs. self-hosted LLMs.Commercial LLMs are typically consumed viaremote APIs, meaning
+prompts (and any retrieved context inserted into them) must be transmitted to an external model provider [31, 34].
+This increasesdata exposure riskand reduces end-to-end controllability: even with contractual terms and
+vendor assurances, organizations may have limited visibility into provider-side handling (e.g., retention, secondary
+processing, or cross-region routing) and must treat the prompt as a potentially sensitive payload [ 12, 31]. In
+contrast, self-hosted (open-source) models keep inferencewithin the organization’s trust boundary, making data
+handling more controllable: access can be restricted via internal IAM, prompts/outputs can be logged or disabled
+under local policy, and compliance requirements (e.g., residency) can be enforced operationally [34]. However, self-
+hosting shifts responsibility to the operator: the main risks become the local security posture, including securing
+model-serving endpoints, hardening the retrieval stack, and protecting stored prompts, retrieved documents, and
+generated outputs [34].
+Tool-augmented and retrieval-based workflows amplify these issues regardless of deployment. Untrusted
+retrieved text can introduce prompt-injection style instructions, and generated summaries/explanations can
+inadvertently echo secrets or sensitive identifiers if not constrained [12, 38].
+Common mitigations in log analysis pipelines.Typical mitigations include: (i)minimization(send only
+the smallest relevant window and avoid full dumps), (ii)redaction/masking(identifiers, secrets, tokens), (iii)
+bounded retrieval disclosure(retrieve on-prem, but pass only small snippets/fields), (iv)RBAC and auditing
+(who can query what and how prompts/outputs are safely logged), and (v)policy-constrained outputs(no
+secret echoing, structured extraction, and citation requirements) [31, 34, 70]. These controls interact with utility:
+aggressive redaction may remove key signals, so many approaches combine masking with structured extraction
+and retrieval to preserve diagnostic content while limiting exposure [31, 34].
+Cost drivers and practical optimizations.The main cost drivers are context length (tokens), number of model
+calls (multi-pass/agentic workflows), and retrieval/embedding computation [23, 126]. Common optimizations
+include windowing and deduplication, template compaction, hierarchical summarization, caching embeddings
+and intermediate summaries, batching, andselective escalation(invoke a large model only after a cheaper filter
+flags candidates) [111]. For self-hosted models, quantization and efficient serving reduce inference cost. For API
+models, prompt compression and retrieval-first designs reduce token budgets [23, 126].
+Hybrid designs as a practical deployment pattern.A frequent design issmall model for scoring/filtering
+(ranking suspicious windows, candidate component selection, coarse labeling) pluslarge model for explanation
+and summarization[ 10, 116]. This keeps expensive reasoning focused on a small subset of high-value context,
+reduces latency, and yields operator-facing artifacts (summaries, rationales, action candidates) without incurring
+LLM costs on every log line [111, 126]. In practice, such hybrids also simplify governance: only the most capable
+(and often most sensitive/costly) components are exposed to the most sensitive or costly data [31, 34].
+4 Logging Statement Generation and Maintenance
+Logging statement generation studies how to automatically insert and update log statements in source code so
+that systems emit informative runtime records for debugging and monitoring. In practice, insufficient logging
+can hinder incident triage and reduce observability, whereas excessive or inconsistent logging introduces noise,
+performance overhead, and scalability concerns. Hence, one active line of research is automated logging statement
+generation, which aims to recommend or synthesize high-quality log statements so that developers can obtain
+effective logs with less manual effort.
+13

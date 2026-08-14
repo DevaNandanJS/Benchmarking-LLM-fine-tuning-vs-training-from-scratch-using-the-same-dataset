@@ -1,0 +1,46 @@
+the fine-tuned model learns the distribution of logging patterns from large corpora and can adapt to unusual
+constructs, such as nested exceptions or multi-call sequences, without additional rules.
+As the first end-to-end LLM-based automated logging tool, LANCE delivers an innovative proof of concept.
+Yet, it suffers from three key limitations: (1) rewriting the entire method may inadvertently alter non-logging
+code, (2) full-method input and output incurs substantial latency compared to local insertion, and (3) it always
+injects exactly one log statement, thus failing to decide when logging is unnecessary or when multiple logs are
+required. Subsequent approaches explicitly refine the use of fine-tuning to mitigate these issues. FastLog [185]
+decouples location from content: a learned module first predicts fine-grained insertion points, and the LLM then
+generates only the log statement to be inserted. This changes the learning problem from “rewrite the whole
+method” to “predict a small edit” and thus preserves the original code while reducing decoding cost. LEONID [109]
+extends LANCE by teaching the model to predict not just the content of a single log, but also whether a method
+needs logging at all and how many logs to insert. This turns the fixed one-log-per-method assumption into a
+learned, method-level decision, closer to how developers actually log. ELogger [ 37] pushes the same idea to
+block level: it first classifies whether a block warrants logging and only then invokes the generator, reducing
+over-instrumentation by using the LLM where it matters most. AUCAD [199] further strengthens this fine-tuning
+line by automatically constructing aligned datasets from log-related issues. The model is trained not just on
+arbitrary method/log pairs, but on positive and negative examples mined from real bug reports, which sharpens
+its notion of “good” versus “bad” logging behavior.
+Overall, these fine-tuned generators demonstrate that LLMs can implicitly encode common logging idioms and
+jointly model location, level, message, and variables. Their main trade-off is training and deployment cost: models
+are tied to specific architectures and datasets, motivating lighter-weight paradigms such as in-context learning.
+4.3.2 Prompt-based In-Context Learning.With stronger LLMs, an alternative to task-specific fine-tuning is
+prompt-based in-context learning (ICL). Compared with fine-tuned models, ICL-based approaches greatly reduce
+training and infrastructure costs and make it easier to deploy or swap models in practice. UniLog [187] is the
+first general-purpose framework to systematically exploit ICL for logging. It feeds the target method, along with
+a small set of (code, log) examples from the same project, and asks a Codex-like model [13] to output the location,
+level, and message. Mechanistically, UniLog leverages an emergent ability of LLMs: given a handful of exemplars,
+the model can infer a project’s logging style (e.g., how verbose to be, which variables to mention) and apply that
+style to new methods. A warm-up strategy stabilizes this behavior by first exposing the model to generic logging
+patterns before switching to project-specific examples, reducing variance across invocations.
+ICL-based methods shift the burden from training to prompting: instead of adjusting millions of parameters,
+practitioners adjust the prompt. This makes automated logging much easier to deploy or migrate between
+models, and it directly leverages LLM strengths in style transfer and pattern imitation. File-level ML logging [138]
+prompts GPT-4o-mini with Python pipeline files and a few annotated examples, letting the model infer where
+to place logs at pipeline boundaries. Test-code logging [150] supplies test methods and exemplar test logs so
+that the model learns to describe test intent and failure conditions. ConfLogger [146] combines static analysis to
+find configuration-sensitive operations with ICL prompts that show how such operations are typically logged,
+enabling the LLM to specialize its suggestions for configuration diagnosability.
+4.3.3 Execution-Aware Reasoning with CoT and Static Context.While plain ICL uses only the immediate method
+body, real logging decisions often depend on broader execution context and on a chain of reasoning (e.g.,
+“this call propagates an error from a lower-level component, so it should be logged at ERROR”). To expose this
+context and reasoning to the LLM, several works enrich prompts with chain-of-thought (CoT) style structure and
+execution-aware static information.
+SCLogger [83] augments the input with two-hop callers and callees on the call graph and organizes the prompt
+in a CoT fashion. Instead of giving the LLM only the target method, SCLogger explicitly injects the surrounding
+17

@@ -1,0 +1,17 @@
+{
+  "char_count": 236237,
+  "word_count": 31329,
+  "proxy_token_count_gpt2_tiktoken": 60739,
+  "note": "proxy_token_count_gpt2_tiktoken uses the GPT-2 tiktoken encoding as a lightweight stand-in. Phase 2 will recompute and overwrite this field using the actual base-model tokenizer (may differ by \u00b15-15 %).",
+  "pages_total": 54,
+  "pages_garbled_flag": 14,
+  "repeating_patterns_stripped": 1,
+  "hyphen_joins_logged": 116,
+  "repeat_threshold_used": 0.4,
+  "garble_thresholds": {
+    "non_ascii": 0.3,
+    "non_dict_word": 0.4
+  },
+  "exact_token_count_smollm2_135m": 65044,
+  "note_phase2_token_count": "exact_token_count_smollm2_135m = 65,044 (+7.1% vs proxy_token_count_gpt2_tiktoken=60,739). proxy field preserved for audit trail."
+}

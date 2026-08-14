@@ -1,0 +1,46 @@
+statements, helping developers decide where to log and what to record under project conventions. At the core
+of many pipelines, LLMs are applied tolog parsing, converting raw messages into structured templates and
+parameters with improved robustness under drift, unseen formats, and long-tail events [6]. Between parsing and
+downstream inference, LLMs are also increasingly used forlog representation learning, producing semantic
+embeddings or contextualized event representations for logs that improve robustness and transferability under
+drift. Downstream, LLMs are used foranomaly detectionandfailure prediction, but also increasingly for
+operator-facing tasks such asroot cause analysis(RCA) andlog summarization, where explanation quality and
+evidence integration are as important as prediction accuracy [20, 42]. Although parsing is a common intermediate
+stage, some downstream studies instead operate on raw or lightly normalized logs, so the pipeline should be
+read as a common analytical structure, not a mandatory sequence of steps. At the same time, LLM-based log
+analysis introduces new trade-offs and risks that are less prominent in classic pipelines: context window limits,
+latency/cost constraints in online settings, privacy and data-governance concerns, sensitivity to prompting and
+retrieval design, and hallucinations that can mislead incident response if outputs are not properly grounded and
+verified [20, 68].
+Given the pace and breadth of this emerging area, practitioners and researchers need a consolidated, task-driven
+view of (i)whereLLMs are applied in the log-analysis pipeline, (ii)howthey are integrated (e.g., prompting/ICL,
+retrieval grounding, fine-tuning, tool/agent augmentation, and verification), (iii)howthey are evaluated (datasets,
+metrics, baselines, and reproducibility), and (iv)whatremains open for real-world deployment. While prior
+surveys have reviewed automated log analysis broadly [47] and recent work has summarized specific subareas
+such as LLM-based log parsing [6], a systematic, end-to-end review of the full LLM4Log landscape is timely.
+In this paper, we presentLLM4Log, a systematic review oflarge-language-model-based log analysis. We focus
+on software runtime logs as the central evidence source, while also covering multimodal studies in which logs
+remain an important part of the operational evidence. We conducted a structured literature collection and manual
+screening process, with the corpus collection completed in November 2025. Using a task-driven search and
+screening protocol, we identified 162 task-paper records spanning seven log-analysis tasks. Since some studies
+address multiple tasks, we deduplicated the task-paper records by title, resulting in 145 unique papers published
+between 2020 and 2025. Building on this corpus, we organize the field through a unified taxonomy and cross-paper
+analyses.
+Our goal is to offer a consolidated, end-to-end reference for how LLMs are applied to log analysis, what works
+in practice, and what remains open. To that end, we make the following contributions:
+• A systematic, task-driven mapping of LLM4Log research (2020–2025).We provide a curated and
+categorized corpus, summarize the temporal and task distribution, and characterize where the community
+concentrates effort and where gaps remain.
+• A pipeline-level review of log-centric LLM methods.We review and compare LLM-based approaches
+for (i) logging statement generation and maintenance, (ii) log parsing, and (iii) downstream tasks (anomaly
+detection, failure prediction, root cause analysis, and log summarization), highlighting reusable design
+patterns and recurring trade-offs across the log-analysis workflow.
+• Cross-cutting insights, evaluation caveats, and future directions for LLM4Log.We distill lessons
+about evaluation practices, robustness under drift and long-tail events, grounding and faithfulness for
+operator-facing outputs, privacy/security constraints, deployment practicality, and reproducibility, and
+we summarize these observations in a dedicated cross-cutting section that outlines priorities for reliable
+real-world adoption.
+Paper organization.The rest of this paper is organized as follows. Section 2 describes our systematic survey
+methodology. Section 3 provides LLM background and a taxonomy of adaptation/enhancement paradigms for
+log analysis. Section 4 reviews LLM-based logging statement generation and maintenance. Section 5 surveys
+3

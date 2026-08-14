@@ -1,0 +1,4 @@
+[221] Xinkai Zou, Xuan Jiang, Ruikai Huang, Haoze He, Parv Kapoor, Hongrui Wu, Yibo Wang, Jian Sha, Xiongbo Shi, Zixun Huang, and
+Jinhua Zhao. Towards generalizable context-aware anomaly detection: A large-scale benchmark in cloud environments, 2025. URL
+https://arxiv.org/abs/2508.01844.
+54

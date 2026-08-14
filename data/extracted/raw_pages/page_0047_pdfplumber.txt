@@ -1,0 +1,55 @@
+[73] Van-HoangLeandHongyuZhang.Logparsing:Howfarcanchatgptgo?InProceedingsofthe38thIEEE/ACMInternationalConference
+onAutomatedSoftwareEngineering,ASE’23,page1699–1704.IEEEPress,2024.ISBN9798350329964.doi:10.1109/ASE56229.2023.00206.
+URLhttps://doi.org/10.1109/ASE56229.2023.00206.
+[74] Van-HoangLeandHongyuZhang.Prelog:Apre-trainedmodelforloganalytics.ProceedingsoftheACMonManagementofData,2(3):
+1–28,2024.doi:10.1145/3654966.URLhttps://dl.acm.org/doi/10.1145/3654966.PresentedatSIGMOD2024.
+[75] Van-Hoang Le, Yi Xiao, and Hongyu Zhang. Unleashing the true potential of semantic-based log parsing with pre-trained
+language models. In Proceedings of the 47th International Conference on Software Engineering (ICSE 2025). IEEE/ACM, 2025.
+URLhttps://conf.researchr.org/details/icse-2025/icse-2025-research-track/80/Unleashing-the-True-Potential-of-Semantic-based-Log-
+Parsing-with-Pre-trained-Language.Toappear.
+[76] JuyoungLee,YeonsuJeong,TaehyunHan,andTaejinLee.Logresp-agent:Arecursiveaiframeworkforcontext-awareloganomaly
+detectionandttpanalysis.AppliedSciences,15(13),2025.ISSN2076-3417.doi:10.3390/app15137237.URLhttps://www.mdpi.com/2076-
+3417/15/13/7237.
+[77] YukyungLee,JinaKim,andPilsungKang.Lanobert:Systemloganomalydetectionbasedonbertmaskedlanguagemodel,2021.URL
+https://arxiv.org/abs/2111.09564.
+[78] MikeLewis,YinhanLiu,NamanGoyal,MarjanGhazvininejad,AbdelrahmanMohamed,OmerLevy,VeselinStoyanov,andLuke
+Zettlemoyer.Bart:Denoisingsequence-to-sequencepre-trainingfornaturallanguagegeneration,translation,andcomprehension.In
+Proceedingsofthe58thannualmeetingoftheassociationforcomputationallinguistics,pages7871–7880,2020.
+[79] PatrickLewis,EthanPerez,AleksandraPiktus,FabioPetroni,VladimirKarpukhin,NamanGoyal,HeinrichK"uttler,MikeLewis,
+Wen-tauYih,TimRockt"aschel,SebastianRiedel,andDouweKiela. Retrieval-augmentedgenerationforknowledge-intensivenlp
+tasks,2020.URLhttps://arxiv.org/abs/2005.11401.
+[80] XiaoyunLi,PengfeiChen,LinxiaoJing,ZilongHe,andGuangbaYu.Swisslog:Robustandunifieddeeplearningbasedloganomaly
+detectionfordiversefaults.In2020IEEE31stInternationalSymposiumonSoftwareReliabilityEngineering(ISSRE),pages92–103.IEEE,
+2020.
+[81] XinyuLi,YingtongHuo,ChenxiMao,ShiwenShan,YuxinSu,DanLi,andZibinZheng.AnomalyGen:Anautomatedsemanticlog
+sequencegenerationframeworkwithLLMforanomalydetection,2025.URLhttps://arxiv.org/abs/2504.12250.
+[82] YichenLi,YintongHuo,ZhihanJiang,RenyiZhong,PinjiaHe,YuxinSu,LionelCBriand,andMichaelRLyu.Exploringtheeffectiveness
+ofllmsinautomatedloggingstatementgeneration:Anempiricalstudy.IEEETransactionsonSoftwareEngineering,2024.
+[83] YichenLi,YintongHuo,RenyiZhong,ZhihanJiang,JinyangLiu,JunjieHuang,JiazhenGu,PinjiaHe,andMichaelR.Lyu. Go
+static:Contextualizedloggingstatementgeneration. ProceedingsoftheACMonSoftwareEngineering,1(FSE):609–630,2024. doi:
+10.1145/3643754.URLhttps://doi.org/10.1145/3643754.
+[84] YichenLi,JinyangLiu,JunsongPu,ZhihanJiang,ZhuangbinChen,XiaoHe,TieyingZhang,JianjunChen,YiLi,RuiShi,andMichael
+Lyu.Automatedproactiveloggingqualityimprovementforlarge-scalecodebases.InProceedingsofthe2025IEEE/ACMInternational
+ConferenceonAutomatedSoftwareEngineering(ASE2025)(IndustryShowcase),2025. URLhttps://conf.researchr.org/details/ase-
+2025/ase-2025-industry-showcase/28/Automated-Proactive-Logging-Quality-Improvement-for-Large-Scale-Codebases.
+[85] YichenLi,YulunWu,JinyangLiu,ZhihanJiang,ZhuangbinChen,GuangbaYu,andMichaelRLyu. Coca:Generativerootcause
+analysisfordistributedsystemswithcodeknowledge.arXivpreprintarXiv:2503.23051,2025.
+[86] ZhenhaoLi,HengLi,Tse-HsunChen,andWeiyiShang.Deeplv:Suggestingloglevelsusingordinalbasedneuralnetworks.In2021
+IEEE/ACM43rdInternationalConferenceonSoftwareEngineering(ICSE),pages1461–1472.IEEE,2021.
+[87] ZhenhaoLi,AnRanChen,XingHu,XinXia,Tse-HsunChen,andWeiyiShang.Aretheyallgood?studyingpractitioners’expectations
+onthereadabilityoflogmessages.InProceedingsofthe38thIEEE/ACMInternationalConferenceonAutomatedSoftwareEngineering
+(ASE2023),2023.doi:10.48550/arXiv.2308.08836.URLhttps://arxiv.org/abs/2308.08836.
+[88] YifanLiao,MingXu,YunLin,XiwenTeoh,XiaofeiXie,RuitaoFeng,FrankLiaw,HongyuZhang,andJinSongDong.Detectingand
+explaininganomaliescausedbywebtamperattacksviabuildingconsistency-basednormality.InProceedingsofthe39thIEEE/ACM
+InternationalConferenceonAutomatedSoftwareEngineering,pages531–543,2024.
+[89] YingFuLim,JiawenZhu,andGuansongPang.Adaptinglargelanguagemodelsforparameter-efficientloganomalydetection.arXiv
+preprint,2025.URLhttps://arxiv.org/abs/2503.08045.arXiv:2503.08045.
+[90] YifeiLin,H.Deng,andX.Li.Fastlogad:Loganomalydetectionwithmask-guidedpseudoanomalygenerationanddiscrimination,
+2024.URLhttps://arxiv.org/abs/2404.08750.
+[91] PengfeiLiu,WeizheYuan,JinlanFu,ZhengbaoJiang,HiroakiHayashi,andGrahamNeubig.Pre-train,prompt,andpredict:Asystematic
+surveyofpromptingmethodsinnaturallanguageprocessing,2021.URLhttps://arxiv.org/abs/2107.13586.
+[92] YilunLiu,ShiminTao,WeibinMeng,JingyuWang,WenbingMa,YuhangChen,YanqingZhao,HaoYang,andYanfeiJiang.Interpretable
+onlineloganalysisusinglargelanguagemodelswithpromptstrategies.InProceedingsofthe32ndIEEE/ACMInternationalConference
+onProgramComprehension(ICPC’24),pages35–46.AssociationforComputingMachinery,2024.doi:10.1145/3643916.3644408.URL
+https://doi.org/10.1145/3643916.3644408.
+47

@@ -1,0 +1,45 @@
+exploring multiple candidate hypotheses/paths, scoring or pruning them, and selecting the best [176, 195]. This
+matches operational diagnosis where multiple plausible causes exist. ToT-style search can be implemented via self-
+consistency sampling, explicit branching (e.g., per service/component), and re-ranking using retrieved evidence
+or tool outputs [ 176, 195]. The practical trade-off is cost: ToT multiplies calls/tokens, so it is often reserved
+for high-severity complex incidents, and paired with retrieval and/or a smaller model to narrow the search
+space [195]. More generally, many approaches adoptstructured decompositionwithout explicitly naming
+CoT/ToT by splitting the workflow into stages such as symptom extraction, candidate generation, evidence
+retrieval, and final decision [194, 217].
+Fine-tuning and post-training for log tasks.When data is available, training often yields better stability
+than pure prompting [43]. It is useful to distinguish: (i)continued pretraining(domain-adaptive pretraining
+on large unlabeled log corpora) to improve coverage of log vocabulary and style, (ii)supervised fine-tuning
+(SFT)on labeled log tasks, (iii)parameter-efficient tuning (PEFT)(e.g., LoRA/adapters) to reduce cost and
+enable more frequent updates under drift, and (iv)post-training/alignment(instruction tuning and preference
+optimization) to improve instruction following, format adherence, and safety/harmlessness behaviors [120, 133].
+In log analysis, post-training is especially relevant when the model must (a) reliably follow output schemas, (b)
+avoid leaking sensitive data in summaries, and (c) produce calibrated, non-overconfident explanations (including
+the ability to abstain) [120]. A common pattern ishybrid training: fine-tune a smaller encoder/LM for scoring
+or classification while using a larger aligned model for explanation and interactive assistance [10, 116]. Another
+pattern istask-to-instruction transformation, where multiple log tasks are cast into a unified instruction
+format so one model can support classification, extraction, and generation consistently [120].
+Tool augmentation and agentic workflows.Agentic log-analysis approaches extend in-context retrieval by
+letting an LLM iteratively call external tools to gather, filter, and validate evidence [111, 140, 194]. Typical tools
+include log search/index queries, metric/trace dashboards, ticket/KB/runbook lookup, config/code retrieval, and
+lightweight parsers or summarizers that pre-compress high-volume inputs [111]. This paradigm is a natural fit
+for real-world log analysis because a single prompt window is rarely sufficient: relevant signals may be scattered
+across long time spans, multiple components, and heterogeneous repositories [111, 194].
+Agentic workflows commonly follow a loop of: (i)planning(what evidence to obtain next and which hypothe-
+ses to test), (ii)acting(tool calls for retrieval, slicing, aggregation, or correlation), (iii)observing(interpreting
+tool outputs and updating the working context), and (iv)deciding(producing a final prediction/explanation/-
+summary with evidence pointers) [194]. The benefits are stronger grounding and broader coverage. The costs are
+latency, more failure modes (tool errors, cascading mistakes), and higher security risks (e.g., prompt injection via
+retrieved documents) [111, 140]. Accordingly, practical deployments often add guardrails such as allow-listed
+tools, bounded iterations, schema validation, and conservative fallback behaviors [111, 148].
+Verification, calibration, and controllability.Because log analysis is high-stakes and noisy, many approaches
+add explicit reliability layers:self-consistency(sample multiple reasoning paths and aggregate),cross-checking
+(verify claims against retrieved lines/windows or tool outputs),schema validation(force typed/JSON outputs
+and reject invalid responses),evidence citation(require each claim to point to a log span or retrieved document),
+andselective generation(generate only after candidate filtering by a smaller model) [ 63, 65, 105, 176]. These
+paradigms reappear throughout the task sections. Section 7 later compares their trade-offs in terms of supervision
+needs, inference cost, robustness under drift, controllability, and operational fit.
+3.5 Practical Concerns: Privacy, Security, Compliance, and Efficiency
+Logs may contain sensitive identifiers (user IDs, IPs, hostnames), infrastructure topology, security indicators,
+and occasionally personal data [31, 70]. As a result, deploying LLMs for log analysis is often governed as much
+byprivacy/security constraintsas by model accuracy, whilelatency and costremain first-class operational
+12

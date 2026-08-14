@@ -1,0 +1,44 @@
+LLM-basedlogparsing.Section6coversdownstreamloganalysistasks,includinganomalydetection,failure
+prediction,rootcauseanalysis,andlogsummarization.Section7synthesizesrecurringinsights,openchallenges,
+andfuturedirectionsacrosstasks.Finally,Section8concludesthesurvey.
+2 SurveyMethodology
+Tobuildtheliteraturecorpusforthissurvey,weconductedastructuredsearchforpublicationsonLLM-basedlog
+analysis.Weusedaflagship-venue-firstsearchstrategy.Westartedfrommajorsoftwareengineeringvenuesto
+buildafocusedinitialpaperset.Werecognizethatthischoicemayunder-representsomeinterdisciplinaryor
+industry-facingwork.Wethereforecomplementedtheinitialvenue-basedsearchwithbackwardandforward
+snowballing,andwithdigital-libraryandacademic-searchcross-checkingtobroadencoverage.Theliterature
+collectionwascompletedinNovember2025.Thecompletepaperlistandcorpusmetadataareavailableinour
+onlinerepository:https://github.com/zeyang919/LLM4Log.
+Stage3
+Stage1 Stage2 Digital-library
+Backwardandfor- andacademic-
+Flagship-venue-first
+wardsnowballing searchcross-check
+keywordsearch Finalcorpus
+Papersconnectedtothe Remainingincluded
+Searchedflagshipsoft- 145unique
+Stage-1seedsetthrough papersidentifiedthrough
+wareengineeringvenues papers
+citation/referencelinks databaseandsearch
+cross-checking
+52uniquepapers
+70uniquepapers
+23uniquepapers
+Fig.2. Workflowoftheliteraturecollectionprocess.
+2.1 Literaturecollectionprotocol
+Stage 1: flagship-venue-first keyword search. We began with keyword-based searches in the following
+softwareengineering venues,whichconstitutedour Stage-1flagship-venue-firstsearch set:ICSE,FSE, ASE,
+ISSTA,ICST,ICSME,ISSRE,ESEM,ICPC,TSE,TOSEM,EMSE,JSS,andISTasshowninTable1.Thisstageyielded
+52uniquepapers,assummarizedinFigure2.Table1summarizesthevenuescoveredintheStage-1search.
+Table1. Stage-1searchvenuesandyearrange.
+Type Venues Years
+Conference ICSE,FSE,ASE,ISSTA,ICST,ICSME, 2020–2025
+ISSRE,ESEM,ICPC
+Journal TSE,TOSEM,EMSE,JSS,IST 2020–2025
+Weusedcombinationsoflog-related andLLM-related keywords.Thelog-relatedkeywordsincludetermssuch
+as“log”,“systemlog”,“runtimelog”,“loganalysis”,“logparsing”,“loganomalydetection”,“failureprediction”,“root
+causeanalysis”,“incidentdiagnosis”,“logsummarization”,theLLM-relatedkeywordsincludetermssuchas“large
+languagemodel”,“LLM”,“Transformer”,“BERT”,“GPT”,“ChatGPT”,“in-contextlearning”,“prompting”,“retrieval-
+augmented generation”, and “agent”. We iteratively refined the keyword set as we encountered task-specific
+terminologyandcommunity-preferredphrasing(e.g.,operationaldiagnosisandtroubleshootingterms).
+4

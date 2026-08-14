@@ -1,0 +1,40 @@
+narrative description), often combined with grouping-by-time/component to keep summaries faithful and easy
+to scan.
+6.5.2 LLM-based Approaches for Log Summarization.Compared with anomaly detection and RCA, log summa-
+rization is one of the mostLLM-nativelog analysis tasks. Its primary deliverable is a human-readable artifact, and
+usefulness depends on semantic coherence, correct attribution, and actionable compression instead of only classi-
+fication accuracy. Log summarization differs from generic text summarization because logs are noisy, temporally
+dense, uneven in informativeness, and useful only when the summary remains faithful to concrete evidence.
+Across the collected studies, LLM-based log summarization typically follows a “structure-then-generate” pattern:
+(i) pre-organize raw logs (by time, component, severity, or templates), (ii) select salient evidence (representative
+lines, errors, entities), and then (iii) generate an abstractive narrative or a structured synopsis (timeline, key
+events, involved modules), often with faithfulness constraints.
+Benchmarks and evaluation: summarization as a first-class log task.LogEval [ 20] explicitly includes
+log summarizationin a broader benchmark suite for LLM-based log analysis. It evaluates summary quality
+using both lexical overlap (e.g., ROUGE) and task-oriented correctness signals (e.g., accuracy/F1-style measures),
+and compares strong proprietary models against a wide range of open-source chat/instruction models. This
+benchmark perspective highlights two recurring issues in summarization: (i)metric mismatch—ROUGE-like
+scores only partially reflect incident usefulness, and (ii)context limitation—performance depends heavily on
+which log subset is provided to the model, motivating retrieval or guided selection before generation.
+Guided enhancement assistants: making summaries faithful and operator-friendly.Practical summariza-
+tion assistants often aim to reduce hallucinations and improve scanability by enforcing intermediate structure.
+logSage [96] (SAC’25) exemplifies this direction by treating summarization as an assistant workflow with guided
+enhancement: instead of asking an LLM to narrate raw logs end-to-end, the system emphasizes staged processing
+(e.g., evidence selection, grouping, and controlled rewriting) so that the final summary better reflects the un-
+derlying log evidence and aligns with on-call needs (handoff, incident notes, rapid situational awareness). Such
+designs typically trade some linguistic freedom for higher faithfulness and better operator trust.
+Instruction-based log interpretation as summarization.Some works position summarization as part of a
+unifiedinstruction-followinginterface for log analysis. LogLM [ 94] transforms multiple log tasks into instruction-
+based interactions. For summarization-like requests, it outputs natural-language interpretations and resolutions,
+and evaluates with standard generation metrics (BLEU/ROUGE variants). Similarly, Ji et al. [ 62] emphasize
+interpretable domain knowledge to adapt LLMs for log analysis. Their “interpretation” outputs overlap with
+summarization in practice by explaining what the logs indicate, and are assessed via manual scoring, reflecting
+that human utility and correctness are hard to capture with automatic metrics alone. This line suggests that in
+real deployments, summarization is rarely an isolated task. It often co-occurs with Q&A, diagnosis hints, and
+“what should I do next” guidance.
+Tooling for scalable log processing and its relationship to summarization.While not a summarization
+method per se, LogLead [107] illustrates an important enabling trend: scalable pipelines that load, enhance, and
+process logs efficiently can serve as thefront-endto LLM summarization by curating what the model sees (e.g.,
+enhancing logs, selecting windows, and organizing content). In other words, summarization quality is frequently
+bounded by upstream log preparation and selection instead of purely by the decoder’s generation capability.
+39

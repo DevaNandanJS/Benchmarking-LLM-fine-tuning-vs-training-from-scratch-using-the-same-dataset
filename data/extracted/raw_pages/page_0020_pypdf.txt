@@ -1,0 +1,44 @@
+Forlog message, exact-match metrics such asMessage Accuracy (MA)are increasingly treated as a “strict
+sanity check” instead of the main quality signal, since natural language admits paraphrases. To maintain backward
+compatibility, many studies still report overlap-based metrics such asBLEU/ROUGE, but these metrics mainly
+reflect surface similarity and can penalize semantically faithful rephrasing [122]. For LLM-generated messages,
+it is now common (and more defensible) to additionally report a semantics-aware metric such asBERTScore,
+which compares contextual embedding similarity instead of exact token matches [204]. Finally, edit-distance-style
+measures (token/character Levenshtein distance) are useful when the paper’s objective includes developer fixing
+effort: they approximate how much manual editing is needed to correct a generated message.
+Forvariables, the field has largely converged on viewing variable logging as a set selection problem. Ac-
+cordingly,Variable Precision/Recall/F1is often more informative than a single “all-or-nothing” accuracy.
+These metrics separate “missing important variables” (low recall) from “logging too many irrelevant variables”
+(low precision), and they also interact naturally with hallucination checks (e.g., penalizing variables that do not
+exist in scope). In addition, if a method jointly generates message and variables, it is worth reporting variable
+metrics separately from message metrics to avoid conflating semantic description quality with instrumentation
+completeness. Overall, automated-logging results are not fully comparable across papers because studies differ
+in dataset construction, insertion granularity, task decomposition (full generation versus subtask prediction),
+whether multiple valid logs/messages are accepted, programming language and project context, and metric
+choice.
+5 Log Parsing
+Modern software systems generate massive volumes of execution logs to support debugging, monitoring, and
+reliability engineering. However, the scale and velocity of log streams make manual inspection impractical:
+operators must quickly locate relevant events, correlate symptoms across components, and identify anomalous
+behaviors under strict time constraints. This motivates automated log analysis, which treats logs as machine-
+processable data instead of free-form text. A prerequisite for most downstream log analytics is log parsing, the
+process of converting raw log lines into structured event records [6, 47]. By normalizing heterogeneous messages
+into reusable templates and extracting runtime parameters, log parsing enables efficient indexing, aggregation,
+statistical modeling, and cross-run comparison, and thus directly impacts the effectiveness of tasks such as
+anomaly detection, failure prediction, and root cause analysis. Parsing is also where log-specific LLM challenges
+become especially visible: the parser must decide ambiguous template/value boundaries, preserve stable event
+identities under drift, cover long-tail templates, and still operate under streaming-scale constraints.
+We review LLM-based log parsing via reusable paradigms and the approaches that make them practical at
+scale, highlighting how they address the limitations of traditional parsers (format drift, long-tail events) and what
+new trade-offs they introduce (e.g., context budgets and coordination overhead).
+5.1 Task Definition
+Log parsing is the task that transforms each raw log line into a structured representation that separatesinvariant
+event semantics fromdynamicruntime values. Concretely, given a raw log line 𝑥, a parser typically outputs (i) a
+set ofheader fields(e.g., timestamp/date, severity level, process/thread, component), (ii) alog template 𝑡 where
+dynamic spans are replaced by placeholders (e.g., <*>), and (iii) aparameter list 𝑣 that records the extracted
+runtime values. At the stream level, especially in online settings where logs must be parsed on-the-fly as they
+arrive, parsers often maintain atemplate inventory(or event dictionary) and assign anevent IDto each unique
+template so that the raw stream can be converted into an event sequence for downstream mining [46, 164, 177].
+Figure 4 illustrates this objective with Hadoop logs. For example, raw messages such as “Jetty bound to port
+62267” and “Jetty bound to port 62258” differ only in the concrete port number, yet they represent the same
+20

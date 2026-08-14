@@ -1,0 +1,44 @@
+Logwindow
+Vectorfeaturesx
+Rawlogs(window) Classiccounts countsovertemplates
+1 1 0 0 : : 1 1 2 2 : : 0 0 3 3 . . 1 1 2 2 0 8 I I N N F F O O O O r r d d e e r r S S v v c c r G e E c T v / r a e p q i u / e o s r t de i r d s = ? 4 i 2 d=42 b p a a g ra -o m f- s e t v a e t n is t t s ic / s n-grams + [𝑐 p ( a 𝑒 r 1 a ) m ,.. s . ta ,𝑐 ts (𝑒 (e 5 . ) g ] ., = 𝜇( [ m 1 s ,1 ) , = 1, 3 1 0 , 0 1 0 ] )
+10:12:03.311WARNDBtimeoutconn=7(3000ms)
+10:12:03.540INFOOrderSvcretryqueryattempt=1
+10: 𝑆 P 1 a = 2 r : s ⟨ 0 e ( 3 d 𝑒 . 𝑖 e , 9 v 𝑡 0 𝑖 e 5 , n 𝑝 t 𝑖 E s ) R ⟩ ( R t O e R mp G l a a t te e s w + ay p p a u a r p a r s s m i t n e r g t e e a rs m ) failedcode=504 W t a o v k o g e r / n d T v e F e m - c I t D b o e F rs dd → ings W z ≈ (c 3 ( o 𝑤 o [ n 0 ) r t . d e 1 = - x 2 a t , a - v v − f g r g 0 e ( e e . t 0 v i t 3 e o m , n k e 0 t e o . n 4 e u 4 s m t ) ] , b c s on z n 𝑖 (𝑤 ,m ) s) D AD ow / n F s P tr / e R a C m A t / a S s u k m s
+𝑒 1:recvrequestid=* 𝑝 1={id=42}
+𝑒 𝑒 3 2 : : t G i E m T eo / u a t pi c / o o n rd n= er * s? (# id ms = ) * 𝑝 𝑝 2 3 = = { { i c d on = n 4 = 2} 7,ms=3000} Contextualencoder Contextualeventembsz𝑖 (𝑐)
+𝑒 𝑒 5 4: : r u e p t s r t y re q a u m er f y ai a l t e t d em c p o t d = e * =* 𝑝 𝑝 4= 5= {a {c t o t d e e mp = t 5 = 04 1 } } B ev E e R n T t / e S m B b E e R d T d / i l n og g enc. e z 3 m (𝑐) be ≈ d [ f 0 u . l 0 l 8 t , em 0. p 5 l 1 a , te − + 0 p .1 a 1 ra ] ms
+(context-sensitive)
+DirectLLM Promptoutput
+rawwindowtext LikelyDBtimeoutcaused504.
+prompt&reason Retriesobserved(attempt=1).
+Fig.6. Anillustrativeoverviewoflogwindowrepresentations:rawlogsareparsedintotemplatesandparameters,then
+mappedto(i)classicfeaturevectors,(ii)context-freeword-averagedembeddings,(iii)contextualeventembeddings,or(iv)
+directprompt-basedLLMoutputs.Numericvectorsareschematictohighlightdifferentrepresentations.
+withexistingmonitoringpipelines.Inthesehybriddesigns,LLMsmayserveonlyasanauxiliarycomponent
+(e.g.,toimproveparsingqualityorprovideexplanations),whiletheanomalydetector/predictorstillrelieson
+traditionalfeaturesandmachine-learningmodels.
+Atthesametime,manyrecentpipelinesadoptcontextualeventembeddings.Insteadofaveragingcontext-free
+wordvectors,theyembedeachentirelogeventwithapretrainedencoder.Themainadvantageisrobustness:
+contextualencodersmodelwordorderandcompositionalmeaningwithinanevent,andtheycanassigndifferent
+representationstothesametokenacrossdifferentcontexts(whichiscommoninfast-evolvingsoftwarelogs)[30,
+125].Asaresult,semanticallyequivalenteventswithheterogeneousphrasingtendtostaycloserintheembedding
+space,whilesubtleboundaryorwordingchangesarelesslikelytobreakdownstreammodels,apropertythatis
+particularlyusefulunderdrift,long-tailpatterns,andlimitedsupervision.
+Inpractice,theworkflowislightweight.Eachparsedevent(oftenthetemplatetext,optionallyconcatenated
+withselectedparameters)isconvertedtoashortinputstringandencodedwithacontextualmodelsuchas
+BERT[24]andSentence-BERT[135],orwithlog-orientedencoders(e.g.,PreLog[74]andOWL[42])toobtaina
+fixed-lengtheventembedding.Forsequence-leveltasks,eventembeddingswithinasession/windowarethen
+aggregated(e.g.,pooling/attentionoralightweightsequentialmodel)intoawindowrepresentation.Downstream
+modulesusetheserepresentationseitherfor(i)similarity-basedretrieval/matching(nearest-neighborsearchfor
+relatedevents/windows)or(ii)trainingdetectors/predictorsforanomalydetectionandfailureprediction,often
+withimprovedtolerancetowordingvariationcomparedtoword-embeddingpipelines.
+Unifiedlogrepresentationsvialarge-scalepretraining.Beyond“usingageneral-purposeencoder,”BigLog[165]
+advocatesunsupervisedlarge-scalepre-training tolearnaunified representationspaceforlogs.Thecoreidea
+istopretrainonmassive,heterogeneouslogcorporasothatasingleencodercanproducetransferableembed-
+dingsacrosssystemsandlogstyles,reducingtherelianceonper-systemfeatureengineeringortask-specific
+representationtuning.ThisperspectiveisespeciallyrelevantinLLM-erapipelineswherethebottleneckoften
+shiftsfrommodelcapacitytorepresentationcompatibility:whenlogschangefrequentlyorwhenoperatorsneed
+cross-serviceretrievalandcorrelation,aunifiedembeddingspaceenables(i)morereliablesimilaritysearch
+overhistoricalwindows,(ii)easiercross-systemtransfer/bootstrappingunderlimitedlabels,and(iii)acommon
+29

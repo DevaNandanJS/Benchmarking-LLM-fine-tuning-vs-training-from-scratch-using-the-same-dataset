@@ -1,0 +1,88 @@
+Table 9. Trade-offs among major LLM adaptation paradigms in LLM4Log.
+Paradigm Strength Limitation Cost / drift /
+grounding
+Best fit
+Fine-tuning Stable task-specific
+behavior
+Needs labels and is
+harder to refresh
+Medium inference
+cost, high refresh
+cost / Low–medium
+/ Medium
+Stable tasks with labeled
+data
+Prompting /
+ICL
+Fast adaptation without
+retraining
+Sensitive to prompts,
+examples, and context
+selection
+Medium–high /
+Medium / Low–
+medium
+Low-label and fast-
+changing settings
+Retrieval-
+augmented
+methods
+Fresh system-specific
+evidence
+Depends on retrieval
+quality and index fresh-
+ness
+Medium / High with
+a maintained index
+/ High if evidence is
+exposed
+RCA, summarization,
+and incident support
+Agentic work-
+flows
+Multi-step evidence
+gathering and tool use
+More complex, with
+higher latency and
+error-propagation risk
+High / Medium–
+high / Medium–high
+if steps are logged
+Complex multi-source
+investigation workflows
+Hybrid / selec-
+tive escalation
+Balances efficiency and
+capability
+Requires routing,
+caching, and valida-
+tion design
+Low–medium in
+routine cases / High
+with updated rout-
+ing / Medium–high
+Production pipelines
+with cost or latency
+constraints
+corpus metadata, we further observe that only 25 of the 162 collected papers records explicitly mention industrial
+or proprietary context, only 17 report any human or user study signal, only 23 report deployment-style metrics,
+and only 5 provide clear deployment-oriented evidence. This makes direct cross-paper comparison difficult
+even before considering task heterogeneity: the literature is still dominated by benchmark-oriented academic
+prototypes, while industrial-context and deployment-oriented evaluations remain a minority. Evidence about
+industrial deployment maturity remains uneven across tasks: RCA currently contains the clearest concentration
+of industrial and deployment-style evaluations, while most parsing, anomaly-detection, and summarization
+studies remain primarily benchmark-driven, with only a few logging systems reporting concrete organizational
+deployment evidence.
+The third challenge concerns grounding, privacy, and deployment practicality. Operator-facing outputs in
+RCA and summarization can appear coherent even when they are only weakly supported by the logs or retrieved
+evidence, making grounding and evidence attribution essential [ 20, 68, 98, 100]. At the same time, logs may
+contain sensitive identifiers, internal topology, or security-relevant content, which complicates direct use of
+remote API-based LLMs and pushes many practical designs toward self-hosted, retrieval-bounded, or hybrid
+architectures [31, 34, 38, 70]. These constraints are not secondary deployment details. They directly shape what
+kinds of LLM4Log systems are feasible in practice [31, 34, 111].
+Looking ahead, several research directions appear particularly important. First, benchmark design should better
+reflect drift, long-tail behavior, and cross-system variation instead of relying mainly on static splits [20, 103, 188].
+Second, privacy-preserving and self-hosted LLM4Log deserves more attention, including parameter-efficient
+adaptation, on-prem retrieval, and redaction-aware pipelines [23, 31, 34]. Third, RCA and summarization should
+move toward more augmented and verifiable outputs, with explicit evidence attribution and stronger evaluation of
+42

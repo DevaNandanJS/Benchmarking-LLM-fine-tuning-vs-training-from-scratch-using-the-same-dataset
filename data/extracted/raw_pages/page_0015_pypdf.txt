@@ -1,0 +1,46 @@
+4.2.1 Where-to-Log: Placement and Coverage.A core difficulty of logging is decidingwherea statement should
+be inserted. Logs placed too sparsely may miss critical runtime evidence, reducing diagnosability, whereas
+overly dense logging introduces noise, log flooding, and runtime overhead [ 8, 36, 84, 219]. In real systems,
+diagnostically important events often occur along complex, low-frequency control-flow paths (e.g., rare branches,
+retries, and exception chains), making it difficult to identify insertion points that reliably capture true execution
+states [36, 83, 219].
+Traditional automated techniques often suggest logging-statement placement using local syntactic cues (e.g.,
+method entry/exit, catch blocks, API calls) or handcrafted rules over AST patterns [ 108, 185, 187, 219]. Such
+signals are inexpensive and scalable, but they are weak proxies for diagnostic value: they may over-instrument
+common patterns while missing semantically important events that span multiple statements or methods [82, 162].
+Static-analysis-based methods can improve precision by tracking control flow and exceptional paths, yet they
+still struggle to decide which program points are worth logging from a human-debugging perspective, and they
+often produce redundant locations when applied at scale [25, 36, 83]. Moreover, placement decisions made in
+isolation are difficult to reconcile globally: a log that appears useful within one method may be inconsistent or
+redundant when viewed across the system, especially in large-scale or distributed applications [36, 83, 215, 219].
+4.2.2 What-to-Log: Level, Message, and Variables.Even if a location is chosen, determiningwhatto record remains
+challenging. First, log levels encode severity and expected frequency, but these levels are often ambiguous in real
+projects. The same event may be viewed asINFO in one module and WARN in another, leading to inconsistency and
+unreliable filtering during incident response [49, 86, 219]. Second, messages must convey clear event semantics,
+yet developers frequently struggle to express intent concisely, avoid vague wording, and align with project
+terminology [87, 219]. Third, selecting which variables to include is subtle: missing key variables reduces
+diagnostic value, whereas logging too many values increases verbosity [25, 83, 219]. These issues are exacerbated
+by the need to maintain a consistent style across contributors, components, and versions.
+Prior approaches typically decompose this decision into separate subtasks, such as level prediction and
+variable selection, using local features (identifiers, types, nearby API calls, shallow data-flow signals) and then
+fill messages with templates [82, 86, 219]. This decomposition is convenient for modeling, but it often yields
+incoherent outcomes, for example, a predicted level that does not match the message phrasing or variables that
+are only weakly related to the event being described. Template- and pattern-based message generation further
+struggles to express nuanced intent (e.g., distinguishing a transient network hiccup from a persistent configuration
+error), producing rigid or generic strings that provide limited diagnostic cues. Overall, the fundamental difficulty
+is that level, variables, and message are semantically coupled decisions, whereas many traditional techniques
+treat them as largely independent.
+4.2.3 How-to-Log: Quality, Maintainability, and Evolution.Logging quality is not only about writing a single
+statement correctly, but also about keeping logs useful throughout software evolution. As code and requirements
+change, logs can become stale, misleading, or incorrect (e.g., referring to outdated conditions, variables, or
+execution phases), yet they are rarely updated with the same rigor as functional code [59, 175, 214]. In addition,
+practical logging must respect non-functional constraints, such as performance overhead, storage budget, and
+privacy/security policies, which further complicate the amount and type of information that can be safely
+recorded [47, 215].
+Traditional tooling provides limited support for maintaining logs over time. Simple consistency checks (e.g.,
+unused variables, formatting rules) can catch surface-level issues, but they do not reliably detect semantic drift,
+in which the code behavior changes while the log message remains plausible [ 59, 214]. Likewise, mining- or
+rule-based detectors often rely on project-specific patterns and are brittle in the face of refactoring, API evolution,
+or style changes [84, 214, 219]. As a result, projects accumulate redundant, inconsistent, or outdated logs, gradually
+reducing the overall utility of the logging infrastructure and increasing maintenance costs [84, 214].
+15

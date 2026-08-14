@@ -1,0 +1,47 @@
+Table 6. Summary of LLM-based anomaly detection studies organized by task category. (continued in Table 7)
+Paper Supervised? Train? Dataset(s) evaluated Parsing? Metric(s) Base Model(s)
+Discriminative & Representation Learning (Encoder-based)
+HitAnomaly [55] Supervised Yes HDFS, BGL, OpenStack Yes F1 BERT
+SwissLog [80] Supervised Yes HDFS, BGL Yes F1 BERT
+Ott et al. [118] Semi-Sup Yes OpenStack Yes F1 BERT
+LogBert [40] Semi-Sup Yes HDFS, BGL, ThunderbirdYes F1 BERT
+NeuralLog [71] Supervised Yes HDFS, BGL, TB, Spirit No F1 BERT
+BERT-Log [14] Supervised Yes HDFS, BGL Yes F1 BERT-110M
+LogST [210] Semi-Sup Yes HDFS Yes F1 Sentence-BERT
+Prog-BERT-LSTM [147] Semi-Sup Yes HDFS, BGL, ThunderbirdYes F1 BERT
+HilBERT [56] Supervised Yes HDFS, BGL Yes F1 BERT
+LogBP-LORA [48] Supervised Yes BGL, Thunderbird Yes F1 BERT-base
+LogDAPT [211] Supervised Yes HDFS, BGL, ThunderbirdYes F1 BERT
+LogADSBERT [52] Semi-Sup Yes HDFS, Hadoop, Open-
+Stack
+Yes F1 Sentence-BERT
+Karlsen et al. [67] Unsup No ECML, CSIC, Access Yes F1 DistilRoBERTa
+FastLogAD [90] Semi-Sup Yes HDFS, BGL, ThunderbirdYes F1 ELECTRA
+LAnoBERT [77] Semi-Sup Yes HDFS, BGL, ThunderbirdNo F1, AUC BERT
+Corbelle et al. [18] Supervised Yes HDFS Yes F1 BERT-base
+Zhou et al. [218] Supervised Yes HDFS, BGL Yes F1 BERT
+LogELECTRA [191] Semi-Sup Yes BGL, Thunderbird, SpiritNo F1 ELECTRA
+LogFiT [2] Semi-Sup Yes HDFS, BGL, ThunderbirdNo F1 BERT
+LogRoBERTa [159] Supervised Yes HDFS, BGL No F1 RoBERTa
+ADALog [127] Unsup Yes BGL, Thunderbird, SpiritNo F1 DistilBERT
+Thali et al. [166] Supervised Yes SWaT, Morris ICS No F1 BERT
+APT-LLM [7] Semi-Sup Yes Android, Linux, Win Yes AUC BERT
+Entezami et al. [29] Supervised Yes KDD99, UNSW, CICIDS Yes F1 BERT
+AnomalyExplainerBot [5] Supervised Yes HDFS Yes F1 RoBERTa
+Horváth et al. [51] Supervised Yes BGL, Thunderbird Yes F1, Acc LLaMA
+Generative Forecasting & Next-Token Prediction (Decoder-based)
+LogGPT (BigData) [168] Supervised Yes HDFS, BGL, ThunderbirdNo F1 GPT-2
+LogSense [154] Semi-Sup Yes - Yes - GPT-2
+PreLog [74] Supervised Yes HDFS, BGL, Spirit No F1 FLAN-T5 (140M)
+Bogdan et al. [9] Supervised Yes ECU Comm. Logs Yes Top-k Qwen2-0.4B
+LogLM [94] Supervised Yes BGL, Spirit Yes F1 LLaMA-2-7B
+NLPLog [62] Supervised Yes NLPLog Yes F1 LLaMA-2-7B
+hierarchical compaction + BERT-based detection by Corbelle et al. [18]. Other works emphasize robustness and
+transfer across systems and unstable log vocabularies. For instance, Ott et al. study robustness and transferability
+with pretrained language models [118], and APT-LLM applies embedding-based detection to advanced persistent
+threats in cyber logs [7]. Some papers explicitly investigate LLM-assistedparsing + embeddingpipelines before
+detection (e.g., Zhou et al. [218]), while others evaluate broader log/security settings with encoder backbones (e.g.,
+Thali et al. [166] and Entezami et al. [29]). Finally, as LLM-era anomaly detection expands beyond classic system
+logs, recent large-scale studies also include LLaMA-family backbones in supervised pipelines (e.g., Horváth et
+al. [51]) and explanation-oriented add-ons (e.g., AnomalyExplainerBot [5]).
+31

@@ -1,0 +1,55 @@
+[114] PriyankaMudgal,BijanArbab,andSwaathiSampathKumar.Crasheventllm:Predictingsystemcrasheswithlargelanguagemodels.In
+2024InternationalConferenceonInformationTechnologyandComputing(ICITCOM),pages72–76.IEEE,2024.
+[115] GunhoNo,YukyungLee,HyeongwonKang,andPilsungKang. RAPID:Training-freeretrieval-basedloganomalydetectionwith
+pre-trainedlanguagemodelconsideringtoken-levelinformation.EngineeringApplicationsofArtificialIntelligence,133:108613,2024.
+doi:10.1016/j.engappai.2024.108613.
+[116] OpenAI.Gpt-4technicalreport,2023.URLhttps://arxiv.org/abs/2303.08774.
+[117] Oracle.Javaplatform,standardeditionjava.util.logging.Onlinedocumentation,2024.URLhttps://docs.oracle.com/en/java/javase/.
+[118] HaroldOtt,JasminBogatinovski,AlexanderAcker,SashoNedelkoski,andOdejKao.Robustandtransferableanomalydetectioninlog
+datausingpre-trainedlanguagemodels,2021.URLhttps://arxiv.org/abs/2102.11570.
+[119] YoussefEsseddiqOuatiti,MohammedSayagh,BramAdams,andAhmedE.Hassan.Omnillp:Enhancingllm-basedloglevelprediction
+withcontext-awareretrieval,2025.URLhttps://arxiv.org/abs/2508.08545.
+[120] LongOuyang,JeffWu,XuJiang,DiogoAlmeida,CarrollL.Wainwright,PamelaMishkin,ChongZhang,SandhiniAgarwal,Katarina
+Slama,AlexRay,JohnSchulman,JacobHilton,FraserKelton,LukeMiller,MaddieSimens,AmandaAskell,PeterWelinder,PaulF.
+Christiano,JanLeike,andRyanLowe. Traininglanguagemodelstofollowinstructionswithhumanfeedback,2022. URLhttps:
+//arxiv.org/abs/2203.02155.
+[121] JonathanPan,SweeLiangWong,andYidiYuan.Raglog:Loganomalydetectionusingretrievalaugmentedgeneration,2023.URL
+https://arxiv.org/abs/2311.05261.
+[122] KishorePapineni,SalimRoukos,ToddWard,andWei-JingZhu.Bleu:amethodforautomaticevaluationofmachinetranslation.In
+Proceedingsofthe40thannualmeetingoftheAssociationforComputationalLinguistics,pages311–318,2002.
+[123] ChanghuaPei,ZihanLiu,JianhuiLi,ErhanZhang,LeZhang,HaimingZhang,WeiChen,DanPei,andGaogangXie.Self-evolutionary
+group-wiselogparsingbasedonlargelanguagemodel.In2024IEEE35thInternationalSymposiumonSoftwareReliabilityEngineering
+(ISSRE),pages49–60.IEEE,2024.
+[124] ChanghuaPei,ZexinWang,FengruiLiu,ZeyanLi,YangLiu,XiaoHe,RongKang,TieyingZhang,JianjunChen,JianhuiLi,etal.
+Flow-of-action:Sopenhancedllm-basedmulti-agentsystemforrootcauseanalysis.InCompanionProceedingsoftheACMonWeb
+Conference2025,pages422–431,2025.
+[125] MatthewE.Peters,MarkNeumann,MohitIyyer,MattGardner,ChristopherClark,KentonLee,andLukeZettlemoyer. Deep
+contextualizedwordrepresentations. InProceedingsofthe2018ConferenceoftheNorthAmericanChapteroftheAssociationfor
+ComputationalLinguistics:HumanLanguageTechnologies,Volume1(LongPapers),pages2227–2237,NewOrleans,Louisiana,June2018.
+AssociationforComputationalLinguistics.doi:10.18653/v1/N18-1202.
+[126] ReinerPope,YashJain,RohanPeri,JeffHankins,BaolinLin,andIonStoica.Efficientlyscalingtransformerinferencewithpagedattention,
+2023.URLhttps://arxiv.org/abs/2309.06180.
+[127] PrzemekPospieszny,WojciechMormul,KarolinaSzyndler,andSanjeevKumar.ADALog:Adaptiveunsupervisedanomalydetectionin
+logswithself-attentionmaskedlanguagemodel.arXivpreprint,2025.URLhttps://arxiv.org/abs/2505.13496.
+[128] PythonSoftwareFoundation.Pythonlogging—loggingfacilityforpython.Onlinedocumentation,2024.URLhttps://docs.python.org/
+3/library/logging.html.
+[129] JiaxingQi,ShaohanHuang,ZhongzhiLuan,ShuYang,CarolJ.Fung,HailongYang,DepeiQian,JingShang,ZhiwenXiao,andZhihui
+Wu. LogGPT:ExploringChatGPTforlog-basedanomalydetection. In2023IEEEInternationalConferenceonHighPerformance
+Computing&Communications,DataScience&Systems,SmartCity&DependabilityinSensor,Cloud&BigDataSystems&Application
+(HPCC/DSS/SmartCity/DependSys),pages273–280,2023.doi:10.1109/HPCC-DSS-SMARTCITY-DEPENDSYS60770.2023.00045.URL
+https://doi.org/10.1109/HPCC-DSS-SmartCity-DependSys60770.2023.00045.
+[130] XipengQiu,TianxiangSun,YigeXu,YunfanShao,NingDai,andXuanjingHuang.Pre-trainedmodelsfornaturallanguageprocessing:
+Asurvey.ScienceChinaTechnologicalSciences,63(10):1872–1897,2020.doi:10.1007/s11431-020-1647-3.URLhttps://arxiv.org/abs/
+2003.08271.
+[131] QOS.ch.Logback.Onlinedocumentation,2024.URLhttps://logback.qos.ch/.
+[132] QOS.ch.Slf4j:Simpleloggingfacadeforjava.Onlinedocumentation,2024.URLhttps://www.slf4j.org/.
+[133] RafaelRafailov,ArchitSharma,EricMitchell,StefanoErmon,ChristopherD.Manning,andChelseaFinn.Directpreferenceoptimization:
+Yourlanguagemodelissecretlyarewardmodel,2023.URLhttps://arxiv.org/abs/2305.18290.
+[134] ColinRaffel,NoamShazeer,AdamRoberts,KatherineLee,SharanNarang,MichaelMatena,YanqiZhou,WeiLi,andPeterJLiu.
+Exploringthelimitsoftransferlearningwithaunifiedtext-to-texttransformer.Journalofmachinelearningresearch,21(140):1–67,
+2020.
+[135] NilsReimersandIrynaGurevych.Sentence-bert:Sentenceembeddingsusingsiamesebert-networks.arXivpreprintarXiv:1908.10084,
+2019.
+[136] YoucefRemil,AnesBendimerad,RomainMathonat,andMehdiKaytoue.Aiopssolutionsforincidentmanagement:Technicalguidelines
+andacomprehensiveliteraturereview.arXivpreprintarXiv:2404.01363,2024.
+49

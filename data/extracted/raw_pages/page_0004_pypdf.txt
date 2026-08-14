@@ -1,0 +1,55 @@
+LLM-based log parsing. Section 6 covers downstream log analysis tasks, including anomaly detection, failure
+prediction, root cause analysis, and log summarization. Section 7 synthesizes recurring insights, open challenges,
+and future directions across tasks. Finally, Section 8 concludes the survey.
+2 Survey Methodology
+To build the literature corpus for this survey, we conducted a structured search for publications onLLM-based log
+analysis. We used a flagship-venue-first search strategy. We started from major software engineering venues to
+build a focused initial paper set. We recognize that this choice may under-represent some interdisciplinary or
+industry-facing work. We therefore complemented the initial venue-based search with backward and forward
+snowballing, and with digital-library and academic-search cross-checking to broaden coverage. The literature
+collection was completed in November 2025. The complete paper list and corpus metadata are available in our
+online repository: https://github.com/zeyang919/LLM4Log.
+Stage 1
+Flagship-venue-first
+keyword search
+Searched flagship soft-
+ware engineering venues
+52 unique papers
+Stage 2
+Backward and for-
+ward snowballing
+Papers connected to the
+Stage-1 seed set through
+citation/reference links
+70 unique papers
+Stage 3
+Digital-library
+and academic-
+search cross-check
+Remaining included
+papers identified through
+database and search
+cross-checking
+23 unique papers
+Final corpus
+145 unique
+papers
+Fig. 2. Workflow of the literature collection process.
+2.1 Literature collection protocol
+Stage 1: flagship-venue-first keyword search.We began with keyword-based searches in the following
+software engineering venues, which constituted our Stage-1 flagship-venue-first search set: ICSE, FSE, ASE,
+ISSTA, ICST, ICSME, ISSRE, ESEM, ICPC, TSE, TOSEM, EMSE, JSS, and IST as shown in Table 1. This stage yielded
+52 unique papers, as summarized in Figure 2. Table 1 summarizes the venues covered in the Stage-1 search.
+Table 1. Stage-1 search venues and year range.
+Type Venues Years
+Conference ICSE, FSE, ASE, ISSTA, ICST, ICSME,
+ISSRE, ESEM, ICPC
+2020–2025
+Journal TSE, TOSEM, EMSE, JSS, IST 2020–2025
+We used combinations oflog-relatedandLLM-relatedkeywords. The log-related keywords include terms such
+as“log”, “system log”, “runtime log”, “log analysis”, “log parsing”, “log anomaly detection”, “failure prediction”, “root
+cause analysis”, “incident diagnosis”, “log summarization”, the LLM-related keywords include terms such as“large
+language model”, “LLM”, “Transformer”, “BERT”, “GPT”, “ChatGPT”, “in-context learning”, “prompting”, “retrieval-
+augmented generation”, and “agent”. We iteratively refined the keyword set as we encountered task-specific
+terminology and community-preferred phrasing (e.g., operational diagnosis and troubleshooting terms).
+4
