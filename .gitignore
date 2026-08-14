@@ -16,10 +16,10 @@ TASK1_TASK1_finetuning_model/checkpoints/*
 TASK2_TASK2_slm_from_scratch/checkpoints/*
 !TASK2_TASK2_slm_from_scratch/checkpoints/.gitkeep
 
-*.pt
+
 *.bin
 *.safetensors
-*.onnx
+
 
 # Personal progress / study notes
 progress/
