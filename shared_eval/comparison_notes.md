@@ -1,7 +1,7 @@
 # Cross-Track Comparison Notes
 
 > **Status:** Both tracks complete.
-> Last updated by compare.py: 2026-08-13T07:23:15.696081+00:00
+> Last updated by compare.py: 2026-08-14T05:35:00.302921+00:00
 
 ---
 
@@ -15,11 +15,11 @@ Formula: `BPB = (total_ce_nats / utf8_byte_length_of_val_text) / ln(2)`
 | Track | Model | Strategy | BPB | Perplexity | Best Val CE Loss |
 |---|---|---|---|---|---|
 | **Track 1** | SmolLM2-135M (LoRA) | Fine-tune pretrained | **1.309722** | 10.7794 | 2.377641 |
-| **Track 2** | GPT-from-scratch | Train from random init | **2.345678** | 50.1200 | 3.914000 |
+| **Track 2** | GPT-from-scratch | Train from random init | **2.306906** | 38.2081 | 3.643046 |
 
-**BPB gap (Track 2 − Track 1):** +1.035956 bits/byte
+**BPB gap (Track 2 − Track 1):** +0.997184 bits/byte
 
-Track 2 is **1.0360 bits/byte worse** than Track 1. This gap quantifies the
+Track 2 is **0.9972 bits/byte worse** than Track 1. This gap quantifies the
 cost of not having a pretrained language prior when training on a ~65K-token document.
 
 ---
@@ -28,9 +28,9 @@ cost of not having a pretrained language prior when training on a ~65K-token doc
 
 | Metric | Track 1 (LoRA) | Track 2 (Scratch) |
 |---|---|---|
-| Trainable parameters | 460,800 (0.341% of 135M) | 12345678 (100% — full model) |
-| Total parameters | ~135M (frozen base + adapters) | 12345678 |
-| val_chunks scored | 38 | 38 |
+| Trainable parameters | 460,800 (0.341% of 135M) | see trainable_params.json (100% — full model) |
+| Total parameters | ~135M (frozen base + adapters) | see trainable_params.json |
+| val_chunks scored | 38 | 56 |
 | tokens scored per chunk | 256 (HF model scores all positions) | 255 (custom model shifts internally, block_size-1) |
 | BPB formula | Identical — (total_ce_nats / utf8_bytes) / ln(2) | Identical |
 
@@ -46,14 +46,14 @@ cost of not having a pretrained language prior when training on a ~65K-token doc
 
 ## Qualitative Generation Comparison
 
-*(8 prompts × 2 decoding modes each — see track1_samples.md and track2_samples.md)*
+*(8 prompts × 2 decoding modes each — see finetuning_samples.md and slm_samples.md)*
 
 | Aspect | Track 1 (LoRA) | Track 2 (Scratch) |
 |---|---|---|
-| Domain vocabulary | *[manual review — see track1_samples.md annotations]* | *[manual review — see track2_samples.md annotations]* |
-| Fluency | Generally high — GPT-2 prior; most completions are grammatical | Generally lower — no language prior; relies entirely on ~65K-token domain corpus. novel-plausible: 2 / incoherence: 2 / memorization: 4 |
+| Domain vocabulary | *[manual review — see finetuning_samples.md annotations]* | *[manual review — see slm_samples.md annotations]* |
+| Fluency | Generally high — GPT-2 prior; most completions are grammatical | Generally lower — no language prior; relies entirely on ~65K-token domain corpus. novel-plausible: 16 / incoherence: 0 / memorization: 0 |
 | Coherence over ~80 tokens | Degrades gradually over ~80 tokens | Degrades quickly; repetition more common |
-| Annotation summary | novel=5 / memorize=2 / incohere=1 | novel=2 / memorize=4 / incohere=2 |
+| Annotation summary | novel=0 / memorize=0 / incohere=0 | novel=16 / memorize=0 / incohere=0 |
 | Memorization vs. novel | Mix of memorization + novel phrasing | Predominantly memorization at low perplexity; incoherence at high |
 
 > **Domain vocabulary note:** "domain vocabulary" is a manual judgment based on
@@ -68,7 +68,7 @@ cost of not having a pretrained language prior when training on a ~65K-token doc
 Track 1 (LoRA fine-tuning of SmolLM2-135M) **wins on every measurable axis** in
 this experiment:
 
-- **Quality (BPB):** 1.0360 bits/byte better — the pretrained model's
+- **Quality (BPB):** 0.9972 bits/byte better — the pretrained model's
   general language knowledge provides a strong prior that even LoRA's tiny
   parameter budget cannot fully erase.
 - **Data efficiency:** Both tracks use the same ~65K-token document. Track 1's
@@ -76,7 +76,7 @@ this experiment:
   must re-learn from scratch — an unreasonably small dataset for a blank-slate model.
 - **Deployment footprint:** Track 1's deployment artifact is SmolLM2-135M +
   LoRA adapter (~1.8MB of adapter weights). Track 2's artifact is the full
-  from-scratch model (12345678 parameters).  At this parameter count,
+  from-scratch model (see trainable_params.json parameters).  At this parameter count,
   Track 2 is smaller in absolute terms, but with far worse quality — a worse
   trade-off.
 - **Compute cost:** Track 1 trains only 460,800 parameters per step;
@@ -100,12 +100,12 @@ None of these conditions apply to this experiment.
 
 | File | Contents |
 |---|---|
-| `track1_final_metrics.json` | CE loss, perplexity, BPB for the best Track 1 checkpoint |
-| `track1_loss_curve.png` | Train/val loss curve for the best Track 1 run |
-| `track2_final_metrics.json` | CE loss, perplexity, BPB for the best Track 2 checkpoint |
-| `track2_loss_curve.png` | Train/val loss curve for all Track 2 sweep runs |
+| `finetuning_final_metrics.json` | CE loss, perplexity, BPB for the best Track 1 checkpoint |
+| `finetuning_loss_curve.png` | Train/val loss curve for the best Track 1 run |
+| `slm_final_metrics.json` | CE loss, perplexity, BPB for the best Track 2 checkpoint |
+| `slm_loss_curve.png` | Train/val loss curve for all Track 2 sweep runs |
 | `comparison_notes.md` | This file — cross-track comparison |
 
 ---
 
-*Generated by `TASK2_slm_from_scratch/scripts/compare.py` at 2026-08-13T07:23:15.696097+00:00*
+*Generated by `TASK2_slm_from_scratch/scripts/compare.py` at 2026-08-14T05:35:00.302946+00:00*

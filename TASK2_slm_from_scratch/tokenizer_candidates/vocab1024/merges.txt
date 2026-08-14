@@ -2,7 +2,6 @@
 i n
 a n
 o n
-č Ċ
 r e
 t i
 e n
@@ -766,3 +765,4 @@ con text
 Ġapp roaches
 Ġman y
 2 6
+S S
