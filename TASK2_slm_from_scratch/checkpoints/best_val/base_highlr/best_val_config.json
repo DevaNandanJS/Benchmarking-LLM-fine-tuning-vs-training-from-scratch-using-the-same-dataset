@@ -1,7 +1,7 @@
 {
   "phase": 4,
-  "run_name": "base",
-  "sweep_axis": "architecture",
+  "run_name": "base_highlr",
+  "sweep_axis": "learning_rate",
   "n_layer": 6,
   "n_embd": 192,
   "n_head": 4,
@@ -9,7 +9,7 @@
   "block_size": 256,
   "dropout": 0.1,
   "tie_weights": true,
-  "learning_rate": 0.0003,
+  "learning_rate": 0.0006,
   "batch_size": 16,
   "total_steps": 2000,
   "warmup_steps": 100,
@@ -23,5 +23,7 @@
   "amp": true,
   "smoke_test": false,
   "seed": 42,
-  "timestamp": "2026-08-14T06:02:25.875872+00:00"
+  "timestamp": "2026-08-14T06:03:04.898470+00:00",
+  "best_val_step": 700,
+  "best_val_loss": 3.618411
 }

@@ -1,7 +1,7 @@
 # Track 2 — From-Scratch GPT: Qualitative Samples
 
 > **Run:** base_highlr  |  **Checkpoint:** best_val  |  **Params:** n_layer=6 n_embd=192 n_head=4 vocab_size=1024
-> **Generated:** 2026-08-14T05:34:56.059809+00:00
+> **Generated:** 2026-08-14T06:03:57.658856+00:00
 > **max_new_tokens:** 100  |  **Sampling:** T=0.8, top_p=0.9  |  **Greedy:** T=0 (argmax)
 
 > **Annotation key:** `memorization` — verbatim domain phrases; `incoherence` — repetition / degenerate output; `novel-plausible` — grammatical, on-topic, non-verbatim.
@@ -138,7 +138,8 @@ bration, especially requirel
 When the training loss decreases but validation loss increases, this indicates to log summarization.F1, PAGG, FGA, F1 - - Template the model to the overheadability, the
 the addownstream tasks from a sequence-style (emps,
 dats, tradendecting with datGPT. APA, but also troducing is style logs in
-posit”, sensitive (ivers, and nat
+posit”, sensitive
+T, and static f
 ```
 
 > **Annotation:** novel-plausible
@@ -238,10 +239,8 @@ miting decompositing doms
 ```
 Compared to larger models, a small language model trained from scratching. This mators, the most usefully
 s a same time, the most usefulness and it is a same to the most usefulness and verance.
-s to the most warly, the model can before challs and vectors.
-s.
-system-based methods.
-s a same time, the most usefully as a frelection, the most wasingly
+s to the most warly, the model can before challs with a same time, and verance to the most usefully as a singly.
+s to the most usefully, the most usefully is not only a s
 ```
 
 > **Annotation:** novel-plausible

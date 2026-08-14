@@ -1,9 +1,9 @@
 {
   "phase": 4,
-  "run_name": "base",
+  "run_name": "small",
   "sweep_axis": "architecture",
-  "n_layer": 6,
-  "n_embd": 192,
+  "n_layer": 4,
+  "n_embd": 128,
   "n_head": 4,
   "vocab_size": 1024,
   "block_size": 256,
@@ -23,5 +23,7 @@
   "amp": true,
   "smoke_test": false,
   "seed": 42,
-  "timestamp": "2026-08-14T06:02:25.875872+00:00"
+  "timestamp": "2026-08-14T06:01:58.377249+00:00",
+  "best_val_step": 1900,
+  "best_val_loss": 3.702633
 }

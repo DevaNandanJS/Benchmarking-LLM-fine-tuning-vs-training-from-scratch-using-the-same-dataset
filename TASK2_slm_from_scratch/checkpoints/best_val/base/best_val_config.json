@@ -23,5 +23,7 @@
   "amp": true,
   "smoke_test": false,
   "seed": 42,
-  "timestamp": "2026-08-14T06:02:25.875872+00:00"
+  "timestamp": "2026-08-14T06:02:25.875872+00:00",
+  "best_val_step": 1300,
+  "best_val_loss": 3.627612
 }
