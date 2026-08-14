@@ -8,7 +8,7 @@
 
 ## 0. Track-2-specific conventions
 
-- All artifacts live under `slm_from_scratch/` mirroring Track 1's subfolder structure: `configs/`, `checkpoints/`, `logs/`, `eval/`, `generations/`.
+- All artifacts live under `TASK2_slm_from_scratch/` mirroring Track 1's subfolder structure: `configs/`, `checkpoints/`, `logs/`, `eval/`, `generations/`.
 - Same `metrics.jsonl` logging format as Track 1 (Section 0 of that document) — this is what makes the two tracks' loss curves plottable on comparable axes later.
 - Same seed discipline, same config-dump-before-training discipline, same "sweep, don't guess" discipline for hyperparameters.
 - This track reuses `data/extracted/document_clean.txt` produced in Track 1's Phase 1 — **do not re-extract**; if Track 1 hasn't been run yet, run its Phase 1 first (it's track-agnostic data prep).
@@ -22,15 +22,15 @@
 **If you're using the VS Code + Google Colab extension workflow, read Track 1's Phase 0 §0.a first** — it covers the authoring-vs-execution split (agent edits `.py` files locally; anything GPU-bound must run as a notebook cell against the remote kernel, whose filesystem is separate from your local workspace) and the thin-orchestrator-notebook pattern this plan reuses. Not repeated in full here.
 
 **Steps:**
-1. Confirm the GPU/Colab connection exactly as in Track 1 Phase 0 steps 1–3. If you're working through both tracks in one sitting, you can **reuse the same running Colab session** rather than spinning up a second one — open `slm_from_scratch/slm_run.ipynb` and connect via **Auto Connect** to attach to the already-running server (saves reconnect time and avoids a second GPU-queue wait). If you're returning in a later session, connect fresh as in Track 1.
+1. Confirm the GPU/Colab connection exactly as in Track 1 Phase 0 steps 1–3. If you're working through both tracks in one sitting, you can **reuse the same running Colab session** rather than spinning up a second one — open `TASK2_slm_from_scratch/slm_run.ipynb` and connect via **Auto Connect** to attach to the already-running server (saves reconnect time and avoids a second GPU-queue wait). If you're returning in a later session, connect fresh as in Track 1.
 2. Sync code the same way as Track 1 (git clone/pull cell). This repo should already contain `data/extracted/document_clean.txt` from Track 1's Phase 1 — **do not re-extract it here**; if it's missing after syncing, run Track 1's Phase 1 first (it's track-agnostic data prep, not something to duplicate).
 3. Install dependencies inside a notebook cell (not a local terminal — see Track 1 §0.a for why that distinction matters):
    ```python
    !pip install -q torch tokenizers matplotlib pandas numpy
    ```
    Note `tokenizers` (Hugging Face's Rust-backed tokenizer training library) is the only "external" dependency of substance — everything else (model, training loop) will be implemented directly, per the task's requirement for "your own architecture and training code."
-4. Log `!pip freeze > slm_from_scratch/environment.txt` and copy it back into the version-controlled repo, same discipline as Track 1.
-5. Create `slm_from_scratch/{configs,checkpoints,logs,eval,generations,scripts}/` (the `scripts/` folder is where the agent's actual model/training code lives) and the orchestrator notebook `slm_from_scratch/slm_run.ipynb` (same sync-then-call-into-scripts pattern as Track 1's `finetuning_run.ipynb`).
+4. Log `!pip freeze > TASK2_slm_from_scratch/environment.txt` and copy it back into the version-controlled repo, same discipline as Track 1.
+5. Create `TASK2_slm_from_scratch/{configs,checkpoints,logs,eval,generations,scripts}/` (the `scripts/` folder is where the agent's actual model/training code lives) and the orchestrator notebook `TASK2_slm_from_scratch/slm_run.ipynb` (same sync-then-call-into-scripts pattern as Track 1's `finetuning_run.ipynb`).
 
 **Definition of Done:**
 - [ ] Connected to a Colab GPU kernel (reused or fresh), confirmed via the same hardware-check cell as Track 1.
@@ -55,19 +55,19 @@
        min_frequency=2,
        special_tokens=["<|endoftext|>"],
    )
-   tokenizer.save_model("slm_from_scratch/tokenizer")
+   tokenizer.save_model("TASK2_slm_from_scratch/tokenizer")
    ```
 2. **Vocabulary size sweep (required, not optional):** train at minimum 3 candidate sizes — e.g., **256, 1024, 4096** — and for each, compute and log:
    - Resulting vocabulary size actually produced (BPE may plateau below the target if the corpus is too small to fill it — this itself is diagnostic and worth noting).
    - **Fertility**: average tokens per word on the source document (`total_tokens / total_words`) — lower is more compressive, but too-low fertility at tiny vocab sizes trades off against needing longer context windows for the same content.
    - Resulting total token count for the whole document under each vocab size (this changes how many training chunks Phase 2 produces).
-   Save this comparison to `slm_from_scratch/eval/vocab_sweep.csv`. Pick a final vocabulary size and write 2–3 sentences in `configs/tokenizer_choice.md` justifying it against the trade-off described in the blueprint document (Section 4.2): embedding-table size relative to model size and to corpus size.
+   Save this comparison to `TASK2_slm_from_scratch/eval/vocab_sweep.csv`. Pick a final vocabulary size and write 2–3 sentences in `configs/tokenizer_choice.md` justifying it against the trade-off described in the blueprint document (Section 4.2): embedding-table size relative to model size and to corpus size.
 3. Sanity check: tokenize a few sentences from the document and print the resulting tokens — confirm no pathological over-fragmentation (near character-level for common words) or under-fragmentation (huge chunks that don't look like meaningful subwords) at the chosen size.
 4. Add an explicit end-of-text special token and confirm it's correctly inserted between logical document sections if applicable (or omit if the whole document is treated as one continuous stream — decide and log which).
 
 **Definition of Done:**
 - [ ] `vocab_sweep.csv` with ≥3 candidate vocab sizes and their fertility/token-count stats.
-- [ ] Final tokenizer files saved to `slm_from_scratch/tokenizer/` (`vocab.json`, `merges.txt`).
+- [ ] Final tokenizer files saved to `TASK2_slm_from_scratch/tokenizer/` (`vocab.json`, `merges.txt`).
 - [ ] Written justification for the chosen vocab size referencing the actual sweep numbers (not generic reasoning).
 
 ---

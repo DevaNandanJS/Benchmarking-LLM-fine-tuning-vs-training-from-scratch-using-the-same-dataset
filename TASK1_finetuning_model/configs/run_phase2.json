@@ -1,0 +1,18 @@
+{
+  "phase": 2,
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "total_params": 134515008,
+  "tokenizer_vocab_size": 49152,
+  "pad_token": "<|endoftext|>",
+  "pad_token_id": 0,
+  "pad_token_decision": "pad_token was None \u2014 set to eos_token ('<|endoftext|>', id=0). DOWNSTREAM NOTE (Phase 5): data collator MUST mask pad positions in labels (labels=-100 at pad positions). Failure to do so trains the model on <eos> as content signal.",
+  "exact_token_count_smollm2_135m": 65044,
+  "proxy_token_count_gpt2_tiktoken": 60739,
+  "fp16_weight_footprint_mb": 269.0,
+  "t4_vram_gb": 15.0,
+  "vram_utilisation_weights_only_pct": 1.79,
+  "quantization_needed": false,
+  "quantization_decision": "No quantization needed. Frozen-weight fp16 footprint: 269 MB (134,515,008 params \u00d7 2 bytes = 269,030,016 bytes), 1.8% of T4 VRAM (15.0 GB). NOTE: this covers frozen-weight storage only. Full training memory also includes activations, gradients, and optimizer state for the LoRA-trainable parameter slice. At this model size with LoRA (typically ~0.5\u20132% of parameters), the additional overhead is small but should be confirmed empirically once Phase 5 batch size is set (check torch.cuda.max_memory_allocated() after the first training step).",
+  "model_architecture_json": "C:\\llm_task\\TASK1_finetuning_model\\configs\\model_architecture.json",
+  "seed": 42
+}

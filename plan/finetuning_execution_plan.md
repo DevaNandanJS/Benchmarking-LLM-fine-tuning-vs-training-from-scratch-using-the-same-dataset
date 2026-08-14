@@ -2,7 +2,7 @@
 
 **Purpose of this document:** a phase-by-phase, agent-executable build plan. Each phase states its goal, exact inputs, ordered steps, concrete commands/API calls, the artifacts it must produce, and a "Definition of Done" checklist so completion is verifiable rather than assumed. This is meant to be handed directly to a coding agent (e.g., Claude Code) as a task list — each phase can be a separate work unit/commit.
 
-**Companion document:** `slm_from_scratch_slm_execution_plan.md`. The two pipelines deliberately share conventions (directory layout, chunking approach, logging format, evaluation metrics) so their outputs can be compared fairly at the end — see Phase 8 in both documents.
+**Companion document:** `TASK2_slm_from_scratch_slm_execution_plan.md`. The two pipelines deliberately share conventions (directory layout, chunking approach, logging format, evaluation metrics) so their outputs can be compared fairly at the end — see Phase 8 in both documents.
 
 ---
 
@@ -16,7 +16,7 @@
       raw/                 # original PDF
       extracted/            # cleaned .txt
       processed/             # tokenized/chunked datasets (per track, prefixed)
-    finetuning_model/
+    TASK1_finetuning_model/
       configs/
       checkpoints/
       logs/
@@ -24,7 +24,7 @@
       generations/
       scripts/               # importable .py modules — this is what the agent edits
       finetuning_run.ipynb        # thin orchestrator notebook — cells sync + call into scripts/
-    slm_from_scratch/
+    TASK2_slm_from_scratch/
       ...
     shared_eval/            # cross-track comparison artifacts
     writeup/
@@ -50,7 +50,7 @@ If you're using the official **Google Colab extension for VS Code**, three thing
 - **Practical implication for agent-driven execution:** the agent can reliably author every file here — the `.py` scripts and the orchestrator notebook's cells — directly on local disk, any time, independent of whether a Colab session is even connected. Whether the agent's *terminal* tool can itself trigger execution against this specific extension's live kernel session isn't something I can confirm — treat it as a manual VS Code UI action (connect kernel → run cell / Run All) and plan for a human-in-the-loop checkpoint: agent finishes editing a phase → you run the corresponding cells → agent reads the resulting logs/checkpoints back from disk to continue. If fully unattended agent execution matters more to you than free-tier convenience, an SSH-accessible cloud GPU box (where the agent's own shell runs directly on the GPU machine) sidesteps this limitation entirely.
 - **If you're instead using plain browser Colab or a local/other GPU machine**, ignore the VS Code-specific bits below (kernel picker, extension install) and follow the equivalent generic step (mount Drive via the browser UI, or just run everything in a normal local terminal if working locally) — the invariant that matters is: setup happens in the place code will actually execute, not just where it's authored.
 
-**Recommended pattern:** keep all real logic in importable `.py` modules under `finetuning_model/scripts/` (as the rest of this plan already assumes) and add one thin orchestrator notebook, `finetuning_model/finetuning_run.ipynb`, whose cells only sync code and call into those scripts:
+**Recommended pattern:** keep all real logic in importable `.py` modules under `TASK1_finetuning_model/scripts/` (as the rest of this plan already assumes) and add one thin orchestrator notebook, `TASK1_finetuning_model/finetuning_run.ipynb`, whose cells only sync code and call into those scripts:
 ```python
 # Cell 1 — sync the latest local edits onto the remote kernel
 !git clone https://github.com/<you>/llm_task.git || (cd llm_task && git pull)
@@ -60,14 +60,14 @@ If you're using the official **Google Colab extension for VS Code**, three thing
 !pip install -q -r requirements.txt
 
 # Cell 3 — run a phase
-!python finetuning_model/scripts/extract_text.py
+!python TASK1_finetuning_model/scripts/extract_text.py
 ```
 This means re-running the sync cell picks up whatever the agent just edited, without hand-copying code into cells — and it keeps the notebook itself tiny/diff-friendly, while the actual code a reviewer or interviewer reads is ordinary, readable `.py` files, which is also just a stronger artifact for the "explain every line" interview requirement than a wall of notebook cells.
 
 ### Steps
 
 1. Install the extension: **Extensions view → search "Google Colab" → Install** the official Google-published one (it will pull in the VS Code Jupyter extension as a dependency if you don't already have it).
-2. Open/create `finetuning_model/finetuning_run.ipynb`, use the kernel picker (top-right of the notebook) → **Select Another Kernel → Colab → New Colab Server** (or **Auto Connect** to reattach to a recent session — note this silently starts a *new* server if the old one expired, so re-verify GPU/files afterward) → choose **GPU** → **T4** on the free tier, and sign in with your Google account when prompted.
+2. Open/create `TASK1_finetuning_model/finetuning_run.ipynb`, use the kernel picker (top-right of the notebook) → **Select Another Kernel → Colab → New Colab Server** (or **Auto Connect** to reattach to a recent session — note this silently starts a *new* server if the old one expired, so re-verify GPU/files afterward) → choose **GPU** → **T4** on the free tier, and sign in with your Google account when prompted.
 3. Verify the connection and hardware in a cell:
    ```python
    import torch
@@ -87,7 +87,7 @@ This means re-running the sync cell picks up whatever the agent just edited, wit
    !pip install -q matplotlib pandas
    !pip install -q bitsandbytes   # only if the quantization decision gate (Phase 3) says you need it
    ```
-6. Record `!pip freeze > finetuning_model/environment.txt` from the same session, then get this file back into the version-controlled repo (commit it from the remote via git, or copy it back) — it's a reproducibility artifact and should live with the code, not just on the ephemeral Colab VM.
+6. Record `!pip freeze > TASK1_finetuning_model/environment.txt` from the same session, then get this file back into the version-controlled repo (commit it from the remote via git, or copy it back) — it's a reproducibility artifact and should live with the code, not just on the ephemeral Colab VM.
 7. Create the directory structure from Section 0 — this has no GPU dependency and can be done locally by the agent before any Colab connection exists at all.
 
 **Definition of Done:**

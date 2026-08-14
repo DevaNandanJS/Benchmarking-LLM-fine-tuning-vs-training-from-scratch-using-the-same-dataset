@@ -11,10 +11,10 @@ data/processed/*
 !data/extracted/.gitkeep
 !data/processed/.gitkeep
 
-finetuning_model/checkpoints/*
-!finetuning_model/checkpoints/.gitkeep
-slm_from_scratch/checkpoints/*
-!slm_from_scratch/checkpoints/.gitkeep
+TASK1_TASK1_finetuning_model/checkpoints/*
+!TASK1_TASK1_finetuning_model/checkpoints/.gitkeep
+TASK2_TASK2_slm_from_scratch/checkpoints/*
+!TASK2_TASK2_slm_from_scratch/checkpoints/.gitkeep
 
 *.pt
 *.bin

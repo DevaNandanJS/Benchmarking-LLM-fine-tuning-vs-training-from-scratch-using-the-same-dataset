@@ -16,7 +16,7 @@ llm_task/
     raw/                 # original PDF  -> data/raw/document.pdf (Phase 1)
     extracted/           # cleaned .txt + stats.json
     processed/           # tokenized/chunked datasets (per track, prefixed)
-  finetuning_model/
+  TASK1_finetuning_model/
     configs/             # run_<name>.json, model_choice.md, split_strategy.md, trainable_params.json
     checkpoints/         # LoRA adapters, sweep_<name>/ subdirs (gitignored)
     logs/                # metrics.jsonl per run, env_check.json, environment.txt (committed)
@@ -24,13 +24,13 @@ llm_task/
     generations/         # finetuning_samples.md
     scripts/             # importable .py modules — THIS is where the agent edits
     finetuning_run.ipynb # thin orchestrator notebook (cells sync + call into scripts/)
-  slm_from_scratch/
+  TASK2_slm_from_scratch/
     configs/ checkpoints/ logs/ eval/ generations/ scripts/ slm_run.ipynb
   shared_eval/           # cross-track comparison artifacts
   progress/              # human-readable phase-by-phase documentation (updated after EVERY phase)
     README.md            # project index + status table for both tracks
-    finetuning_model/    # one .md file per completed phase
-    slm_from_scratch/    # one .md file per completed phase
+    TASK1_finetuning_model/    # one .md file per completed phase
+    TASK2_slm_from_scratch/    # one .md file per completed phase
   writeup/
   requirements.txt       # pinned deps (installed on the Colab kernel)
 ```
@@ -59,9 +59,9 @@ llm_task/
 - **Cell execution ≠ terminal execution.** Selecting "Colab" as the notebook kernel only
   makes *cells* run on the GPU. A `python foo.py` run from an agent's shell tool runs
   locally, with no GPU. Anything that needs the GPU must run as a notebook cell.
-- **Pattern:** all real logic lives in importable `.py` modules under `finetuning_model/scripts/`
+- **Pattern:** all real logic lives in importable `.py` modules under `TASK1_finetuning_model/scripts/`
   (agent edits these). The notebook `finetuning_run.ipynb` is a thin orchestrator: its cells only
-  sync code (`git clone/pull`), install deps, and call `!python finetuning_model/scripts/<script>.py`.
+  sync code (`git clone/pull`), install deps, and call `!python TASK1_finetuning_model/scripts/<script>.py`.
 - **Sync workflow (critical):** after the agent edits local files, the user must
   `git add -A && git commit -m ... && git push` BEFORE re-running the notebook's sync cell,
   or the remote kernel will keep running stale code.
@@ -98,11 +98,11 @@ and revise the project.
 ```
 progress/
   README.md                    # project index + status table for both tracks
-  finetuning_model/
+  TASK1_finetuning_model/
     phase1_data_extraction.md  # one file per phase
     phase2_model_selection.md
     ...
-  slm_from_scratch/
+  TASK2_slm_from_scratch/
     phase1_data_extraction.md  # stub exists
     ...
 ```
