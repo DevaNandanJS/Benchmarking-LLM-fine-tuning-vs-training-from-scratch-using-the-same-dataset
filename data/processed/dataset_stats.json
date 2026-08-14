@@ -1,0 +1,22 @@
+{
+  "model_name": "HuggingFaceTB/SmolLM2-135M",
+  "context_length": 256,
+  "train_stride": 128,
+  "val_stride": 256,
+  "val_fraction": 0.15,
+  "total_tokens": 65044,
+  "split_boundary_token_idx": 55287,
+  "train_tokens": 55287,
+  "val_tokens": 9757,
+  "train_chunks": 430,
+  "val_chunks": 38,
+  "tokens_covered_train": 55168,
+  "tokens_covered_val": 9728,
+  "dropped_tokens_train": 119,
+  "dropped_tokens_val": 29,
+  "train_overlap_pct": 50.0,
+  "val_overlap_pct": 0.0,
+  "seed": 42,
+  "timestamp": "2026-08-14T04:56:09.073095+00:00",
+  "note": "train/val chunked independently from contiguous token regions to prevent near-duplicate window leakage. train_stride < val_stride is intentional: denser training samples, independent (non-redundant) validation samples. Phase 5 DataLoader must use shuffle=True for train, shuffle=False for val."
+}
