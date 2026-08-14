@@ -1,27 +1,7 @@
-# Python
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
-
-# Large binary artifacts (kept out of git; see Phase 0 step 4 for Drive-backed persistence)
-
-
-
-!data/raw/.gitkeep
-!data/extracted/.gitkeep
-!data/processed/.gitkeep
-
-TASK1_finetuning_model/checkpoints/*
-!TASK1_finetuning_model/checkpoints/.gitkeep
-TASK2_slm_from_scratch/checkpoints/*
-!TASK2_slm_from_scratch/checkpoints/.gitkeep
-
-
 *.bin
 *.safetensors
-
-
-# Personal progress / study notes
-progress/
-
 .venv/
+progress/
