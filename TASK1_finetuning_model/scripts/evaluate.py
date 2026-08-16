@@ -1,4 +1,4 @@
-"""Phase 6 — Quantitative Evaluation."""
+"""Evaluate fine-tuned model checkpoint on validation loss, perplexity, and BPB."""
 from __future__ import annotations
 
 import argparse

@@ -1,4 +1,4 @@
-"""Phase 4 — Training Loop Implementation (Training from Scratch)."""
+"""Train Small Language Model from scratch with hyperparameter sweeps and checkpointing."""
 from __future__ import annotations
 
 import argparse

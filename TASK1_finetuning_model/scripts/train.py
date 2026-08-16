@@ -1,4 +1,4 @@
-"""Phase 5 — Training Loop & Execution."""
+"""LoRA fine-tuning training loop with metric logging, lr scheduling, and checkpointing."""
 from __future__ import annotations
 
 import argparse

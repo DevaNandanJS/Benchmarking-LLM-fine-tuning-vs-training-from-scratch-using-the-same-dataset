@@ -1,4 +1,4 @@
-"""Phase 3 — Model Architecture Implementation (Training from Scratch)."""
+"""Custom decoder-only Transformer language model architecture with causal self-attention."""
 from __future__ import annotations
 
 import argparse

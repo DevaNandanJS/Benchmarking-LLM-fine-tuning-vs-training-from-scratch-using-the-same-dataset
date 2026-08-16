@@ -1,4 +1,4 @@
-"""Phase 7 — Cross-Track Comparison."""
+"""Aggregate cross-track metrics and generate side-by-side benchmark comparison."""
 from __future__ import annotations
 
 import argparse

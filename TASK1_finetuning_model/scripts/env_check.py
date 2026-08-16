@@ -1,4 +1,4 @@
-"""Phase 0 environment verification — run on the remote Colab GPU kernel."""
+"""Environment verification and GPU capability check."""
 from __future__ import annotations
 
 import json

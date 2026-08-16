@@ -1,4 +1,4 @@
-"""Phase 1 — Custom Tokenizer Training with Vocabulary Sweep."""
+"""Train custom BPE tokenizer, evaluate vocabulary fertility, and export artifacts."""
 from __future__ import annotations
 
 import csv

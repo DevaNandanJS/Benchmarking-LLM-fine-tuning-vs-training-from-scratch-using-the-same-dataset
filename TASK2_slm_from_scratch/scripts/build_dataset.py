@@ -1,4 +1,4 @@
-"""Phase 2 — Dataset Construction (Tokenise, Chunk, Split)."""
+"""Tokenize corpus with custom BPE tokenizer, create train/val splits, and export dataset tensors."""
 from __future__ import annotations
 
 import json

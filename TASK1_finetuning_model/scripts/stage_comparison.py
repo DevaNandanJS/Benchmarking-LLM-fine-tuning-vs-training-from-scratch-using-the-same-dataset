@@ -1,4 +1,4 @@
-"""Phase 8 — Cross-Track Comparison Prep."""
+"""Stage Track 1 evaluation metrics and artifacts for cross-track comparison."""
 from __future__ import annotations
 
 import json

@@ -1,4 +1,4 @@
-"""Phase 7 — Qualitative Evaluation (Generation)."""
+"""Generate text completions across decoding modes and export qualitative evaluation samples."""
 from __future__ import annotations
 
 import argparse

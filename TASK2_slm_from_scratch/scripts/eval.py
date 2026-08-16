@@ -1,4 +1,4 @@
-"""Phase 5 — Quantitative Evaluation (Training from Scratch)."""
+"""Evaluate Small Language Model checkpoint on validation loss, perplexity, and BPB."""
 from __future__ import annotations
 
 import argparse

@@ -1,4 +1,4 @@
-"""Phase 6 — Qualitative Evaluation (Training from Scratch)."""
+"""Generate text completions from Small Language Model and export qualitative sample evaluations."""
 from __future__ import annotations
 
 import argparse

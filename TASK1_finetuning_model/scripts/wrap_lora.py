@@ -1,4 +1,4 @@
-"""Phase 4 — LoRA Configuration & Model Wrapping."""
+"""Attach LoRA adapters, freeze base model weights, and log trainable parameter stats."""
 from __future__ import annotations
 
 import io

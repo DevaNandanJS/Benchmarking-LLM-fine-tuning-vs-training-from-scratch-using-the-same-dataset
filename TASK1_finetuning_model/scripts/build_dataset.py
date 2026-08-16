@@ -1,4 +1,4 @@
-"""Phase 3 — Dataset Construction (Chunking & Splitting)."""
+"""Tokenize corpus, apply train/val split, chunk sequences, and export PyTorch datasets."""
 from __future__ import annotations
 
 import json

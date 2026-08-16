@@ -1,4 +1,4 @@
-"""Phase 1 — Data Extraction & Cleaning."""
+"""Extract and clean text from the source PDF and save corpus statistics."""
 from __future__ import annotations
 
 import json

@@ -1,4 +1,4 @@
-"""Phase 2 — Base Model & Tokenizer Selection."""
+"""Load base model and tokenizer, inspect architecture, and log memory footprint."""
 from __future__ import annotations
 
 import json
