@@ -220,7 +220,17 @@ def load_metrics_jsonl(run_name: str) -> list[dict]:
             line = line.strip()
             if line:
                 records.append(json.loads(line))
-    return records
+    if not records:
+        return []
+
+    # If train.py was re-run, metrics.jsonl contains appended sessions where
+    # the step resets back to 25. Slice out only the latest continuous run session
+    # so matplotlib does not connect the end of one run back to the start of the next.
+    latest_run_start = 0
+    for i in range(1, len(records)):
+        if records[i].get("step", 0) <= records[i - 1].get("step", 0):
+            latest_run_start = i
+    return records[latest_run_start:]
 
 def plot_best_loss_curve(best_run: str) -> None:
     """Plot clean train and val loss for the best run alone, save to eval/loss_curve.png."""
