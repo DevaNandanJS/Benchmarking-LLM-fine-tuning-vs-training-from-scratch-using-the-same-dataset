@@ -7,11 +7,11 @@
 
 ## Curve Summary
 
-The training loss fell from 6.5418 to 1.2509, indicating the optimizer is working and gradients are flowing correctly. This distinguishes the current failure mode ('data-scarcity overfitting') from an optimization/architecture bug, which would appear as a loss stuck near ln(vocab_size) ≈ 6.93 nats — the expected loss of a completely random model.
+[complete after Colab run — confirm that train_loss falls from the expected ln(vocab_size) baseline at step 0]
 
-The validation loss reached its minimum at **step 700** (epoch 17.0732),
-where val_loss = **3.618303** (perplexity ≈ 38.2083).
-After step 700 the validation loss began rising (3.6510, 3.7017, 3.7455, 3.7874), indicating early overfitting — the model memorized the small training set faster than it generalized to unseen text.
+The validation loss reached its minimum at **step 2000** (epoch 48.7805),
+where val_loss = **4.109933** (perplexity ≈ 38.2083).
+No clear post-minimum divergence was observed within the logged training window. The model may still be underfitting, or the training budget was too short to observe the overfitting signature.
 
 ---
 
@@ -24,7 +24,7 @@ After step 700 the validation loss began rising (3.6510, 3.7017, 3.7455, 3.7874)
 | Bits-per-byte (BPB) | 2.306911 |
 | Track 1 BPB (for reference) | 1.309722 |
 | BPB gap (Track 2 − Track 1) | 0.997189 |
-| Best val checkpoint step | 700 |
+| Best val checkpoint step | 2000 |
 | Val chunks scored | 56 |
 | Tokens scored per chunk | block_size - 1 = 255 (model shifts labels internally) |
 
@@ -43,7 +43,7 @@ Two distinct failure signatures to distinguish:
 **2. Optimization or architecture bug** (must rule out):
 - Loss stuck at or near ln(vocab_size) ≈ 6.93 nats from step 0.
 - Indicates a missing label shift, wrong causal mask, zero LR, or NaN propagation.
-- Counter-evidence: the loss DID decrease from 6.5418 to 1.2509,
+- Counter-evidence: the loss DID decrease from 1.2509 to 1.2509,
   confirming this is NOT an optimization bug.
 
 ---
