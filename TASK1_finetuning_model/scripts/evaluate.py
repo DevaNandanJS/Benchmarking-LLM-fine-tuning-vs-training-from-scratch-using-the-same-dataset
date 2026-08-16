@@ -48,9 +48,25 @@ def load_metrics_jsonl(run_name: str) -> list[dict]:
     # If train.py was re-run, isolate the latest run session
     latest_run_start = 0
     for i in range(1, len(records)):
-        if records[i].get("step", 0) <= records[i - 1].get("step", 0):
+        if records[i].get("step", 0) < records[i - 1].get("step", 0):
             latest_run_start = i
-    return records[latest_run_start:]
+    records = records[latest_run_start:]
+
+    # Merge duplicate step entries
+    merged_by_step: dict[int, dict] = {}
+    for r in records:
+        s = r.get("step")
+        if s not in merged_by_step:
+            merged_by_step[s] = dict(r)
+        else:
+            if r.get("val_loss") is not None:
+                merged_by_step[s]["val_loss"] = r["val_loss"]
+            if r.get("train_loss") is not None:
+                merged_by_step[s]["train_loss"] = r["train_loss"]
+            if r.get("lr") is not None:
+                merged_by_step[s]["lr"] = r["lr"]
+
+    return sorted(merged_by_step.values(), key=lambda r: r["step"])
 
 def pick_best_run() -> str:
     """Read sweep_results.csv and return the run_name with lowest best_val_loss."""

@@ -224,13 +224,29 @@ def load_metrics_jsonl(run_name: str) -> list[dict]:
         return []
 
     # If train.py was re-run, metrics.jsonl contains appended sessions where
-    # the step resets back to 25. Slice out only the latest continuous run session
-    # so matplotlib does not connect the end of one run back to the start of the next.
+    # the step resets back to 25 (step < prev_step). Slice out the latest session:
     latest_run_start = 0
     for i in range(1, len(records)):
-        if records[i].get("step", 0) <= records[i - 1].get("step", 0):
+        if records[i].get("step", 0) < records[i - 1].get("step", 0):
             latest_run_start = i
-    return records[latest_run_start:]
+    records = records[latest_run_start:]
+
+    # Merge duplicate step entries (e.g. step logged on train and on eval)
+    # so each step has a clean merged record with both train_loss and val_loss
+    merged_by_step: dict[int, dict] = {}
+    for r in records:
+        s = r.get("step")
+        if s not in merged_by_step:
+            merged_by_step[s] = dict(r)
+        else:
+            if r.get("val_loss") is not None:
+                merged_by_step[s]["val_loss"] = r["val_loss"]
+            if r.get("train_loss") is not None:
+                merged_by_step[s]["train_loss"] = r["train_loss"]
+            if r.get("lr") is not None:
+                merged_by_step[s]["lr"] = r["lr"]
+
+    return sorted(merged_by_step.values(), key=lambda r: r["step"])
 
 def plot_best_loss_curve(best_run: str) -> None:
     """Plot clean train and val loss for the best run alone, save to eval/loss_curve.png."""
