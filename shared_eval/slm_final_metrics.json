@@ -1,13 +1,13 @@
 {
   "run_name": "base_highlr",
-  "checkpoint_dir": "/content/llm_task/llm_task/TASK2_slm_from_scratch/checkpoints/best_val/base_highlr",
+  "checkpoint_dir": "/content/llm_task/llm_task/llm_task/llm_task/llm_task/TASK2_slm_from_scratch/checkpoints/best_val/base_highlr",
   "val_chunks": 56,
   "total_val_tokens_scored": 14280,
-  "mean_ce_loss": 3.643119,
-  "perplexity": 38.2108,
-  "bpb": 2.306953,
+  "mean_ce_loss": 3.643017,
+  "perplexity": 38.2069,
+  "bpb": 2.306888,
   "vocab_size_approx": 1024,
   "tokens_per_chunk_note": "block_size - 1 = 255 (model shifts labels internally)",
   "bpb_note": "BPB = (total_ce_nats / utf8_byte_length_of_val_text) / ln(2). Val windows are non-overlapping (val_stride=256, val_overlap_pct=0.0). total_ce_nats accumulated as sum of loss.item() * (block_size-1) * actual_batch_size per batch \u2014 block_size-1 because model.forward() shifts labels internally, scoring T-1=255 positions per 256-token chunk. Track 1 scores 256 tokens/chunk (HuggingFace model masks first label via -100 rather than slicing); total_val_tokens_scored therefore differs between tracks but BPB is still directly comparable (same byte denominator, same val text span, same formula). Byte boundary: split_boundary_token_idx -> char offset via ByteLevelBPETokenizer Encoding.offsets \u2014 no character-fraction approximation.",
-  "timestamp": "2026-08-16T19:16:22.866089+00:00"
+  "timestamp": "2026-08-16T19:47:33.639147+00:00"
 }

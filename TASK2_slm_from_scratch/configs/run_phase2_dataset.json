@@ -5,6 +5,6 @@
   "val_stride": 256,
   "val_fraction": 0.15,
   "seed": 42,
-  "tokenizer_dir": "/content/llm_task/llm_task/TASK2_slm_from_scratch/tokenizer",
-  "input_file": "/content/llm_task/llm_task/data/extracted/document_clean.txt"
+  "tokenizer_dir": "/content/llm_task/llm_task/llm_task/llm_task/llm_task/TASK2_slm_from_scratch/tokenizer",
+  "input_file": "/content/llm_task/llm_task/llm_task/llm_task/llm_task/data/extracted/document_clean.txt"
 }

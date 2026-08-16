@@ -7,11 +7,11 @@
 
 ## Curve Summary
 
-[complete after Colab run — confirm that train_loss falls from the expected ln(vocab_size) baseline at step 0]
+The training loss fell from 6.5418 to 1.2509, indicating the optimizer is working and gradients are flowing correctly. This distinguishes the current failure mode ('data-scarcity overfitting') from an optimization/architecture bug, which would appear as a loss stuck near ln(vocab_size) ≈ 6.93 nats — the expected loss of a completely random model.
 
-The validation loss reached its minimum at **step 2000** (epoch 48.7805),
-where val_loss = **4.110407** (perplexity ≈ 38.2108).
-No clear post-minimum divergence was observed within the logged training window. The model may still be underfitting, or the training budget was too short to observe the overfitting signature.
+The validation loss reached its minimum at **step 700** (epoch 17.0732),
+where val_loss = **3.618284** (perplexity ≈ 38.2069).
+After step 700 the validation loss began rising (3.6509, 3.7018, 3.7454, 3.7872), indicating early overfitting — the model memorized the small training set faster than it generalized to unseen text.
 
 ---
 
@@ -19,12 +19,12 @@ No clear post-minimum divergence was observed within the logged training window.
 
 | Metric | Value |
 |---|---|
-| Final mean CE loss (val) | 3.643119 nats |
-| Perplexity | 38.2108 |
-| Bits-per-byte (BPB) | 2.306953 |
+| Final mean CE loss (val) | 3.643017 nats |
+| Perplexity | 38.2069 |
+| Bits-per-byte (BPB) | 2.306888 |
 | Track 1 BPB (for reference) | 1.309722 |
-| BPB gap (Track 2 − Track 1) | 0.997231 |
-| Best val checkpoint step | 2000 |
+| BPB gap (Track 2 − Track 1) | 0.997166 |
+| Best val checkpoint step | 700 |
 | Val chunks scored | 56 |
 | Tokens scored per chunk | block_size - 1 = 255 (model shifts labels internally) |
 
@@ -43,7 +43,7 @@ Two distinct failure signatures to distinguish:
 **2. Optimization or architecture bug** (must rule out):
 - Loss stuck at or near ln(vocab_size) ≈ 6.93 nats from step 0.
 - Indicates a missing label shift, wrong causal mask, zero LR, or NaN propagation.
-- Counter-evidence: the loss DID decrease from 1.2509 to 1.2509,
+- Counter-evidence: the loss DID decrease from 6.5418 to 1.2509,
   confirming this is NOT an optimization bug.
 
 ---
@@ -51,7 +51,7 @@ Two distinct failure signatures to distinguish:
 ## Comparison with Track 1
 
 Track 1 (LoRA fine-tuning of SmolLM2-135M) achieved **BPB = 1.309722**.
-Track 2 (from-scratch GPT) achieved **BPB = 2.306953**.
+Track 2 (from-scratch GPT) achieved **BPB = 2.306888**.
 
 The BPB gap is the direct quantification of the cost of not having a language prior:
 Track 2 must learn token co-occurrence statistics, word forms, and document structure

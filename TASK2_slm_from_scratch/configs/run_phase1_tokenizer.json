@@ -11,6 +11,6 @@
   ],
   "diminishing_ratio_threshold": 0.3,
   "plateau_fraction": 0.9,
-  "input_file": "/content/llm_task/llm_task/data/extracted/document_clean.txt",
+  "input_file": "/content/llm_task/llm_task/llm_task/llm_task/llm_task/data/extracted/document_clean.txt",
   "seed": 42
 }

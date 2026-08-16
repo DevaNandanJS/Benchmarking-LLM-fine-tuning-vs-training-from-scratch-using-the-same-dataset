@@ -6,5 +6,5 @@
   "final_layernorm": 384,
   "lm_head_tied": 0,
   "weight_tying": true,
-  "timestamp": "2026-08-16T19:14:20.906511+00:00"
+  "timestamp": "2026-08-16T19:46:04.185275+00:00"
 }
