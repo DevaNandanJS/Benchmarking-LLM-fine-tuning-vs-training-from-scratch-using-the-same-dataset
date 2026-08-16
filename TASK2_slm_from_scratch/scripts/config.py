@@ -39,6 +39,7 @@ LAST_CKPT_DIR:         Path = CHECKPOINTS_DIR / "last"
 
 # Phase 5 — evaluation
 LOSS_CURVE_PNG:        Path = EVAL_DIR / "loss_curve.png"
+LOSS_CURVE_SWEEP_PNG:  Path = EVAL_DIR / "loss_curve_sweep.png"
 SWEEP_RESULTS_CSV:     Path = EVAL_DIR / "sweep_results.csv"
 FINAL_METRICS_JSON:    Path = EVAL_DIR / "final_metrics.json"
 LOSS_CURVE_INTERP_MD:  Path = EVAL_DIR / "loss_curve_interpretation.md"
@@ -59,3 +60,5 @@ SLM_SHARED_METRICS_JSON:     Path = SHARED_EVAL_DIR / "slm_final_metrics.json"
 TRACK2_SHARED_METRICS_JSON:  Path = SLM_SHARED_METRICS_JSON
 SLM_SHARED_LOSS_CURVE_PNG:   Path = SHARED_EVAL_DIR / "slm_loss_curve.png"
 TRACK2_SHARED_LOSS_CURVE_PNG:Path = SLM_SHARED_LOSS_CURVE_PNG
+SLM_SWEEP_LOSS_CURVE_PNG:    Path = SHARED_EVAL_DIR / "slm_sweep_loss_curve.png"
+TRACK2_SWEEP_LOSS_CURVE_PNG: Path = SLM_SWEEP_LOSS_CURVE_PNG

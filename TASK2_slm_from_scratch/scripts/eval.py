@@ -23,6 +23,7 @@ from config import (  # noqa: E402
     LOGS_DIR,
     LOSS_CURVE_INTERP_MD,
     LOSS_CURVE_PNG,
+    LOSS_CURVE_SWEEP_PNG,
     SWEEP_RESULTS_CSV,
     TOKENIZER_DIR,
     VAL_PT,
@@ -221,8 +222,51 @@ def load_metrics_jsonl(run_name: str) -> list[dict]:
                 records.append(json.loads(line))
     return records
 
-def plot_loss_curves(best_run: str) -> None:
-    """Plot train/val loss for all available sweep runs, save to eval/loss_curve.png."""
+def plot_best_loss_curve(best_run: str) -> None:
+    """Plot clean train and val loss for the best run alone, save to eval/loss_curve.png."""
+    import matplotlib  # noqa: PLC0415
+    matplotlib.use("Agg")   # non-interactive backend — works in Colab cells
+    import matplotlib.pyplot as plt  # noqa: PLC0415
+
+    records = load_metrics_jsonl(best_run)
+    if not records:
+        print(f"[eval] WARNING: No records found for best run '{best_run}'")
+        return
+
+    steps_train  = [r["step"] for r in records if r.get("train_loss") is not None]
+    losses_train = [r["train_loss"] for r in records if r.get("train_loss") is not None]
+    steps_val    = [r["step"] for r in records if r.get("val_loss") is not None]
+    losses_val   = [r["val_loss"] for r in records if r.get("val_loss") is not None]
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(steps_train, losses_train, label="Train loss", linewidth=1.5, color="#2563eb")
+    if steps_val:
+        ax.plot(steps_val, losses_val, label="Val loss", linewidth=2.0,
+                color="#dc2626", marker="o", markersize=4)
+        best_step_in_run = steps_val[losses_val.index(min(losses_val))]
+        ax.axvline(
+            x=best_step_in_run, color="#16a34a", linestyle=":",
+            linewidth=1.5, label=f"Best val step ({best_step_in_run})"
+        )
+
+    ax.set_xlabel("Step", fontsize=12)
+    ax.set_ylabel("Cross-Entropy Loss (nats)", fontsize=12)
+    ax.set_title(
+        f"Track 2 — From-Scratch GPT Loss Curve (Best Run: {best_run})\n"
+        f"context_length=256, tie_weights=True",
+        fontsize=13,
+    )
+    ax.legend(fontsize=11)
+    ax.grid(True, alpha=0.3)
+
+    EVAL_DIR.mkdir(parents=True, exist_ok=True)
+    fig.savefig(LOSS_CURVE_PNG, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    print(f"[eval] best run loss curve -> {LOSS_CURVE_PNG}")
+
+
+def plot_sweep_loss_curves(best_run: str) -> None:
+    """Plot comparative train/val loss for all available sweep runs, save to eval/loss_curve_sweep.png."""
     import matplotlib  # noqa: PLC0415
     matplotlib.use("Agg")   # non-interactive backend — works in Colab cells
     import matplotlib.pyplot as plt  # noqa: PLC0415
@@ -277,9 +321,13 @@ def plot_loss_curves(best_run: str) -> None:
     ax.grid(True, alpha=0.25)
 
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
-    fig.savefig(LOSS_CURVE_PNG, dpi=150, bbox_inches="tight")
+    fig.savefig(LOSS_CURVE_SWEEP_PNG, dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print(f"[eval] loss curve -> {LOSS_CURVE_PNG}")
+    print(f"[eval] sweep loss curve -> {LOSS_CURVE_SWEEP_PNG}")
+
+
+# Alias for backward compatibility
+plot_loss_curves = plot_sweep_loss_curves
 
 # ════════════════════════════════════════════════════════════════════════════
 # §6 — Loss curve interpretation writer
@@ -448,8 +496,9 @@ def main() -> None:
     run_name = args.run or find_best_run()
     print(f"[eval] evaluating run: {run_name}")
 
-    # 1. Plot loss curves for all sweep runs
-    plot_loss_curves(best_run=run_name)
+    # 1. Plot loss curves (both best-run clean plot and multi-run sweep comparison)
+    plot_best_loss_curve(best_run=run_name)
+    plot_sweep_loss_curves(best_run=run_name)
 
     # 2. Load best checkpoint
     model, cfg_dict = load_best_checkpoint(run_name, device)
@@ -501,9 +550,10 @@ def main() -> None:
     write_loss_curve_interpretation(metrics, run_name)
 
     # 7. Definition-of-Done assertions
-    assert LOSS_CURVE_PNG.exists(),      f"FAIL: {LOSS_CURVE_PNG} not written"
-    assert FINAL_METRICS_JSON.exists(),  f"FAIL: {FINAL_METRICS_JSON} not written"
-    assert LOSS_CURVE_INTERP_MD.exists(),f"FAIL: {LOSS_CURVE_INTERP_MD} not written"
+    assert LOSS_CURVE_PNG.exists(),       f"FAIL: {LOSS_CURVE_PNG} not written"
+    assert LOSS_CURVE_SWEEP_PNG.exists(), f"FAIL: {LOSS_CURVE_SWEEP_PNG} not written"
+    assert FINAL_METRICS_JSON.exists(),   f"FAIL: {FINAL_METRICS_JSON} not written"
+    assert LOSS_CURVE_INTERP_MD.exists(), f"FAIL: {LOSS_CURVE_INTERP_MD} not written"
     loaded = json.loads(FINAL_METRICS_JSON.read_text())
     for key in ("mean_ce_loss", "perplexity", "bpb"):
         assert key in loaded and math.isfinite(loaded[key]) and loaded[key] > 0, (

@@ -20,12 +20,14 @@ from config import (  # noqa: E402
     FINAL_METRICS_JSON,
     GENERATIONS_DIR,
     LOSS_CURVE_PNG,
+    LOSS_CURVE_SWEEP_PNG,
     SHARED_EVAL_DIR,
     TRACK1_FINAL_METRICS_JSON,
     TRACK1_LOSS_CURVE_PNG,
     TRACK2_SAMPLES_MD,
     TRACK2_SHARED_LOSS_CURVE_PNG,
     TRACK2_SHARED_METRICS_JSON,
+    TRACK2_SWEEP_LOSS_CURVE_PNG,
 )
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -62,6 +64,9 @@ def copy_artefacts() -> None:
     print(f"[compare] copied {FINAL_METRICS_JSON.name} -> {TRACK2_SHARED_METRICS_JSON}")
     shutil.copy2(LOSS_CURVE_PNG, TRACK2_SHARED_LOSS_CURVE_PNG)
     print(f"[compare] copied {LOSS_CURVE_PNG.name} -> {TRACK2_SHARED_LOSS_CURVE_PNG}")
+    if LOSS_CURVE_SWEEP_PNG.exists():
+        shutil.copy2(LOSS_CURVE_SWEEP_PNG, TRACK2_SWEEP_LOSS_CURVE_PNG)
+        print(f"[compare] copied {LOSS_CURVE_SWEEP_PNG.name} -> {TRACK2_SWEEP_LOSS_CURVE_PNG}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §3 — Qualitative comparison: extract annotation summary from samples.md
