@@ -1,7 +1,7 @@
 # Track 2 — From-Scratch GPT: Qualitative Samples
 
 > **Run:** base_highlr  |  **Checkpoint:** best_val  |  **Params:** n_layer=6 n_embd=192 n_head=4 vocab_size=1024
-> **Generated:** 2026-08-14T06:03:57.658856+00:00
+> **Generated:** 2026-08-16T19:01:36.856607+00:00
 > **max_new_tokens:** 100  |  **Sampling:** T=0.8, top_p=0.9  |  **Greedy:** T=0 (argmax)
 
 > **Annotation key:** `memorization` — verbatim domain phrases; `incoherence` — repetition / degenerate output; `novel-plausible` — grammatical, on-topic, non-verbatim.
@@ -49,8 +49,9 @@ matency
 ### Sampling (T=0.8, top_p=0.9)
 
 ```
-In the context of language model evaluation, bits-per-byte measures. InProceedings of the 3437, Weibration of Evication, 2023. URL https://com/abs/[3] Fr. Fox And Karl. Cop Secura
-h Pon Domain, and S. Bel Rett: Association for Computational Leuu. IEEE/seean.org/abs/10.0/. URL https://www
+In the context of language model evaluation, bits-per-byte measures. InProceedings of the 3437, Weibration of Eled Huang et al. Assocation and Tasks. [9] Tasksel Logg KBenchmarksen Finer a Farvocusend anomaly detection betworks in automated log analysis. Ins with automated log parsing is used same time,
+analysis models for reg., log analysis. Aganalysis
+s in c
 ```
 
 > **Annotation:** novel-plausible
@@ -61,12 +62,14 @@ h Pon Domain, and S. Bel Rett: Association for Computational Leuu. IEEE/seean.or
 In the context of language model evaluation, bits-per-byte measures and
 inative focused toollowed informance.
 Trivacy.
-Themodels and relike it is ified in the focus
-models the focus on the focus on the focus
-collection, and introve
-s.
-Tring the focused toollection, and collections.
-Benchmarks the
+Themodels and relike it is the fiques the frequirelated
+Themodels and in the frequirelated, and collated
+
+
+cknowledge.
+Benchmarks
+Benchmarks
+Benchmarks and evaluation, and evaluation, and
 ```
 
 > **Annotation:** novel-plausible
@@ -109,7 +112,7 @@ The key advantage of training a model from scratch is not joits [6, 8].
 dated,
 
 7]. Input Javior assework long famikethns, the frames, what models, which a sometimize automated
-s can relevant formond tradiguration, but these approaches diffice that add generation and exairstandid drift, and controled [
+s can relevant formond tradiguration, but these approaches diffice that operator-s, y of log message, and controled [
 ```
 
 > **Annotation:** novel-plausible
@@ -198,8 +201,7 @@ mallenges the frelaging of this frelated towor a f
 ```
 The tokenizer plays a critical role in language modelling because logs, such as makes, and coularrate firectly [20, 102, 9].
 cluding settings are exparged to amits with heterpreadable, e [20]. AI in which extraction [20, 103]. Theirstyle
-viewed as emo that support, 106].
-while 111]. This ch
+viewed as emo that support a sessions are often ious or includ
 ```
 
 > **Annotation:** novel-plausible
@@ -209,11 +211,10 @@ while 111]. This ch
 ```
 The tokenizer plays a critical role in language modelling because logs, and
 directly [20, 18].
-Tout the model can behavior a singlemallenges the model to the model can
-ward
-included instead of the software entice, and vocused to the model can behibritting the fine of the modeling, and
-spars, and deployments [20, 18].
-To
+inclicitice, errors, and covernitice, 113].
+Tout the most usefulness, and the most usefulness, and
+Thrid designeds are often cross-fores are often requiressionscross-faced toward
+incently [20, 10
 ```
 
 > **Annotation:** novel-plausible
@@ -239,8 +240,10 @@ miting decompositing doms
 ```
 Compared to larger models, a small language model trained from scratching. This mators, the most usefully
 s a same time, the most usefulness and it is a same to the most usefulness and verance.
-s to the most warly, the model can before challs with a same time, and verance to the most usefully as a singly.
-s to the most usefully, the most usefully is not only a s
+s to the most warly, the model can before challs and vectors.
+s.
+system-based methods.
+s a same time, the most usefully as a frelection, the most wasingly
 ```
 
 > **Annotation:** novel-plausible
