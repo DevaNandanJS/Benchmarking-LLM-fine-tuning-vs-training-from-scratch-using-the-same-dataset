@@ -1,7 +1,7 @@
 {
   "phase": "phase2_dataset",
   "tokenizer_vocab_size": 1024,
-  "tokenizer_dir": "/content/llm_task/TASK2_slm_from_scratch/tokenizer",
+  "tokenizer_dir": "/content/llm_task/llm_task/TASK2_slm_from_scratch/tokenizer",
   "context_length": 256,
   "train_stride": 128,
   "val_stride": 256,
@@ -23,7 +23,7 @@
   "train_overlap_pct": 50.0,
   "val_overlap_pct": 0.0,
   "seed": 42,
-  "timestamp": "2026-08-16T18:59:16.503658+00:00",
+  "timestamp": "2026-08-16T19:14:16.519089+00:00",
   "context_length_note": "256 tokens chosen for architectural alignment with Track 1 (same block_size). Raw CE loss is NOT directly comparable: Track 2 vocab=1024 -> CE ceiling \u2248 6.93 nats vs Track 1 vocab=49152 -> \u2248 10.80 nats. Use BPB from Phase 5 for cross-track comparison.",
   "val_set_caveat": "Last 15% of this academic paper likely comprises references/appendix \u2014 val text distribution is narrower than train. Shared across both tracks (identical split boundary), so not a cross-track bias, but a known limitation."
 }

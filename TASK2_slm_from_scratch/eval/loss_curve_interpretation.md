@@ -10,7 +10,7 @@
 [complete after Colab run — confirm that train_loss falls from the expected ln(vocab_size) baseline at step 0]
 
 The validation loss reached its minimum at **step 2000** (epoch 48.7805),
-where val_loss = **4.109933** (perplexity ≈ 38.2083).
+where val_loss = **4.110407** (perplexity ≈ 38.2108).
 No clear post-minimum divergence was observed within the logged training window. The model may still be underfitting, or the training budget was too short to observe the overfitting signature.
 
 ---
@@ -19,11 +19,11 @@ No clear post-minimum divergence was observed within the logged training window.
 
 | Metric | Value |
 |---|---|
-| Final mean CE loss (val) | 3.643054 nats |
-| Perplexity | 38.2083 |
-| Bits-per-byte (BPB) | 2.306911 |
+| Final mean CE loss (val) | 3.643119 nats |
+| Perplexity | 38.2108 |
+| Bits-per-byte (BPB) | 2.306953 |
 | Track 1 BPB (for reference) | 1.309722 |
-| BPB gap (Track 2 − Track 1) | 0.997189 |
+| BPB gap (Track 2 − Track 1) | 0.997231 |
 | Best val checkpoint step | 2000 |
 | Val chunks scored | 56 |
 | Tokens scored per chunk | block_size - 1 = 255 (model shifts labels internally) |
@@ -51,7 +51,7 @@ Two distinct failure signatures to distinguish:
 ## Comparison with Track 1
 
 Track 1 (LoRA fine-tuning of SmolLM2-135M) achieved **BPB = 1.309722**.
-Track 2 (from-scratch GPT) achieved **BPB = 2.306911**.
+Track 2 (from-scratch GPT) achieved **BPB = 2.306953**.
 
 The BPB gap is the direct quantification of the cost of not having a language prior:
 Track 2 must learn token co-occurrence statistics, word forms, and document structure
