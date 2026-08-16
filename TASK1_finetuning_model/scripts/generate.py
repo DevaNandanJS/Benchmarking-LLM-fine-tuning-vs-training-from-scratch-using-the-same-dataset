@@ -1,32 +1,4 @@
-"""Phase 7 — Qualitative Evaluation (Generation).
-
-Goal: demonstrate the fine-tuned model can plausibly complete domain-relevant
-text from the held-out validation region of the source document.
-
-Prompts are selected deterministically (SEED=42) from the validation text span
-(boundary: onwards in document_clean.txt) by extracting sentence starts and
-taking the first ~60 tokens as the prompt prefix.
-
-Two decoding modes per prompt:
-    - Sampling:  do_sample=True, temperature=0.8, top_p=0.9
-    - Greedy:    do_sample=False (deterministic)
-Both are saved so the write-up can cite which is more coherent.
-
-Output:
-    TASK1_finetuning_model/generations/finetuning_samples.md  — ≥8 prompt/completion pairs
-                                                     with per-sample annotation
-
-Smoke-test mode (--smoke):
-    Runs 2 prompts on CPU with max_new_tokens=10. Used to verify shapes, decode
-    paths, and markdown formatting before burning Colab inference time.
-
-Run on Colab (from repo root after git pull):
-    !python TASK1_finetuning_model/scripts/generate.py --run r8
-
-Definition of Done (plan §Phase 7):
-    [ ] generations/finetuning_samples.md contains >=5 prompt/completion pairs
-        with brief one-sentence annotations
-"""
+"""Phase 7 — Qualitative Evaluation (Generation)."""
 from __future__ import annotations
 
 import argparse
@@ -54,7 +26,6 @@ NUM_PROMPTS = 8             # number of prompts to generate completions for
 PROMPT_MAX_TOKENS = 60      # tokens to use as the prompt prefix
 MAX_NEW_TOKENS = 80         # tokens to generate per prompt
 
-
 def pick_best_run() -> str:
     """Read sweep_results.csv and return the run with lowest best_val_loss."""
     import csv
@@ -69,14 +40,9 @@ def pick_best_run() -> str:
                 best_run = row["run_name"]
     return best_run
 
-
 def extract_prompts(val_text: str, tokenizer, n: int, max_tokens: int,
                     seed: int = SEED) -> list[str]:
-    """Extract n prompts from val_text by splitting at sentence ends and
-    taking the first max_tokens worth of each selected sentence start.
-
-    Selection is deterministic via the fixed seed.
-    """
+    """Extract n prompts from val_text by splitting at sentence ends and."""
     # Split at period followed by space/newline (rough sentence boundary).
     import re
     sentences = re.split(r"(?<=[.!?])\s+", val_text)
@@ -93,7 +59,6 @@ def extract_prompts(val_text: str, tokenizer, n: int, max_tokens: int,
         prompts.append(tokenizer.decode(truncated_ids, skip_special_tokens=True))
 
     return prompts
-
 
 def generate_completion(model, tokenizer, prompt: str, device,
                         do_sample: bool, max_new_tokens: int) -> str:
@@ -124,8 +89,6 @@ def generate_completion(model, tokenizer, prompt: str, device,
     # Decode only the newly generated tokens (strip the prompt prefix)
     new_ids = output_ids[0, input_ids.shape[1]:]
     return tokenizer.decode(new_ids, skip_special_tokens=True)
-
-
 
 def write_samples_md(prompts: list[str], sampled: list[str],
                      greedy: list[str], run_name: str, smoke: bool) -> None:
@@ -172,7 +135,6 @@ def write_samples_md(prompts: list[str], sampled: list[str],
     TRACK1_SAMPLES_MD.write_text("".join(lines), encoding="utf-8")
     print(f"[phase7] samples saved -> {TRACK1_SAMPLES_MD}")
 
-
 def main() -> None:
     import torch
 
@@ -193,14 +155,14 @@ def main() -> None:
     run_name = args.run or pick_best_run()
     print(f"[phase7] device={device}  run={run_name}  smoke={smoke}")
 
-    # ── 1. Load tokenizer ─────────────────────────────────────────────────
+    # Load tokenizer
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    # ── 2. Load best checkpoint ───────────────────────────────────────────
+    # Load best checkpoint
     ckpt_dir = BEST_VAL_DIR / run_name
     if not ckpt_dir.exists() and not smoke:
         print(f"[phase7] ERROR: checkpoint not found at {ckpt_dir}. Run train.py first.")
@@ -221,7 +183,7 @@ def main() -> None:
     model = model.to(device)
     model.eval()
 
-    # ── 3. Extract prompts from the validation text region ────────────────
+    # Extract prompts from the validation text region
     stats = json.loads(DATASET_STATS_JSON.read_text(encoding="utf-8"))
     boundary = stats["split_boundary_token_idx"]
 
@@ -245,7 +207,7 @@ def main() -> None:
                                max_tokens=PROMPT_MAX_TOKENS, seed=SEED)
     print(f"[phase7] extracted {len(prompts)} prompts from validation text region")
 
-    # ── 4. Generate completions ───────────────────────────────────────────
+    # Generate completions
     sampled_completions = []
     greedy_completions = []
 
@@ -258,19 +220,18 @@ def main() -> None:
         sampled_completions.append(samp)
         greedy_completions.append(grd)
 
-    # ── 5. Write markdown output ──────────────────────────────────────────
+    # Write markdown output
     write_samples_md(prompts, sampled_completions, greedy_completions, run_name, smoke)
 
-    # ── 6. Definition-of-Done assertion ──────────────────────────────────
+    # Definition-of-Done assertion
     assert TRACK1_SAMPLES_MD.exists(), f"FAIL: {TRACK1_SAMPLES_MD} not written"
     content = TRACK1_SAMPLES_MD.read_text(encoding="utf-8")
     assert content.count("## Sample") >= (2 if smoke else 5), (
         "FAIL: fewer than 5 prompt/completion pairs in finetuning_samples.md"
     )
 
-    print(f"\n[phase7] ✅ Definition-of-Done: {content.count('## Sample')} samples written")
+    print(f"\n[phase7] [SUCCESS] Definition-of-Done: {content.count('## Sample')} samples written")
     print("[phase7] Phase 7 complete. Fill in the [TODO] annotations in finetuning_samples.md.")
-
 
 if __name__ == "__main__":
     main()

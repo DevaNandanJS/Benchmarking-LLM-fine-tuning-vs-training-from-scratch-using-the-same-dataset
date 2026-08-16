@@ -1,16 +1,10 @@
-"""Phase 0 environment verification — run on the remote Colab GPU kernel.
-
-Checks Python / torch / CUDA / GPU identity + VRAM, and key package versions.
-Writes logs/env_check.json so the check is *logged*, not just printed
-(Phase 0 DoD: "GPU detected/named, memory printed and logged").
-"""
+"""Phase 0 environment verification — run on the remote Colab GPU kernel."""
 from __future__ import annotations
 
 import json
 import platform
 
 from common import TRACK_DIR, set_seed
-
 
 def main() -> int:
     set_seed()
@@ -49,7 +43,6 @@ def main() -> int:
         return 1
     print("OK - environment verified, logged to logs/env_check.json")
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

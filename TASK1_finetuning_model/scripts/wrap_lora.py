@@ -1,58 +1,4 @@
-"""Phase 4 — LoRA Configuration & Model Wrapping.
-
-Goal: wrap SmolLM2-135M with a PEFT LoRA adapter, verify only the intended
-parameters are trainable, and run a single-batch sanity forward/backward pass
-before any real training (Phase 5).
-
-Key design choices:
-  - Dtype is CONDITIONAL on device:
-      * CPU  → torch.float32   (fp16 addmm/matmul ops on CPU are unsupported
-                                in many PyTorch builds; local dry-runs would
-                                fail with a dtype error unrelated to code logic)
-      * CUDA → torch.float16   (T4 is Turing-gen / SM 7.5; bfloat16 requires
-                                Ampere / SM 8.0+ — bf16 on T4 falls back to
-                                software emulation and is significantly slower;
-                                fp16 with AMP is the correct choice for T4)
-
-  - target_modules = ["q_proj", "v_proj"]  (plan §Phase 4 default)
-      PEFT matches target_modules by SUBSTRING, not exact equality.
-      "q_proj" matches "model.layers.0.self_attn.q_proj" because PEFT checks:
-          any(target in name for target in target_modules)
-      This means short strings like "proj" would inadvertently match many layers —
-      always use the most specific suffix that uniquely identifies the layer type.
-
-  - Three sweep configs authored up-front (r=4, r=8, r=16) for Phase 5 to consume.
-      The sanity forward/backward uses r=8 (plan default). The sweep itself runs
-      in Phase 5 — three separate training runs, each with its own metrics.jsonl.
-
-⚠  FORWARD NOTE FOR PHASE 5 — fp16 TRAINING STABILITY:
-    fp16 forward/backward WITHOUT loss scaling is a well-known source of NaN
-    loss on T4, SEPARATE from the LR/clipping causes in Appendix A of the plan.
-    Phase 5's training loop MUST:
-      1.  Use  torch.cuda.amp.autocast(dtype=torch.float16)  around the forward
-          pass (mixed-precision: compute in fp16, accumulate in fp32).
-      2.  Use  torch.cuda.amp.GradScaler  to scale the loss before .backward()
-          and unscale + clip + step via scaler.step(optimizer).
-    Without GradScaler, fp16 gradients underflow to zero and training silently
-    stalls or produces NaN. This is flagged here at Phase 4 so it is not
-    discovered mid-training.
-
-Outputs (relative to repo root):
-  TASK1_finetuning_model/configs/run_phase4_r4.json    — sweep config, r=4
-  TASK1_finetuning_model/configs/run_phase4_r8.json    — sweep config, r=8 (sanity run)
-  TASK1_finetuning_model/configs/run_phase4_r16.json   — sweep config, r=16
-  TASK1_finetuning_model/configs/trainable_params.json — required DoD deliverable
-  (sanity_check_loss also recorded in trainable_params.json)
-
-Run on Colab (from repo root after git pull):
-  !python TASK1_finetuning_model/scripts/wrap_lora.py
-
-Definition of Done (plan §Phase 4):
-  [x] target_modules confirmed correct for SmolLM2-135M architecture (validated
-      at runtime against model.named_modules(), not guessed)
-  [x] Trainable parameter count/percentage logged → configs/trainable_params.json
-  [x] One successful forward/backward pass completed without error
-"""
+"""Phase 4 — LoRA Configuration & Model Wrapping."""
 from __future__ import annotations
 
 import io
@@ -61,7 +7,7 @@ import math
 import sys
 from pathlib import Path
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ──────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -74,7 +20,7 @@ from config import (  # noqa: E402
     TRAINABLE_PARAMS_JSON,
 )
 
-# ── Hyperparameters ─────────────────────────────────────────────────────────
+# Hyperparameters
 MODEL_NAME = "HuggingFaceTB/SmolLM2-135M"
 
 # LoRA sweep candidates — Phase 5 will train all three as separate named runs.
@@ -88,14 +34,6 @@ LORA_DEFAULT_IDX = 1           # index into LORA_SWEEP to use for the sanity pas
 LORA_DROPOUT = 0.05
 
 # PEFT matches target_modules by SUBSTRING against module names (see module docstring).
-# "q_proj" matches "model.layers.N.self_attn.q_proj" for any layer N.
-# SmolLM2-135M is Llama-style with separate q_proj / k_proj / v_proj / o_proj.
-# Plan default: start with q + v only; add k/o as a Phase 5 sweep dimension if needed.
-#
-# ⚠  GQA NOTE: SmolLM2-135M uses Grouped-Query Attention, so k_proj and v_proj
-#    project to a SMALLER dimension than q_proj. The matrices are not equal-sized.
-#    Do NOT assume equal per-module trainable-param contributions. The authoritative
-#    count comes from print_trainable_parameters() output captured below.
 TARGET_MODULES = ["q_proj", "v_proj"]
 
 # Fallback module names if model_architecture.json is absent (offline / local run).
@@ -106,16 +44,10 @@ SMOLLM2_KNOWN_ATTN_MODULES = [
     "gate_proj", "up_proj", "down_proj",   # MLP projections (for reference)
 ]
 
-
-# ── Helper: capture print_trainable_parameters() output ────────────────────
+# Helper: capture print_trainable_parameters() output
 
 def capture_trainable_params(model) -> tuple[int, int, float]:
-    """Return (trainable, total, pct) by capturing print_trainable_parameters().
-
-    PEFT's print_trainable_parameters() prints a human-readable line but doesn't
-    return structured data. We call it directly and also compute counts manually
-    so we have machine-readable numbers for trainable_params.json.
-    """
+    """Return (trainable, total, pct) by capturing print_trainable_parameters()."""
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     total = sum(p.numel() for p in model.parameters())
     pct = round(100.0 * trainable / total, 3) if total > 0 else 0.0
@@ -133,17 +65,10 @@ def capture_trainable_params(model) -> tuple[int, int, float]:
 
     return trainable, total, pct
 
-
-# ── Helper: validate target_modules against actual model module names ───────
+# Helper: validate target_modules against actual model module names
 
 def validate_target_modules(model, target_modules: list[str]) -> list[str]:
-    """Assert that every target string appears as a substring in at least one
-    module name. Raises ValueError with the full module list if any miss.
-
-    PEFT uses substring matching (not exact equality) — "q_proj" matches
-    "model.layers.0.self_attn.q_proj". This function uses the same logic
-    so the validation is consistent with what PEFT will actually do.
-    """
+    """Assert that every target string appears as a substring in at least one."""
     all_names = [name for name, _ in model.named_modules()]
     missing = []
     for t in target_modules:
@@ -170,7 +95,6 @@ def validate_target_modules(model, target_modules: list[str]) -> list[str]:
         print(f"[phase4] [OK] target '{t}' -> e.g. '{example}'")
     return all_names
 
-
 def main() -> None:
     import torch
     from peft import LoraConfig, TaskType, get_peft_model
@@ -180,7 +104,7 @@ def main() -> None:
     seed = set_seed(SEED)
     print(f"[phase4] seed = {seed}")
 
-    # ── 1. Device & dtype selection ────────────────────────────────────────
+    # Device & dtype selection
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # Conditional dtype: fp32 on CPU (fp16 addmm is unsupported on CPU in many
     # PyTorch builds — would fail with a dtype error unrelated to code logic),
@@ -192,7 +116,7 @@ def main() -> None:
         vram_gb = round(props.total_memory / 1e9, 2)
         print(f"[phase4] GPU: {props.name}  VRAM: {vram_gb} GB")
 
-    # ── 2. Dump sweep configs (config-as-file before any compute) ─────────
+    # Dump sweep configs (config-as-file before any compute)
     for cfg in LORA_SWEEP:
         run_cfg = {
             "phase": 4,
@@ -214,7 +138,7 @@ def main() -> None:
         out = dump_config(run_cfg, cfg["run_name"])
         print(f"[phase4] sweep config saved -> {out}")
 
-    # ── 3. Read model_architecture.json for target module verification ─────
+    # Read model_architecture.json for target module verification
     if MODEL_ARCH_JSON.exists():
         arch = json.loads(MODEL_ARCH_JSON.read_text(encoding="utf-8"))
         arch_source = "configs/model_architecture.json"
@@ -228,21 +152,21 @@ def main() -> None:
         arch = {"all_module_names": SMOLLM2_KNOWN_ATTN_MODULES}
         arch_source = "fallback (known SmolLM2-135M names)"
 
-    # ── 4. Load tokenizer ──────────────────────────────────────────────────
+    # Load tokenizer
     print(f"\n[phase4] loading tokenizer: {MODEL_NAME}")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
         print("[phase4] pad_token set to eos_token (consistent with Phase 2 decision)")
 
-    # ── 5. Load base model ─────────────────────────────────────────────────
+    # Load base model
     print(f"[phase4] loading base model in {dtype} on {device} ...")
     model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, torch_dtype=dtype)
     model = model.to(device)
     total_base_params = sum(p.numel() for p in model.parameters())
     print(f"[phase4] base model total params: {total_base_params:,}")
 
-    # ── 6. Validate target_modules against real named_modules() ───────────
+    # Validate target_modules against real named_modules()
     print(f"\n[phase4] validating target_modules={TARGET_MODULES} ...")
     print(f"[phase4] architecture source: {arch_source}")
     # Validate against the ACTUAL loaded model — most reliable source.
@@ -254,7 +178,7 @@ def main() -> None:
         print("\n[phase4] STOPPING. Fix target_modules before proceeding.")
         sys.exit(1)
 
-    # ── 7. Apply LoRA adapter ──────────────────────────────────────────────
+    # Apply LoRA adapter
     default_cfg = LORA_SWEEP[LORA_DEFAULT_IDX]
     print(
         f"\n[phase4] applying LoRA: r={default_cfg['r']}, "
@@ -273,12 +197,12 @@ def main() -> None:
     )
     model = get_peft_model(model, lora_config)
 
-    # ── 8. Capture & log trainable parameter counts ───────────────────────
+    # Capture & log trainable parameter counts
     print("\n[phase4] trainable parameter counts:")
     trainable, total, pct = capture_trainable_params(model)
     print(f"[phase4] trainable: {trainable:,}  /  total: {total:,}  ({pct:.3f}%)")
 
-    # ── 9. Sanity forward/backward pass ───────────────────────────────────
+    # Sanity forward/backward pass
     print("\n[phase4] loading train tensors for sanity forward/backward pass ...")
     if not TRAIN_PT.exists():
         print(f"[phase4] ERROR: {TRAIN_PT} not found. Run Phase 3 first.")
@@ -301,13 +225,6 @@ def main() -> None:
     optimizer.zero_grad()
 
     # NOTE: On CUDA, the real Phase 5 training loop MUST use
-    #   torch.cuda.amp.autocast(dtype=torch.float16)  +  GradScaler
-    # to prevent fp16 gradient underflow / NaN loss. This sanity pass does
-    # NOT use AMP because:
-    #  (a) on CPU (local dry-run) AMP with fp16 doesn't apply, and
-    #  (b) the goal here is only to confirm shapes and that backward() runs —
-    #      not to simulate the full mixed-precision training stack.
-    # Phase 5's training loop will add AMP. See module docstring for details.
     out = model(input_ids=input_ids, labels=labels)
     loss = out.loss
     print(f"[phase4] sanity forward pass — loss = {loss.item():.4f}")
@@ -323,7 +240,7 @@ def main() -> None:
 
     sanity_loss = round(loss.item(), 4)
 
-    # ── 10. Write trainable_params.json (required DoD deliverable) ─────────
+    # Write trainable_params.json (required DoD deliverable)
     trainable_params_record = {
         "model_name": MODEL_NAME,
         "lora_r": default_cfg["r"],
@@ -356,7 +273,7 @@ def main() -> None:
     )
     print(f"\n[phase4] trainable_params.json saved -> {TRAINABLE_PARAMS_JSON}")
 
-    # ── 11. Definition-of-Done assertions ──────────────────────────────────
+    # Definition-of-Done assertions
     # Config files
     for cfg in LORA_SWEEP:
         cfg_path = CONFIGS_DIR / f"run_{cfg['run_name']}.json"
@@ -371,12 +288,11 @@ def main() -> None:
     # Loss is finite
     assert math.isfinite(sanity_loss), "FAIL: sanity loss not finite"
 
-    print("\n[phase4] ✅ all Definition-of-Done assertions passed")
+    print("\n[phase4] [SUCCESS] all Definition-of-Done assertions passed")
     print(f"[phase4] trainable: {trainable:,} params  ({pct:.3f}%)")
     print(f"[phase4] sanity loss: {sanity_loss}")
     print(f"[phase4] sweep configs written: r=4, r=8, r=16  -> configs/run_phase4_r*.json")
     print("[phase4] Phase 4 complete. Commit configs/ back to repo, then run Phase 5.")
-
 
 if __name__ == "__main__":
     main()

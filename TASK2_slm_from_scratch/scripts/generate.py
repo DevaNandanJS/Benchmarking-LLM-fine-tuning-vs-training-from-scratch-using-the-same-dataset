@@ -1,27 +1,4 @@
-"""Phase 6 — Qualitative Evaluation (Training from Scratch).
-
-Goal: run the same 8 prompts that Track 1 used, produce sampling and greedy
-completions, annotate each for memorization / incoherence / novel-plausible
-quality, and save to generations/slm_samples.md.
-
-Prompts are taken verbatim from TASK1_finetuning_model/generations/finetuning_samples.md
-so the comparison is controlled on inputs.
-
-Outputs:
-    TASK2_slm_from_scratch/generations/slm_samples.md  — 8 prompts × 2 modes each
-
-Run on Colab (from repo root after git pull):
-    !python TASK2_slm_from_scratch/scripts/generate.py
-    !python TASK2_slm_from_scratch/scripts/generate.py --run base  # force a specific run
-
-Smoke-test (local, CPU, no checkpoint needed):
-    python TASK2_slm_from_scratch/scripts/generate.py --smoke-test
-
-Definition of Done (plan §Phase 6):
-    [ ] slm_samples.md present with >= 8 prompt blocks
-    [ ] Both sampling (T=0.8, top_p=0.9) and greedy completions present per prompt
-    [ ] Each completion annotated (memorization / incoherence / novel-plausible)
-"""
+"""Phase 6 — Qualitative Evaluation (Training from Scratch)."""
 from __future__ import annotations
 
 import argparse
@@ -31,7 +8,7 @@ from pathlib import Path
 
 import torch
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ────────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -44,7 +21,6 @@ from config import (  # noqa: E402
     TOKENIZER_DIR,
     TRACK2_SAMPLES_MD,
 )
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §1 — Prompts (same 8 as Track 1 — controlled comparison)
@@ -66,21 +42,12 @@ SAMPLING_TEMPERATURE = 0.8
 SAMPLING_TOP_P       = 0.9
 GREEDY_TEMPERATURE   = 0.0   # triggers argmax branch in GPT.generate()
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §2 — Tokenizer loader
 # ════════════════════════════════════════════════════════════════════════════
 
 def load_tokenizer(tokenizer_dir: Path):
-    """Load the trained ByteLevelBPE tokenizer and resolve eos_token_id.
-
-    eos_token_id is the integer ID of '<|endoftext|>' in vocab.json.
-    Resolution uses tokenizer.token_to_id() — one line, explicit, logged.
-    If the special token is absent (should never happen post-Phase 1), generation
-    still works but won't early-stop on EOS; logged as a WARNING, not a hard-fail.
-
-    Returns (tokenizer, eos_token_id or None).
-    """
+    """Load the trained ByteLevelBPE tokenizer and resolve eos_token_id."""
     from tokenizers import ByteLevelBPETokenizer  # noqa: PLC0415
 
     vocab_json = tokenizer_dir / "vocab.json"
@@ -100,7 +67,6 @@ def load_tokenizer(tokenizer_dir: Path):
     else:
         print(f"[generate] eos_token_id = {eos_token_id}")
     return tok, eos_token_id
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §3 — Checkpoint loader (mirrors eval.py §2)
@@ -124,7 +90,6 @@ def find_best_run() -> str:
         raise ValueError("[generate] sweep_results.csv is empty.")
     print(f"[generate] best run: {best_run}  val_loss={best_loss:.4f}")
     return best_run
-
 
 def load_checkpoint(run_name: str, device):
     """Load best_val.pt for the given run. Returns (model, cfg_dict)."""
@@ -157,7 +122,6 @@ def load_checkpoint(run_name: str, device):
     print(f"[generate] loaded checkpoint: {ckpt_path}")
     return model, cfg_dict
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §4 — Encode and decode helpers
 # ════════════════════════════════════════════════════════════════════════════
@@ -167,36 +131,16 @@ def encode_prompt(tok, prompt: str, device) -> torch.Tensor:
     ids = tok.encode(prompt).ids
     return torch.tensor([ids], dtype=torch.long, device=device)
 
-
 def decode_ids(tok, ids: list[int]) -> str:
     """Decode a list of token IDs to a string."""
     return tok.decode(ids)
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §5 — Annotation heuristics
 # ════════════════════════════════════════════════════════════════════════════
 
 def annotate(completion: str, prompt: str) -> str:
-    """Return a categorical quality annotation for a completion.
-
-    Three categories (per plan §Phase 6):
-    - memorization:     completion contains a long verbatim run of domain
-                        n-grams unlikely to be coincidental (e.g. exact
-                        dataset phrases like specific author names, formulas).
-    - incoherence:      completion devolves into repetition of the same token
-                        or short phrase, or generates characters that are not
-                        valid English (evidence of a degenerate distribution).
-    - novel-plausible:  completion is grammatical, on-topic, and not a
-                        verbatim copy — the model generates something new.
-
-    These are heuristics, not ground truth.  The human reviewer should revise
-    the labels in slm_samples.md after visual inspection.
-
-    Note: "Domain vocabulary" in compare.py's comparison table is a MANUAL
-    judgment based on reading these annotations — it is not derived
-    programmatically from this function's outputs.
-    """
+    """Return a categorical quality annotation for a completion."""
     # Repetition check: dominant n-gram occupying > 30% of tokens
     tokens = completion.split()
     if len(tokens) > 5:
@@ -220,7 +164,6 @@ def annotate(completion: str, prompt: str) -> str:
 
     return "novel-plausible"
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §6 — Markdown writer
 # ════════════════════════════════════════════════════════════════════════════
@@ -230,10 +173,7 @@ def write_samples_md(
     run_name: str,
     cfg_dict: dict,
 ) -> None:
-    """Write slm_samples.md with all prompt completions and annotations.
-
-    Format mirrors finetuning_samples.md for side-by-side comparison.
-    """
+    """Write slm_samples.md with all prompt completions and annotations."""
     lines = [
         "# Track 2 — From-Scratch GPT: Qualitative Samples",
         "",
@@ -287,8 +227,7 @@ def write_samples_md(
 
     GENERATIONS_DIR.mkdir(parents=True, exist_ok=True)
     TRACK2_SAMPLES_MD.write_text("\n".join(lines), encoding="utf-8")
-    print(f"[generate] samples → {TRACK2_SAMPLES_MD}")
-
+    print(f"[generate] samples -> {TRACK2_SAMPLES_MD}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §7 — Main
@@ -375,20 +314,15 @@ def main() -> None:
     assert "Sampling" in content and "Greedy" in content, (
         "FAIL: samples.md missing sampling or greedy sections"
     )
-    print("\n[generate] ✅ all Definition-of-Done assertions passed")
+    print("\n[generate] [SUCCESS] all Definition-of-Done assertions passed")
     print("[generate] Phase 6 complete.")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §8 — Smoke-test
 # ════════════════════════════════════════════════════════════════════════════
 
 def _smoke_test(device) -> None:
-    """Verify generation + annotation + markdown writing without real data.
-
-    Uses a tiny random-init GPT and a dummy tokenizer that just assigns one
-    token per character (so IDs are stable and decode is round-trippable).
-    """
+    """Verify generation + annotation + markdown writing without real data."""
     import torch  # noqa: PLC0415
     from model import GPT, GPTConfig  # noqa: PLC0415
 
@@ -408,7 +342,7 @@ def _smoke_test(device) -> None:
         temperature=0.8, top_p=0.9,
     )
     assert out_s.shape == (1, 15), f"FAIL: sampling shape {out_s.shape} != (1, 15)"
-    print(f"[generate] SMOKE: sampling output shape {tuple(out_s.shape)}  ✓")
+    print(f"[generate] SMOKE: sampling output shape {tuple(out_s.shape)}  [OK]")
 
     # Greedy (argmax branch)
     out_g = model.generate(
@@ -416,20 +350,20 @@ def _smoke_test(device) -> None:
         temperature=0.0,   # triggers argmax branch
     )
     assert out_g.shape == (1, 15), f"FAIL: greedy shape {out_g.shape} != (1, 15)"
-    print(f"[generate] SMOKE: greedy output shape   {tuple(out_g.shape)}  ✓")
+    print(f"[generate] SMOKE: greedy output shape   {tuple(out_g.shape)}  [OK]")
 
     # Greedy is deterministic — running it twice should give the same output
     out_g2 = model.generate(
         prompt_ids.clone(), max_new_tokens=10, temperature=0.0,
     )
     assert torch.equal(out_g, out_g2), "FAIL: greedy generation is not deterministic"
-    print("[generate] SMOKE: greedy determinism  ✓")
+    print("[generate] SMOKE: greedy determinism  [OK]")
 
     # Annotation helper
     ann = annotate(" ".join(["word"] * 20), "prompt")
     assert ann in ("memorization (domain phrase density high)", "incoherence (repetition)",
                    "novel-plausible"), f"FAIL: unexpected annotation: {ann}"
-    print(f"[generate] SMOKE: annotation='{ann}'  ✓")
+    print(f"[generate] SMOKE: annotation='{ann}'  [OK]")
 
     # Markdown writer (write to temp dir)
     import tempfile, shutil  # noqa: E401, PLC0415
@@ -447,13 +381,12 @@ def _smoke_test(device) -> None:
         lines = ["# Test", "", "## Sample 1", "", f"**Prompt:** `{PROMPTS[0]}`", ""]
         tmp_md.write_text("\n".join(lines), encoding="utf-8")
         assert tmp_md.exists(), "FAIL: smoke MD not created"
-        print(f"[generate] SMOKE: markdown write OK  ✓")
+        print(f"[generate] SMOKE: markdown write OK  [OK]")
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    print("[generate] ✅ SMOKE TEST PASSED")
+    print("[generate] [SUCCESS] SMOKE TEST PASSED")
     print("[generate] Run without --smoke-test on Colab after Phase 4 completes.")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §9 — Entry point

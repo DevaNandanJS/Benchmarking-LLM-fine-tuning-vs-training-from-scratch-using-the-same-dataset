@@ -1,65 +1,4 @@
-"""Phase 5 — Training Loop & Execution.
-
-Goal: run LoRA fine-tuning with a manual training loop (not Trainer), full
-metrics.jsonl logging, checkpoint saving on val improvement, early stopping,
-and three-run sweep (r=4, r=8, r=16) producing eval/sweep_results.csv.
-
-Why manual loop over HuggingFace Trainer:
-    The execution plan (§Phase 5 step 1) explicitly notes a manual loop is
-    "arguably the stronger interview artifact since Trainer hides steps you'd
-    otherwise have to explain." Every gradient step, scheduler tick, AMP scaler
-    call, and validation pass is visible and explainable line by line — no
-    TrainingArguments magic to handwave.
-
-⚠  fp16 AMP REQUIRED: training with fp16 without loss scaling is a well-known
-    source of NaN gradients. This script uses:
-        torch.cuda.amp.autocast(dtype=torch.float16)  — mixed-precision forward
-        torch.cuda.amp.GradScaler                     — loss scaling / unscaling
-    Both are required for stable fp16 training on T4. See wrap_lora.py docstring.
-
-⚠  LoRA adapter dtype: after get_peft_model(), the LoRA A/B matrices are kept
-    in fp32 by PEFT even when the frozen base is fp16. This is intentional —
-    adapter gradients need fp32 precision. autocast does NOT force-downcast
-    requires_grad=True parameters, so the A/B matrices stay fp32 during the
-    forward pass accumulation. This is correct behavior; confirmed by the post-
-    wrap dtype assertion in main().
-
-⚠  Pad-masking: labels[labels == pad_token_id] = -100 is included as a safeguard.
-    Phase 3 built full context_length=256 chunks from a continuous token stream
-    with no padding, so this guard fires exactly 0 times on the current dataset.
-    It is kept defensively — if context length or data ever changes to produce
-    padded batches, the guard prevents training on <pad> tokens as content.
-
-Sweep design:
-    Three independent runs are launched separately from the notebook:
-        !python TASK1_finetuning_model/scripts/train.py --run r4
-        !python TASK1_finetuning_model/scripts/train.py --run r8
-        !python TASK1_finetuning_model/scripts/train.py --run r16
-    Each writes its own logs/<run_name>/metrics.jsonl and checkpoints under
-    checkpoints/best_val/<run_name>/. After all three, sweep_results.csv has
-    3 rows and the best run can be identified.
-
-Smoke-test mode (--smoke):
-    Truncates train/val to 4 chunks and runs 3 steps on CPU. Used for local
-    pre-flight validation of shapes, pad-masking, AMP dtype handling, and
-    MetricsLogger output before the real Colab run. Catches runtime issues
-    that AST parsing misses.
-
-Outputs (relative to repo root):
-    TASK1_finetuning_model/configs/run_phase5_<run_name>.json   — run config dump
-    TASK1_finetuning_model/logs/<run_name>/metrics.jsonl         — step-level logging
-    TASK1_finetuning_model/checkpoints/best_val/<run_name>/      — best adapter
-    TASK1_finetuning_model/eval/sweep_results.csv                — appended after each run
-
-Run on Colab (from repo root after git pull):
-    !python TASK1_finetuning_model/scripts/train.py --run r8   # or r4, r16
-
-Definition of Done (plan §Phase 5):
-    [ ] At least one complete training run with full metrics.jsonl logging (>=20 pts)
-    [ ] Best checkpoint (by val loss) saved separately and identified
-    [ ] Small sweep (>=2 configs) completed and tabulated in sweep_results.csv
-    [ ] Overfitting behavior noted with the step/epoch it occurred at
-"""
+"""Phase 5 — Training Loop & Execution."""
 from __future__ import annotations
 
 import argparse
@@ -85,13 +24,13 @@ from config import (  # noqa: E402
     VAL_PT,
 )
 
-# ── Fixed training hyperparameters (starting values per plan §Phase 5) ───────
+# Fixed training hyperparameters (starting values per plan §Phase 5)
 MODEL_NAME = "HuggingFaceTB/SmolLM2-135M"
 LEARNING_RATE = 2e-4          # LoRA tolerates higher LR than full FT
 BATCH_SIZE = 8                # try 16 if VRAM allows after first run
 MAX_EPOCHS = 10               # with early stopping — tiny dataset, expect early best
 WEIGHT_DECAY = 0.01
-WARMUP_RATIO = 0.05           # 5% of total steps → linear warmup
+WARMUP_RATIO = 0.05           # 5% of total steps -> linear warmup
 MAX_GRAD_NORM = 1.0           # gradient clipping
 EARLY_STOP_PATIENCE = 2       # stop if val loss rises for this many consecutive epochs
 
@@ -104,7 +43,6 @@ LORA_CONFIGS = {
     "r8":  {"r": 8,  "lora_alpha": 16, "lora_dropout": 0.05, "target_modules": ["q_proj", "v_proj"]},
     "r16": {"r": 16, "lora_alpha": 32, "lora_dropout": 0.05, "target_modules": ["q_proj", "v_proj"]},
 }
-
 
 def build_model_and_tokenizer(lora_cfg: dict, dtype):
     """Load SmolLM2-135M + tokenizer, wrap with LoRA per lora_cfg."""
@@ -139,7 +77,6 @@ def build_model_and_tokenizer(lora_cfg: dict, dtype):
 
     return model, tokenizer
 
-
 def compute_val_loss(model, val_loader, device, pad_id: int) -> float:
     """Compute mean cross-entropy loss over the full validation set."""
     import torch
@@ -166,7 +103,6 @@ def compute_val_loss(model, val_loader, device, pad_id: int) -> float:
     model.train()
     return total_loss / total_chunks if total_chunks > 0 else float("nan")
 
-
 def append_sweep_row(run_name: str, lora_r: int, final_train_loss: float,
                      final_val_loss: float, best_val_loss: float,
                      best_val_epoch: int) -> None:
@@ -188,7 +124,6 @@ def append_sweep_row(run_name: str, lora_r: int, final_train_loss: float,
             iso_now(),
         ])
     print(f"[phase5] sweep row appended -> {SWEEP_RESULTS_CSV}")
-
 
 def main() -> None:
     import torch
@@ -216,7 +151,7 @@ def main() -> None:
 
     lora_cfg = LORA_CONFIGS[run_name]
 
-    # ── 1. Device & dtype ─────────────────────────────────────────────────
+    # Device & dtype
     if smoke:
         device = torch.device("cpu")
         dtype = torch.float32   # CPU: fp32 only
@@ -226,7 +161,7 @@ def main() -> None:
         dtype = torch.float16 if device.type == "cuda" else torch.float32
     print(f"[phase5] device={device}  dtype={dtype}")
 
-    # ── 2. Dump run config before any compute ─────────────────────────────
+    # Dump run config before any compute
     run_cfg = {
         "phase": 5,
         "run_name": run_name,
@@ -249,7 +184,7 @@ def main() -> None:
     cfg_path = dump_config(run_cfg, f"phase5_{run_name}")
     print(f"[phase5] run config saved -> {cfg_path}")
 
-    # ── 3. Load datasets ──────────────────────────────────────────────────
+    # Load datasets
     print(f"[phase5] loading tensors from {TRAIN_PT} / {VAL_PT} ...")
     train_data = torch.load(TRAIN_PT, weights_only=True)
     val_data = torch.load(VAL_PT, weights_only=True)
@@ -278,7 +213,7 @@ def main() -> None:
 
     print(f"[phase5] train batches/epoch: {len(train_loader)}  val batches: {len(val_loader)}")
 
-    # ── 4. Build model ────────────────────────────────────────────────────
+    # Build model
     print(f"\n[phase5] building LoRA model: {MODEL_NAME} r={lora_cfg['r']} ...")
     model, tokenizer = build_model_and_tokenizer(lora_cfg, dtype)
     model = model.to(device)
@@ -288,7 +223,7 @@ def main() -> None:
     total = sum(p.numel() for p in model.parameters())
     print(f"[phase5] trainable: {trainable:,} / {total:,} ({100*trainable/total:.3f}%)")
 
-    # ── 5. Optimizer + scheduler ──────────────────────────────────────────
+    # Optimizer + scheduler
     from torch.optim import AdamW
     from torch.optim.lr_scheduler import LambdaLR
 
@@ -311,19 +246,19 @@ def main() -> None:
 
     scheduler = LambdaLR(optimizer, lr_lambda)
 
-    # ── 6. AMP scaler (CUDA only) ─────────────────────────────────────────
+    # AMP scaler (CUDA only)
     # GradScaler is required for fp16 training to prevent gradient underflow/NaN.
     # Disabled in smoke mode (CPU fp32) and when falling back to CPU.
     use_amp = device.type == "cuda" and not smoke
     scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
     print(f"[phase5] AMP (GradScaler): {'enabled' if use_amp else 'disabled (CPU or smoke)'}")
 
-    # ── 7. Logging setup ─────────────────────────────────────────────────
+    # Logging setup
     logger = MetricsLogger(run_name)
     log_every_n = max(1, max_steps // MIN_LOG_POINTS)
     print(f"[phase5] logging every {log_every_n} steps (targeting {MIN_LOG_POINTS}+ log points)")
 
-    # ── 8. Training loop ─────────────────────────────────────────────────
+    # Training loop
     global_step = 0
     best_val_loss = float("inf")
     best_val_epoch = -1
@@ -363,7 +298,7 @@ def main() -> None:
                 "See Appendix A of finetuning_execution_plan.md."
             )
 
-            # Scale → backward → unscale → clip → step
+            # Scale -> backward -> unscale -> clip -> step
             scaler.scale(loss).backward()
             scaler.unscale_(optimizer)
             torch.nn.utils.clip_grad_norm_(
@@ -395,7 +330,7 @@ def main() -> None:
 
         mean_train_loss = epoch_train_loss / max(1, epoch_batches)
 
-        # ── 9. Epoch-end validation pass ─────────────────────────────────
+        # Epoch-end validation pass
         val_loss = compute_val_loss(model, val_loader, device, pad_id)
         val_loss_history.append(val_loss)
         current_lr = scheduler.get_last_lr()[0]
@@ -414,7 +349,7 @@ def main() -> None:
             f"lr={current_lr:.2e}"
         )
 
-        # ── 10. Checkpoint on improvement ─────────────────────────────────
+        # Checkpoint on improvement
         if not smoke and val_loss < best_val_loss:
             best_val_loss = val_loss
             best_val_epoch = epoch + 1
@@ -423,18 +358,14 @@ def main() -> None:
             model.save_pretrained(str(ckpt_dir))
             print(f"[phase5] [OK] new best val_loss={val_loss:.4f} -> checkpoint saved -> {ckpt_dir}")
 
-        # ── 11. Early stopping ────────────────────────────────────────────
-        # Trigger if val loss has increased for PATIENCE consecutive epochs
-        # while we're still training (train loss still decreasing typically).
-        # This is not a bug — it's the expected overfitting signal at this data
-        # scale. Document it explicitly as per plan §Phase 5 step 5.
+        # Early stopping
         if not smoke and len(val_loss_history) >= EARLY_STOP_PATIENCE + 1:
             recent = val_loss_history[-(EARLY_STOP_PATIENCE + 1):]
             if all(recent[i] < recent[i + 1] for i in range(EARLY_STOP_PATIENCE)):
                 if overfitting_step is None:
                     overfitting_step = global_step
                     print(
-                        f"[phase5] ⚠ OVERFITTING DETECTED at step {global_step} "
+                        f"[phase5] [WARNING] OVERFITTING DETECTED at step {global_step} "
                         f"(epoch {epoch+1}): val loss rose for {EARLY_STOP_PATIENCE} "
                         f"consecutive epochs ({recent}) while training continues. "
                         "This is the expected signal at this data scale — "
@@ -446,7 +377,7 @@ def main() -> None:
         if smoke and global_step >= 3:
             break
 
-    # ── 12. Post-training summary ─────────────────────────────────────────
+    # Post-training summary
     final_train_loss = mean_train_loss if epoch_batches > 0 else float("nan")
     final_val_loss = val_loss_history[-1] if val_loss_history else float("nan")
 
@@ -461,7 +392,7 @@ def main() -> None:
     if not smoke:
         print(f"[phase5] best checkpoint -> {BEST_VAL_DIR / run_name}")
 
-    # ── 13. Append to sweep_results.csv ──────────────────────────────────
+    # Append to sweep_results.csv
     if not smoke:
         append_sweep_row(
             run_name=run_name,
@@ -477,7 +408,6 @@ def main() -> None:
         print("[phase5] Smoke test passed: shapes OK, loss finite, AMP/dtype checks done")
 
     print("[phase5] Phase 5 run complete. Commit logs/, checkpoints/, eval/ back to repo.")
-
 
 if __name__ == "__main__":
     main()

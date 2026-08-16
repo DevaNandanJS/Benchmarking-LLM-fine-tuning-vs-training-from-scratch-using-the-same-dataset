@@ -1,26 +1,4 @@
-"""
-Phase 1 — Data Extraction & Cleaning
-=====================================
-Extracts text from the source PDF, cleans it, and writes:
-  - data/extracted/document_clean.txt          — final cleaned text
-  - data/extracted/stats.json                  — char / word / proxy-token counts
-  - data/extracted/extraction_manifest.json    — per-page extractor choice + quality scores
-  - data/extracted/hyphen_join_decisions.txt   — log of every hyphen-join decision
-  - data/extracted/raw_pages/                  — raw (pre-clean) per-page text from both extractors
-
-Design decisions (see plan/finetuning_execution_plan.md §Phase 1 and user review):
-  - Primary extractor: pdfplumber (better layout fidelity)
-  - Fallback: pypdf (activated if pdfplumber is garbled on a given page)
-  - Header/footer detection: repetition-based (lines recurring on ≥40 % of pages),
-    NOT "isolated single-word line" (which would delete section headings)
-  - Hyphen joins: soft-hyphen (U+00AD) always joined without hyphen;
-    ASCII hyphen disambiguated via nltk wordlist + every decision logged
-  - Garble detection: BOTH non-ASCII ratio AND non-dict-word ratio; flag if either trips
-  - Blank-line collapse: applied AFTER full concatenation (handles straddling page boundaries)
-  - Token count proxy: tiktoken / GPT-2 encoding, clearly labelled to avoid Phase 2 confusion
-
-No GPU required. Safe to run locally.
-"""
+"""Phase 1 — Data Extraction & Cleaning."""
 from __future__ import annotations
 
 import json
@@ -30,7 +8,7 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
-# ── Insert repo root on path so `scripts.*` imports work when run directly ──
+# Insert repo root on path so `scripts.*` imports work when run directly
 _HERE = Path(__file__).resolve().parent
 _REPO = _HERE.parents[1]
 if str(_REPO) not in sys.path:
@@ -49,20 +27,20 @@ from TASK1_finetuning_model.scripts.config import (  # noqa: E402
 
 set_seed()  # determinism convention (§0)
 
-# ─── Garble thresholds (tunable) ─────────────────────────────────────────────
+# Garble thresholds (tunable)
 # Either signal tripping marks a page as potentially garbled.
-_GARBLE_NON_ASCII_THRESHOLD = 0.30   # > 30 % non-ASCII chars  → suspect mojibake
-_GARBLE_NON_DICT_THRESHOLD = 0.40   # > 40 % non-dictionary English words → suspect font-remap
+_GARBLE_NON_ASCII_THRESHOLD = 0.30   # > 30 % non-ASCII chars  -> suspect mojibake
+_GARBLE_NON_DICT_THRESHOLD = 0.40   # > 40 % non-dictionary English words -> suspect font-remap
 
-# ─── Header/footer repetition threshold ──────────────────────────────────────
+# Header/footer repetition threshold
 # A line must appear on at least this fraction of pages to be considered a
 # running header/footer (not a section heading).
 _REPEAT_THRESHOLD = 0.40
 
-# ─── Wordlist (for garble check + hyphen disambiguation) ─────────────────────
+# Wordlist (for garble check + hyphen disambiguation)
 
 def _load_wordlist() -> set[str]:
-    """Load an English word set from nltk.corpus.words.  Gracefully degrades."""
+    """Load an English word set from nltk.corpus.words. Gracefully degrades."""
     try:
         import nltk  # type: ignore
         try:
@@ -79,10 +57,9 @@ def _load_wordlist() -> set[str]:
         print("[Phase 1] WARNING: nltk not installed. Wordlist-based checks disabled.")
         return set()
 
-
 WORDLIST: set[str] = _load_wordlist()
 
-# ─── Extraction ───────────────────────────────────────────────────────────────
+# Extraction
 
 def _extract_pdfplumber(pdf_path: Path) -> list[str]:
     """Extract page texts via pdfplumber."""
@@ -93,31 +70,16 @@ def _extract_pdfplumber(pdf_path: Path) -> list[str]:
             pages.append(page.extract_text() or "")
     return pages
 
-
 def _extract_pypdf(pdf_path: Path) -> list[str]:
     """Extract page texts via pypdf."""
     from pypdf import PdfReader  # type: ignore
     reader = PdfReader(str(pdf_path))
     return [page.extract_text() or "" for page in reader.pages]
 
-
-# ─── Quality / garble scoring ─────────────────────────────────────────────────
+# Quality / garble scoring
 
 def _quality_scores(text: str) -> dict:
-    """
-    Return two independent garbling signals for *text*:
-
-    non_ascii_ratio
-        Fraction of characters with ord > 127.
-        High values indicate encoding/mojibake problems.
-
-    non_dict_word_ratio
-        Fraction of alphabetic tokens that are not in the English wordlist.
-        High values indicate font-remapping garbage (still ASCII, but wrong letters).
-
-    Both signals are needed because bad PDF extraction can produce either form
-    of corruption — relying on only one misses the other class of failure.
-    """
+    """Return two independent garbling signals for *text*:."""
     if not text.strip():
         return {"non_ascii_ratio": 0.0, "non_dict_word_ratio": 0.0, "char_count": 0}
 
@@ -138,15 +100,13 @@ def _quality_scores(text: str) -> dict:
         "char_count": len(text),
     }
 
-
 def _is_garbled(scores: dict) -> bool:
     return (
         scores["non_ascii_ratio"] > _GARBLE_NON_ASCII_THRESHOLD
         or scores["non_dict_word_ratio"] > _GARBLE_NON_DICT_THRESHOLD
     )
 
-
-# ─── Header / footer detection ────────────────────────────────────────────────
+# Header / footer detection
 
 # Page-number patterns — safe to strip unconditionally via regex:
 #   "3", "  42  ", "Page 3", "Page 3 of 10"
@@ -154,29 +114,15 @@ _PAGE_NUM_RE = re.compile(
     r"^\s*(\d+|[Pp]age\s+\d+(\s+of\s+\d+)?)\s*$"
 )
 
-
 def _build_repeating_line_set(all_pages: list[str]) -> set[str]:
-    """
-    Identify running header/footer strings by frequency across pages.
-
-    Strategy:
-    1. Count how many pages each distinct line appears on (exact match).
-    2. Also count a digit-normalised form (replace all digit runs with "N")
-       so "Page 3" and "Page 4" collapse to the same pattern.
-    3. Any line / normalised-pattern appearing on >= _REPEAT_THRESHOLD of
-       total pages is classified as a header/footer.
-
-    This is intentionally conservative: a line must recur on many pages
-    before it is removed, so section headings ("Introduction", "Conclusion")
-    that appear only once are never touched.
-    """
+    """Identify running header/footer strings by frequency across pages."""
     total = len(all_pages)
     if total == 0:
         return set()
 
-    exact_page_hits: Counter = Counter()   # line  → number of pages it appears on
-    norm_page_hits: Counter = Counter()    # normalised → number of pages
-    norm_to_example: dict[str, str] = {}  # normalised → one representative original
+    exact_page_hits: Counter = Counter()   # line  -> number of pages it appears on
+    norm_page_hits: Counter = Counter()    # normalised -> number of pages
+    norm_to_example: dict[str, str] = {}  # normalised -> one representative original
 
     for page_text in all_pages:
         seen_on_page: set[str] = set()
@@ -205,28 +151,15 @@ def _build_repeating_line_set(all_pages: list[str]) -> set[str]:
 
     return repeating
 
-
-# ─── Cleaning ─────────────────────────────────────────────────────────────────
+# Cleaning
 
 def _clean_page(
     text: str,
     repeating_lines: set[str],
     join_log_lines: list[str],
 ) -> str:
-    """
-    Clean a single page's raw text.
-
-    Steps applied (in order):
-    1. Drop page-number lines (regex).
-    2. Drop repeating header/footer lines (frequency-based set).
-    3. Unicode NFKC normalisation.
-    4. Soft-hyphen (U+00AD) line-end joins — always join without hyphen (unambiguous).
-    5. ASCII hyphen line-end joins — wordlist-disambiguated + logged.
-
-    NOTE: blank-line collapsing is intentionally deferred to after concatenation
-    so runs straddling a page boundary are also caught.
-    """
-    # ── 1 & 2: drop page-number and repeating header/footer lines ──
+    """Clean a single page's raw text."""
+    # 1 & 2: drop page-number and repeating header/footer lines
     kept_lines: list[str] = []
     for raw_line in text.splitlines():
         stripped = raw_line.strip()
@@ -245,31 +178,15 @@ def _clean_page(
         kept_lines.append(raw_line)
     text = "\n".join(kept_lines)
 
-    # ── 3: Unicode normalisation ──
+    # 3: Unicode normalisation
     text = unicodedata.normalize("NFKC", text)
 
-    # ── 4: Soft-hyphen (U+00AD) line-end joins — unambiguous, always drop hyphen ──
+    # 4: Soft-hyphen (U+00AD) line-end joins — unambiguous, always drop hyphen
     # U+00AD is explicitly a discretionary hyphen — its only purpose is layout;
     # joining without the character is always semantically correct.
     text = re.sub(r"\xad[ \t]*\n[ \t]*", "", text)
 
-    # ── 5: ASCII hyphen line-end joins — structural heuristic ──
-    #
-    # The nltk wordlist approach was tested and failed: it produced 0 KEEP_HYPHEN
-    # decisions out of 116 because nltk.words contains no domain/technical vocabulary.
-    # Both sides of every technical compound ('retrieval', 'augmented', 'instruction',
-    # 'tuned') were absent, so the wordlist gave no signal.
-    #
-    # Replacement heuristic (structural, no wordlist needed):
-    #   - If PRE is a short syllable fragment (≤3 chars): almost certainly a layout break
-    #     ('soft-', 'es-', 'pa-'). Join without hyphen.
-    #   - If POST is a short syllable fragment (≤3 chars): similarly a layout break.
-    #   - If both PRE and POST are ≥4 chars: both are likely real word-parts forming a
-    #     compound. Keep the hyphen ('retrieval-augmented', 'instruction-tuned').
-    #   - Exception: digit-letter joins ('GPT-4o', 'CodeLlama-13B'): keep as-is.
-    #     These are model names and metrics, not hyphenated compounds.
-    #
-    # This correctly handles all 116 cases observed in this document.
+    # 5: ASCII hyphen line-end joins — structural heuristic
 
     def _maybe_join_hyphen(m: re.Match) -> str:
         pre = m.group(1)    # word-part before the hyphen
@@ -277,22 +194,22 @@ def _clean_page(
         joined = pre + post
         hyphenated = pre + "-" + post
 
-        # Case 1: digit-letter or letter-digit at the boundary → keep hyphen
+        # Case 1: digit-letter or letter-digit at the boundary -> keep hyphen
         # (model names like GPT-4o, CodeLlama-13B, ROUGE-2)
         if pre[-1].isdigit() or post[0].isdigit():
-            decision = f"KEEP_HYPHEN  : {m.group(0)!r:35s}  →  {hyphenated!r}  (heuristic: digit boundary)"
+            decision = f"KEEP_HYPHEN  : {m.group(0)!r:35s}  ->  {hyphenated!r}  (heuristic: digit boundary)"
             result = hyphenated
-        # Case 2: short syllable on left (≤3 chars) → layout break, drop hyphen
+        # Case 2: short syllable on left (≤3 chars) -> layout break, drop hyphen
         elif len(pre) <= 3:
-            decision = f"DROP_HYPHEN  : {m.group(0)!r:35s}  →  {joined!r}  (heuristic: short-pre syllable, len={len(pre)})"
+            decision = f"DROP_HYPHEN  : {m.group(0)!r:35s}  ->  {joined!r}  (heuristic: short-pre syllable, len={len(pre)})"
             result = joined
-        # Case 3: short syllable on right (≤3 chars) → layout break, drop hyphen
+        # Case 3: short syllable on right (≤3 chars) -> layout break, drop hyphen
         elif len(post) <= 3:
-            decision = f"DROP_HYPHEN  : {m.group(0)!r:35s}  →  {joined!r}  (heuristic: short-post syllable, len={len(post)})"
+            decision = f"DROP_HYPHEN  : {m.group(0)!r:35s}  ->  {joined!r}  (heuristic: short-post syllable, len={len(post)})"
             result = joined
-        # Case 4: both sides are ≥4 chars → likely a real compound, keep hyphen
+        # Case 4: both sides are ≥4 chars -> likely a real compound, keep hyphen
         else:
-            decision = f"KEEP_HYPHEN  : {m.group(0)!r:35s}  →  {hyphenated!r}  (heuristic: both-sides ≥4 chars)"
+            decision = f"KEEP_HYPHEN  : {m.group(0)!r:35s}  ->  {hyphenated!r}  (heuristic: both-sides ≥4 chars)"
             result = hyphenated
 
         join_log_lines.append(decision)
@@ -302,20 +219,15 @@ def _clean_page(
 
     return text
 
-
 def _collapse_blank_lines(text: str, max_consecutive: int = 2) -> str:
-    """
-    Collapse runs of more than *max_consecutive* blank lines to exactly that many.
-    Applied on the fully concatenated text so straddling-page runs are also caught.
-    """
+    """Collapse runs of more than *max_consecutive* blank lines to exactly that many."""
     # A "blank line" is a line containing only whitespace.
     # Replace runs of (max_consecutive + 1) or more blank lines.
     pattern = r"([ \t]*\n){%d,}" % (max_consecutive + 2)
     replacement = "\n" * (max_consecutive + 1)
     return re.sub(pattern, replacement, text)
 
-
-# ─── Main ─────────────────────────────────────────────────────────────────────
+# Main
 
 def main() -> None:
     print(f"[Phase 1] Source PDF : {RAW_PDF}")
@@ -327,7 +239,7 @@ def main() -> None:
     EXTRACTED_DIR.mkdir(parents=True, exist_ok=True)
     RAW_PAGES_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── Extract with pdfplumber ──────────────────────────────────────────────
+    # Extract with pdfplumber
     print("[Phase 1] Extracting with pdfplumber…")
     try:
         plumber_pages = _extract_pdfplumber(RAW_PDF)
@@ -336,7 +248,7 @@ def main() -> None:
         print(f"[Phase 1] WARNING: pdfplumber failed ({exc}); will use pypdf only.")
         plumber_pages = []
 
-    # ── Extract with pypdf ───────────────────────────────────────────────────
+    # Extract with pypdf
     print("[Phase 1] Extracting with pypdf…")
     try:
         pypdf_pages = _extract_pypdf(RAW_PDF)
@@ -354,13 +266,13 @@ def main() -> None:
     plumber_pages += [""] * (n_pages - len(plumber_pages))
     pypdf_pages += [""] * (n_pages - len(pypdf_pages))
 
-    # ── Save raw per-page output for audit trail ─────────────────────────────
+    # Save raw per-page output for audit trail
     print(f"[Phase 1] Saving raw page outputs to {RAW_PAGES_DIR} …")
     for i, (pb, pp) in enumerate(zip(plumber_pages, pypdf_pages)):
         (RAW_PAGES_DIR / f"page_{i+1:04d}_pdfplumber.txt").write_text(pb, encoding="utf-8")
         (RAW_PAGES_DIR / f"page_{i+1:04d}_pypdf.txt").write_text(pp, encoding="utf-8")
 
-    # ── Per-page quality scoring and extractor selection ─────────────────────
+    # Per-page quality scoring and extractor selection
     print("[Phase 1] Scoring page quality and selecting extractor per page…")
     manifest: list[dict] = []
     selected_pages: list[str] = []
@@ -409,7 +321,7 @@ def main() -> None:
             }
         )
 
-    # ── Detect repeating header/footer lines ─────────────────────────────────
+    # Detect repeating header/footer lines
     print("[Phase 1] Detecting repeating header/footer lines…")
     repeating_lines = _build_repeating_line_set(selected_pages)
     if repeating_lines:
@@ -422,7 +334,7 @@ def main() -> None:
     else:
         print("[Phase 1]   No repeating header/footer patterns detected.")
 
-    # ── Clean each selected page ──────────────────────────────────────────────
+    # Clean each selected page
     print("[Phase 1] Cleaning pages…")
     join_log_lines: list[str] = []
     cleaned_pages = [
@@ -430,12 +342,12 @@ def main() -> None:
         for page_text in selected_pages
     ]
 
-    # ── Concatenate and post-process ──────────────────────────────────────────
+    # Concatenate and post-process
     full_text = "\n\n".join(p for p in cleaned_pages if p.strip())
     full_text = _collapse_blank_lines(full_text, max_consecutive=2)
     full_text = full_text.strip()
 
-    # ── Write outputs ─────────────────────────────────────────────────────────
+    # Write outputs
     CLEAN_TXT.write_text(full_text, encoding="utf-8")
     print(f"[Phase 1] Wrote {CLEAN_TXT.relative_to(CLEAN_TXT.parents[3])}  "
           f"({len(full_text):,} chars)")
@@ -449,7 +361,7 @@ def main() -> None:
     else:
         print("[Phase 1]   No hyphen-join decisions to log.")
 
-    # ── Compute stats ─────────────────────────────────────────────────────────
+    # Compute stats
     char_count = len(full_text)
     word_count = len(full_text.split())
 
@@ -505,7 +417,6 @@ def main() -> None:
         "[Phase 1] Done. Please open data/extracted/document_clean.txt\n"
         "          and spot-check a few random sections before proceeding to Phase 2."
     )
-
 
 if __name__ == "__main__":
     main()

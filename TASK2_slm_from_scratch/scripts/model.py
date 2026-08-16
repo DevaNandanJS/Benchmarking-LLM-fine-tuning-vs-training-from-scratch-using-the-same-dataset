@@ -1,36 +1,4 @@
-"""Phase 3 — Model Architecture Implementation (Training from Scratch).
-
-Goal (plan §Phase 3): implement a from-scratch, understood-line-by-line
-decoder-only Transformer, sized appropriately for the data scale.  Every
-component is original code — no pretrained model class is imported.
-
-Architecture: GPT-2-style decoder-only Transformer.
-  - Token + positional embeddings (learned, absolute)
-  - N × TransformerBlock (pre-LayerNorm residual, causal self-attention, MLP)
-  - Final LayerNorm + LM head (optionally weight-tied to token embedding)
-
-Default config (vocab_size=1024, n_embd=192, n_layer=6, n_head=4, block_size=256):
-  Verified parameter count: 2,915,328 (weight-tied) / 3,111,936 (untied).
-  See Decision 5 in plan/scratch_slm_execution_plan.md for the full breakdown.
-
-Invocation semantics (plan §Phase 3, §7-8):
-  python TASK2_slm_from_scratch/scripts/model.py            → unit tests + artifact dump
-  python TASK2_slm_from_scratch/scripts/model.py --smoke-test → unit tests only, no writes
-
-  _unit_test() always runs first unconditionally.  --smoke-test only skips the
-  filesystem writes, not the validation.  This matches build_dataset.py's contract.
-
-Outputs (written by __main__ on test success, skipped under --smoke-test):
-  TASK2_slm_from_scratch/configs/run_phase3_model.json   — architecture config dump
-  TASK2_slm_from_scratch/configs/trainable_params.json   — parameter count breakdown
-
-Definition of Done (plan Phase 3):
-  [x] Model implemented as original code (not an imported pretrained class)
-  [x] Each component (embeddings, attention, MLP, block, head) separately
-      identifiable and commentable
-  [x] Parameter count printed/logged and sanity-checked as "small"
-  [x] Isolated forward/backward unit test passes on random data
-"""
+"""Phase 3 — Model Architecture Implementation (Training from Scratch)."""
 from __future__ import annotations
 
 import argparse
@@ -44,7 +12,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ───────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -58,19 +26,13 @@ from config import (  # noqa: E402
     TRAINABLE_PARAMS_JSON,
 )
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §1 — GPTConfig
 # ════════════════════════════════════════════════════════════════════════════
 
 @dataclass
 class GPTConfig:
-    """Hyperparameter container for the from-scratch GPT model.
-
-    All training-run code imports this dataclass rather than passing loose
-    keyword arguments, so every experiment is fully described by one object
-    that can be serialised to JSON (see dump_config / _dump_phase3_artifacts).
-    """
+    """Hyperparameter container for the from-scratch GPT model."""
 
     vocab_size: int                # set from Phase 1 tokenizer at runtime
     block_size: int = 256          # context length — matches Track 1 for comparison
@@ -87,47 +49,12 @@ class GPTConfig:
                 f"n_embd ({self.n_embd}) must be divisible by n_head ({self.n_head})"
             )
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §2 — CausalSelfAttention
 # ════════════════════════════════════════════════════════════════════════════
 
 class CausalSelfAttention(nn.Module):
-    """Multi-head scaled dot-product attention with a causal mask.
-
-    Design decisions (explained here for interview readiness):
-
-    Single fused QKV projection (c_attn):
-        Projecting Q, K, V in one go (Linear(n_embd, 3*n_embd)) is equivalent
-        to three separate projections but uses a single GEMM, which is more
-        efficient on modern hardware.  This is the standard GPT-2 convention.
-
-    Scaled dot-product attention — what "scaled" means:
-        Raw dot products Q·Kᵀ grow in magnitude with head dimension d_k.
-        Dividing by √d_k keeps the softmax input in a numerically stable range;
-        without scaling, large inputs push softmax into near-zero-gradient
-        saturation territory, harming learning.
-
-    Causal mask — what it does and why it matters:
-        The causal mask prevents position i from attending to any position j > i
-        by setting those attention scores to -∞ before the softmax (which then
-        maps them to 0 weight).  This enforces the autoregressive property:
-        predicting token i+1 uses *only* tokens 0..i — never future tokens.
-        Without the mask, a training-time "shortcut" exists (just copy the next
-        token directly), producing a misleadingly low loss that doesn't reflect
-        real generative ability.  At inference time the model sees only past
-        tokens anyway, so the mask must match training behaviour.
-
-    dropout_p and self.training:
-        F.scaled_dot_product_attention is a *stateless functional call* — it
-        has no internal awareness of model.eval() vs model.train().  Unlike
-        nn.Dropout (which automatically no-ops in eval mode), a non-zero
-        dropout_p passed as a literal float would fire stochastically even
-        during validation and generation, corrupting loss metrics and making
-        generation non-deterministic.
-        Fix: `dropout_p=self.dropout if self.training else 0.0`.
-        This is the canonical nanoGPT pattern for this exact reason.
-    """
+    """Multi-head scaled dot-product attention with a causal mask."""
 
     def __init__(self, config: GPTConfig) -> None:
         super().__init__()
@@ -151,21 +78,17 @@ class CausalSelfAttention(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         B, T, C = x.shape  # batch, sequence length, embedding dim (C == n_embd)
 
-        # ── 1. Compute Q, K, V from the fused projection ─────────────────────
+        # Compute Q, K, V from the fused projection
         qkv = self.c_attn(x)                     # (B, T, 3*C)
         q, k, v = qkv.split(self.n_embd, dim=2)  # each (B, T, C)
 
-        # ── 2. Reshape to (B, n_head, T, head_dim) for multi-head attention ──
+        # Reshape to (B, n_head, T, head_dim) for multi-head attention
         # view+transpose rather than reshape so we avoid a copy when contiguous.
         q = q.view(B, T, self.n_head, self.head_dim).transpose(1, 2)  # (B, nh, T, hd)
         k = k.view(B, T, self.n_head, self.head_dim).transpose(1, 2)
         v = v.view(B, T, self.n_head, self.head_dim).transpose(1, 2)
 
-        # ── 3. Causal scaled dot-product attention ────────────────────────────
-        # is_causal=True tells PyTorch to apply the lower-triangular causal mask
-        # internally (equivalent to setting upper-triangle scores to -inf before
-        # softmax, then zeroing the corresponding attention weights).
-        # dropout_p is conditioned on self.training — see module docstring.
+        # Causal scaled dot-product attention
         y = F.scaled_dot_product_attention(
             q, k, v,
             attn_mask=None,
@@ -173,43 +96,18 @@ class CausalSelfAttention(nn.Module):
             is_causal=True,
         )  # (B, nh, T, hd)
 
-        # ── 4. Merge heads back and apply output projection ───────────────────
+        # Merge heads back and apply output projection
         # contiguous() is needed before view() when the tensor was transposed.
         y = y.transpose(1, 2).contiguous().view(B, T, C)  # (B, T, C)
         y = self.resid_drop(self.c_proj(y))
         return y
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §3 — MLP
 # ════════════════════════════════════════════════════════════════════════════
 
 class MLP(nn.Module):
-    """Position-wise feed-forward network (two linear layers + GELU).
-
-    Design decisions:
-
-    4× expansion ratio:
-        The hidden layer expands to 4*n_embd, following the original
-        "Attention Is All You Need" convention.  This gives the network
-        capacity to represent complex token-level transformations before
-        projecting back down to the residual stream.
-
-    GELU(approximate='tanh'):
-        GPT-2 specifically used the tanh-approximated GELU (sometimes called
-        `gelu_new` in the HuggingFace codebase) rather than the exact
-        erf-based formula.  PyTorch's nn.GELU() defaults to exact erf;
-        passing approximate='tanh' matches GPT-2's actual implementation.
-        The numerical difference is ~1e-4 — negligible for training — but
-        the correct answer to "is this GPT-2's activation?" is now "yes,
-        same approximation" rather than "same function, different formula."
-
-    c_proj naming:
-        The second (output) linear is named c_proj for the same reason as
-        in CausalSelfAttention: the residual-scaling init pass in GPT.__init__
-        identifies output projections by `pn.endswith('c_proj.weight')`.
-        Both attention and MLP output projections share this naming convention.
-    """
+    """Position-wise feed-forward network (two linear layers + GELU)."""
 
     def __init__(self, config: GPTConfig) -> None:
         super().__init__()
@@ -225,28 +123,12 @@ class MLP(nn.Module):
         x = self.drop(x)    # regularisation before residual add
         return x
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §4 — TransformerBlock
 # ════════════════════════════════════════════════════════════════════════════
 
 class TransformerBlock(nn.Module):
-    """One decoder layer: pre-LayerNorm attention + pre-LayerNorm MLP.
-
-    Pre-LayerNorm (x = x + sublayer(LN(x))):
-        LayerNorm is applied to the *input* of each sublayer, not the output.
-        This "pre-norm" variant (vs. the original Transformer's post-norm) gives
-        more stable gradients during training — especially important here since
-        we are training from random initialisation with no warm-start from a
-        pretrained model.  The residual stream x passes through unmodified;
-        each sublayer contributes only a *delta* to it.
-
-    Residual connection:
-        x = x + sublayer(LN(x)) provides a gradient highway: gradients from
-        the loss flow back through the residual path without passing through
-        any learned transformation, which is why deep Transformers are
-        trainable at all.  Without residuals, gradients vanish in 6 layers.
-    """
+    """One decoder layer: pre-LayerNorm attention + pre-LayerNorm MLP."""
 
     def __init__(self, config: GPTConfig) -> None:
         super().__init__()
@@ -260,38 +142,18 @@ class TransformerBlock(nn.Module):
         x = x + self.mlp(self.ln2(x))   # pre-norm MLP residual
         return x
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §5 — GPT (full model)
 # ════════════════════════════════════════════════════════════════════════════
 
 class GPT(nn.Module):
-    """Decoder-only Transformer language model (GPT-2 style, from scratch).
-
-    __init__ ordering — matters for weight tying (see comment in-line):
-        1. Build all sub-layers.
-        2. Apply base _init_weights (std=0.02) to every parameter.
-        3. Apply residual-scaling second pass (c_proj.weight only).
-        4. THEN tie weights.
-        Tying after init means the shared tensor gets one clean draw from the
-        embedding init, and lm_head.weight becomes an alias to it.  Tying
-        before init would cause the shared tensor to be visited twice in the
-        base pass — confusing without being wrong, but wrong to leave implicit.
-
-    Weight tying (tie_weights=True):
-        Sets lm_head.weight = token_embedding.weight.  Justified by:
-        (a) Parameter savings: 197K fewer params at our scale (~6.7% of total).
-        (b) Semantic alignment: the same vector space is used to embed an input
-            token and to score that token as an output — the model's "understanding"
-            of a token is shared between both ends, which is well-motivated.
-        (c) Standard practice: GPT-2 and most small Transformer LMs tie weights.
-    """
+    """Decoder-only Transformer language model (GPT-2 style, from scratch)."""
 
     def __init__(self, config: GPTConfig) -> None:
         super().__init__()
         self.config = config
 
-        # ── 1. Build all sub-layers ───────────────────────────────────────────
+        # Build all sub-layers
         self.token_embedding    = nn.Embedding(config.vocab_size, config.n_embd)
         self.position_embedding = nn.Embedding(config.block_size, config.n_embd)
         self.emb_drop           = nn.Dropout(config.dropout)
@@ -302,40 +164,24 @@ class GPT(nn.Module):
         # LM head: no bias (standard); weight is optionally tied to token_embedding
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
-        # ── 2. Base initialisation pass ───────────────────────────────────────
+        # Base initialisation pass
         # Visits every sub-module in registration order and applies std=0.02
         # normal init to nn.Linear and nn.Embedding; LN to identity.
         self.apply(self._init_weights)
 
-        # ── 3. Residual-scaling second pass ───────────────────────────────────
+        # Residual-scaling second pass
         # The output projections (c_proj) in attention and MLP add to the
-        # residual stream N times (once per layer each).  Without scaling, the
-        # stream variance grows with depth.  Scaling by 1/√(2*n_layer) keeps it
-        # bounded — the GPT-2 convention, applied by name-matching so only the
-        # output projections are rescaled, not all linears.
         residual_std = 0.02 / math.sqrt(2 * config.n_layer)
         for pn, p in self.named_parameters():
             if pn.endswith("c_proj.weight"):
                 nn.init.normal_(p, mean=0.0, std=residual_std)
 
-        # ── 4. Weight tying (after init — see class docstring) ────────────────
-        # After this assignment, lm_head.weight IS token_embedding.weight
-        # (same Python object, same memory).  Any gradient update to one
-        # automatically updates the other.
+        # Weight tying (after init — see class docstring)
         if config.tie_weights:
             self.lm_head.weight = self.token_embedding.weight
 
     def _init_weights(self, module: nn.Module) -> None:
-        """Base initialisation applied to every sub-module via self.apply().
-
-        std=0.02 is the GPT-2 convention — empirically effective for Transformer
-        models.  It prevents activations from being too large (which would
-        saturate non-linearities) or too small (which would slow learning).
-
-        LayerNorm init to identity (weight=1, bias=0): the LN starts as a
-        no-op; training adjusts it from there.  This avoids any bias from
-        the randomly initialised model affecting the normalisation statistics.
-        """
+        """Base initialisation applied to every sub-module via self.apply()."""
         if isinstance(module, nn.Linear):
             nn.init.normal_(module.weight, mean=0.0, std=0.02)
             if module.bias is not None:
@@ -352,26 +198,7 @@ class GPT(nn.Module):
         input_ids: torch.Tensor,
         labels: torch.Tensor | None = None,
     ) -> tuple[torch.Tensor, torch.Tensor | None]:
-        """Forward pass.
-
-        Args:
-            input_ids: (B, T) integer token IDs, T <= block_size.
-            labels:    (B, T) integer token IDs for computing next-token loss.
-                       If None, returns (logits, None).
-
-        Returns:
-            logits: (B, T, vocab_size) unnormalised log-probabilities.
-            loss:   scalar cross-entropy loss if labels provided, else None.
-
-        The shift-by-one indexing explained:
-            At position i the model sees tokens [0..i] and must predict token i+1.
-            So logits[:, :-1, :] (predictions at positions 0..T-2) are compared
-            against labels[:, 1:] (actual tokens at positions 1..T-1).
-            This is the fundamental next-token-prediction setup.  Getting the
-            indexing wrong (e.g., comparing logits[:, :, :] against labels
-            directly) is a common bug that produces a loss that looks fine
-            numerically but is training the wrong objective.
-        """
+        """Forward pass. Args:."""
         device = input_ids.device
         B, T   = input_ids.shape
         assert T <= self.config.block_size, (
@@ -379,21 +206,21 @@ class GPT(nn.Module):
             f"Either reduce the sequence length or increase block_size in GPTConfig."
         )
 
-        # ── Token + positional embeddings ─────────────────────────────────────
+        # Token + positional embeddings
         pos     = torch.arange(0, T, dtype=torch.long, device=device)  # (T,)
         tok_emb = self.token_embedding(input_ids)   # (B, T, n_embd)
         pos_emb = self.position_embedding(pos)       # (T, n_embd) — broadcast over B
         x       = self.emb_drop(tok_emb + pos_emb)  # (B, T, n_embd)
 
-        # ── N transformer blocks ──────────────────────────────────────────────
+        # N transformer blocks
         for block in self.blocks:
             x = block(x)
 
-        # ── Final LayerNorm + LM head ─────────────────────────────────────────
+        # Final LayerNorm + LM head
         x      = self.ln_f(x)       # (B, T, n_embd)
         logits = self.lm_head(x)    # (B, T, vocab_size)
 
-        # ── Next-token prediction loss ────────────────────────────────────────
+        # Next-token prediction loss
         loss = None
         if labels is not None:
             # Shift: logits[i] predicts token[i+1]
@@ -410,13 +237,7 @@ class GPT(nn.Module):
         return logits, loss
 
     def count_parameters(self) -> dict:
-        """Return total and per-component trainable parameter counts.
-
-        The per-component breakdown is written to trainable_params.json so
-        the weight-tying decision is self-documenting in the artifact:
-        lm_head_tied=0 when tie_weights=True (the lm_head has no parameters
-        of its own — its weight IS the token_embedding weight).
-        """
+        """Return total and per-component trainable parameter counts."""
         total = sum(p.numel() for p in self.parameters() if p.requires_grad)
 
         def _count(module: nn.Module) -> int:
@@ -449,65 +270,24 @@ class GPT(nn.Module):
         top_p: float | None = None,
         eos_token_id: int | None = None,
     ) -> torch.Tensor:
-        """Autoregressive next-token generation loop.
-
-        Args:
-            input_ids:      (1, T_prompt) LongTensor, already on the correct device.
-            max_new_tokens: Maximum number of new tokens to append.
-            temperature:    Sampling temperature.  temperature <= 0.0 triggers
-                            pure greedy decoding via argmax (see note below).
-            top_k:          If set, only the top-k logits are sampled from.
-            top_p:          If set, nucleus (top-p) sampling is used.
-            eos_token_id:   If set, generation stops early when this token is emitted.
-
-        Returns:
-            LongTensor of shape (1, T_prompt + n_generated).
-
-        Design notes (for interview readiness):
-
-        Context crop (step a):
-            The position embedding table has exactly block_size entries.  Passing
-            a sequence longer than block_size would cause an index-out-of-bounds
-            error in nn.Embedding.  We take the last block_size tokens, matching
-            what is done in nanoGPT and similar implementations.
-
-        Greedy branch (temperature <= 0.0):
-            Dividing logits by a near-zero float (e.g. 1e-7) can produce very
-            large values (20.0 / 1e-7 = 2e8) that make F.softmax numerically
-            unstable on fp32 — the result collapses to a one-hot but may produce
-            -inf in intermediate computations.  A genuine argmax branch is two
-            lines, removes this class of failure entirely, and is unambiguous.
-
-        Temperature then top-k/top-p order:
-            Temperature is applied first (raw logits → scaled logits), then
-            top-k/top-p truncation, then softmax + multinomial.  Applying
-            softmax before temperature would change which tokens survive the
-            truncation step — always apply temperature to logits, not probs.
-
-        @torch.no_grad() decorator:
-            Applied to the whole method, not just the loop, so no computation
-            graph accumulates for any intermediate tensor.  Using the decorator
-            rather than a `with torch.no_grad():` block inside the loop avoids
-            the risk of accidentally removing the context manager during
-            refactoring.
-        """
+        """Autoregressive next-token generation loop. Args:."""
         was_training = self.training
         self.eval()
 
         try:
             for _ in range(max_new_tokens):
-                # ── a. Crop context to block_size ────────────────────────────
+                # a. Crop context to block_size
                 ctx = (
                     input_ids
                     if input_ids.shape[1] <= self.config.block_size
                     else input_ids[:, -self.config.block_size :]
                 )
 
-                # ── b. Forward — take only the last-position logits ──────────
+                # b. Forward — take only the last-position logits
                 logits, _ = self(ctx)           # (1, T, vocab_size)
                 logits = logits[:, -1, :]       # (1, vocab_size)
 
-                # ── c. Greedy branch — bypass softmax entirely ───────────────
+                # c. Greedy branch — bypass softmax entirely
                 if temperature <= 0.0:
                     next_token = logits.argmax(dim=-1, keepdim=True)  # (1, 1)
                     input_ids = torch.cat([input_ids, next_token], dim=1)
@@ -515,17 +295,17 @@ class GPT(nn.Module):
                         break
                     continue
 
-                # ── d. Temperature scaling ───────────────────────────────────
+                # d. Temperature scaling
                 logits = logits / temperature
 
-                # ── e. Top-k filtering ───────────────────────────────────────
+                # e. Top-k filtering
                 if top_k is not None:
                     k = min(top_k, logits.size(-1))
                     # Zero out all logits below the k-th largest value.
                     threshold = logits.topk(k).values[..., -1, None]
                     logits = logits.masked_fill(logits < threshold, float("-inf"))
 
-                # ── f. Top-p (nucleus) filtering ─────────────────────────────
+                # f. Top-p (nucleus) filtering
                 if top_p is not None:
                     # Sort descending, compute cumulative softmax probs,
                     # zero out tokens once the cumulative mass exceeds top_p.
@@ -542,11 +322,11 @@ class GPT(nn.Module):
                         dim=-1, index=sorted_idx, src=sorted_logits
                     )
 
-                # ── g. Sample ────────────────────────────────────────────────
+                # g. Sample
                 probs = F.softmax(logits, dim=-1)
                 next_token = torch.multinomial(probs, num_samples=1)  # (1, 1)
 
-                # ── h. Append and check EOS ──────────────────────────────────
+                # h. Append and check EOS
                 input_ids = torch.cat([input_ids, next_token], dim=1)
                 if eos_token_id is not None and next_token.item() == eos_token_id:
                     break
@@ -558,22 +338,12 @@ class GPT(nn.Module):
 
         return input_ids
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §6 — Runtime config loader
 # ════════════════════════════════════════════════════════════════════════════
 
 def _load_runtime_config() -> GPTConfig:
-    """Build a GPTConfig from Phase 1/2 outputs, with safe defaults.
-
-    Reads vocab_size from the trained tokenizer's vocab.json and block_size
-    from the dataset stats JSON.  If either file is missing (Phases 1/2 not
-    yet run on Colab), falls back to vocab_size=1024, block_size=256 with a
-    printed warning so the unit test can run locally without Colab outputs.
-
-    The actual training in Phase 4 will always use the real values because
-    it will be run on Colab after Phases 1/2 have been committed.
-    """
+    """Build a GPTConfig from Phase 1/2 outputs, with safe defaults."""
     vocab_size  = 1024   # default — BPE sweep most likely selects this
     block_size  = 256    # matches Track 1 and build_dataset.py constant
 
@@ -604,21 +374,12 @@ def _load_runtime_config() -> GPTConfig:
 
     return GPTConfig(vocab_size=vocab_size, block_size=block_size)
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §7 — Unit tests (pure validation — no filesystem side effects)
 # ════════════════════════════════════════════════════════════════════════════
 
 def _unit_test(config: GPTConfig) -> None:
-    """Validate the model in isolation on random data before any real training.
-
-    Eight test cases covering shape, loss, gradients, parameter count,
-    weight tying, variable-length input, initial-loss sanity, and
-    eval-mode dropout correctness.
-
-    Raises AssertionError immediately on any failure.  No files are written
-    by this function (see _dump_phase3_artifacts for the separate writer).
-    """
+    """Validate the model in isolation on random data before any real training."""
     print("\n══ Phase 3 Unit Tests ══")
     set_seed(SEED)
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -629,7 +390,7 @@ def _unit_test(config: GPTConfig) -> None:
     model = GPT(config).to(device)
     B, T  = 2, config.block_size
 
-    # ── Test 1: Output shape ─────────────────────────────────────────────────
+    # Test 1: Output shape
     print("[test 1/8] Output shape ...")
     ids = torch.randint(0, config.vocab_size, (B, T), device=device)
     logits, _ = model(ids)
@@ -638,7 +399,7 @@ def _unit_test(config: GPTConfig) -> None:
     )
     print(f"         PASS — logits shape: {tuple(logits.shape)}")
 
-    # ── Test 2: Loss is finite scalar ────────────────────────────────────────
+    # Test 2: Loss is finite scalar
     print("[test 2/8] Loss is a finite scalar ...")
     ids  = torch.randint(0, config.vocab_size, (B, T), device=device)
     _, loss = model(ids, labels=ids)
@@ -647,7 +408,7 @@ def _unit_test(config: GPTConfig) -> None:
     assert torch.isfinite(loss).item(),   f"FAIL: loss is not finite — got {loss.item()}"
     print(f"         PASS — loss={loss.item():.4f}")
 
-    # ── Test 3: Backward pass, gradients exist and are finite ────────────────
+    # Test 3: Backward pass, gradients exist and are finite
     print("[test 3/8] Backward pass + finite gradients ...")
     model.zero_grad()
     ids  = torch.randint(0, config.vocab_size, (B, T), device=device)
@@ -667,7 +428,7 @@ def _unit_test(config: GPTConfig) -> None:
     assert has_grad, "FAIL: no parameter received a gradient"
     print("         PASS — gradients exist and are finite")
 
-    # ── Test 4: Parameter count in expected range ─────────────────────────────
+    # Test 4: Parameter count in expected range
     print("[test 4/8] Parameter count ...")
     param_info = model.count_parameters()
     total = param_info["total"]
@@ -677,7 +438,7 @@ def _unit_test(config: GPTConfig) -> None:
     )
     print(f"         PASS — total trainable params: {total:,}")
 
-    # ── Test 5: Weight tying identity ────────────────────────────────────────
+    # Test 5: Weight tying identity
     print("[test 5/8] Weight tying ...")
     if config.tie_weights:
         assert model.lm_head.weight is model.token_embedding.weight, (
@@ -691,7 +452,7 @@ def _unit_test(config: GPTConfig) -> None:
         )
         print("         PASS — weights are not tied (tie_weights=False)")
 
-    # ── Test 6: Variable-length input (shorter than block_size) ──────────────
+    # Test 6: Variable-length input (shorter than block_size)
     print("[test 6/8] Variable-length input ...")
     short_T = max(4, config.block_size // 4)  # well below block_size
     ids_short = torch.randint(0, config.vocab_size, (1, short_T), device=device)
@@ -702,11 +463,7 @@ def _unit_test(config: GPTConfig) -> None:
     )
     print(f"         PASS — T={short_T} (< block_size={config.block_size}) works")
 
-    # ── Test 7: Initial loss ≈ ln(vocab_size) (random-model sanity) ──────────
-    # A freshly initialised model should produce near-uniform logits over the
-    # vocabulary; the CE of a uniform distribution is ln(vocab_size).  A loss
-    # far below this signals the model can already "see" the labels (masking
-    # bug); a loss far above indicates numerical instability (init too large).
+    # Test 7: Initial loss ≈ ln(vocab_size) (random-model sanity)
     print("[test 7/8] Initial loss near ln(vocab_size) ...")
     model_fresh = GPT(config).to(device)
     ids_rand    = torch.randint(0, config.vocab_size, (B, T), device=device)
@@ -721,11 +478,7 @@ def _unit_test(config: GPTConfig) -> None:
     )
     print(f"         PASS — initial loss={actual_val:.4f}, ln(vocab_size)={expected:.4f}")
 
-    # ── Test 8: Eval-mode dropout determinism ─────────────────────────────────
-    # If dropout_p in SDPA ignores self.training, two eval-mode forward passes
-    # on identical input will produce different (stochastic) losses.
-    # This test directly catches the dropout/self.training bug described in
-    # the Phase 3 plan review.
+    # Test 8: Eval-mode dropout determinism
     print("[test 8/8] Eval-mode dropout determinism ...")
     model_eval = GPT(config).to(device)
     model_eval.eval()
@@ -741,47 +494,37 @@ def _unit_test(config: GPTConfig) -> None:
     )
     print(f"         PASS — eval-mode loss is deterministic ({loss_eval_1.item():.6f})")
 
-    print("\n[phase3] All 8 unit tests passed ✓")
-
+    print("\n[phase3] All 8 unit tests passed [OK]")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §8 — Artifact writer (separate from unit tests — no side effects in tests)
 # ════════════════════════════════════════════════════════════════════════════
 
 def _dump_phase3_artifacts(config: GPTConfig, model: GPT) -> None:
-    """Write run_phase3_model.json and trainable_params.json.
-
-    Called by __main__ AFTER _unit_test() passes.  Kept separate from
-    _unit_test() so the test function has zero filesystem side effects and
-    can be called safely from any context (imports, future test harnesses).
-
-    Both files use canonical paths from config.py (MODEL_CONFIG_JSON,
-    TRAINABLE_PARAMS_JSON) so they land in the right place regardless of CWD.
-    """
+    """Write run_phase3_model.json and trainable_params.json. Called by __main__ AFTER _unit_test() passes. Kept separate from."""
     CONFIGS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── 1. Architecture config (global config-as-file convention §0) ─────────
+    # Architecture config (global config-as-file convention §0)
     cfg_dict = asdict(config)
     cfg_dict["phase"] = "phase3_model"
     cfg_dict["seed"]  = SEED
     dump_config(cfg_dict, "phase3_model")  # writes configs/run_phase3_model.json
 
-    # ── 2. Trainable parameter breakdown ─────────────────────────────────────
+    # Trainable parameter breakdown
     param_info = model.count_parameters()
     TRAINABLE_PARAMS_JSON.parent.mkdir(parents=True, exist_ok=True)
     TRAINABLE_PARAMS_JSON.write_text(
         json.dumps(param_info, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"[phase3] trainable params → {TRAINABLE_PARAMS_JSON}")
+    print(f"[phase3] trainable params -> {TRAINABLE_PARAMS_JSON}")
 
-    # ── 3. Print summary to stdout (captured by Colab cell output) ───────────
+    # Print summary to stdout (captured by Colab cell output)
     print(f"\n[phase3] Parameter summary:")
     for k, v in param_info.items():
         if isinstance(v, int):
             print(f"  {k}: {v:,}")
         else:
             print(f"  {k}: {v}")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §9 — Entry point

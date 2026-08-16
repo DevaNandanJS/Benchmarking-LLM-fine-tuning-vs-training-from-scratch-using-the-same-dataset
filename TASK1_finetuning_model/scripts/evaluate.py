@@ -1,49 +1,4 @@
-"""Phase 6 — Quantitative Evaluation.
-
-Goal: produce the numbers and plots that go directly into the write-up's
-"training and validation loss curves" and cross-track comparison sections.
-
-Outputs:
-    TASK1_finetuning_model/eval/loss_curve.png              — train+val loss vs step
-    TASK1_finetuning_model/eval/final_metrics.json          — loss, perplexity, BPB
-    TASK1_finetuning_model/eval/loss_curve_interpretation.md — 3-5 sentence interpretation
-
-BPB (bits-per-byte) — why and how:
-    Different tokenizers have different vocabulary sizes, making raw
-    cross-entropy loss non-comparable across models. BPB normalises by the
-    *byte* length of the text, making it tokenizer-agnostic:
-
-        BPB = (sum_CE_nats / utf8_byte_length_of_val_text) / ln(2)
-
-    where sum_CE_nats is the SUM (not mean) of cross-entropy over all
-    validation tokens, and utf8_byte_length_of_val_text is the raw byte
-    length of the validation text span (boundary: onwards in document_clean.txt).
-
-    BPB validity requirement: every validation token must be scored exactly
-    ONCE, i.e., val windows must NOT overlap. Verified: Phase 3 built val
-    chunks with val_stride=256=context_length (val_overlap_pct=0.0 confirmed
-    in data/processed/dataset_stats.json). The BPB formula is valid as-is.
-
-    Byte boundary alignment: naive re-tokenization + slicing at `boundary:`
-    token index can drift by a character or two if the tokenizer produces
-    slightly different token alignments on a second pass. Instead, we use
-    tokenizer(..., return_offsets_mapping=True) to get the exact character
-    offset of the boundary token and slice the raw text at that character.
-    This ensures the byte count and token count refer to exactly the same
-    text span.
-
-Smoke-test mode (--smoke):
-    Loads a tiny dummy metrics.jsonl (2 rows) and the real val tensors (first
-    2 chunks) to verify shapes and JSON output without needing a full run.
-
-Run on Colab (from repo root after git pull):
-    !python TASK1_finetuning_model/scripts/evaluate.py --run r8  # or whichever is best
-
-Definition of Done (plan §Phase 6):
-    [ ] eval/loss_curve.png produced and legible (labelled axes, legend)
-    [ ] eval/final_metrics.json contains loss, perplexity, and BPB
-    [ ] Written interpretation exists and references specific curve features
-"""
+"""Phase 6 — Quantitative Evaluation."""
 from __future__ import annotations
 
 import argparse
@@ -73,7 +28,6 @@ from config import (  # noqa: E402
 
 MODEL_NAME = "HuggingFaceTB/SmolLM2-135M"
 
-
 def load_metrics_jsonl(run_name: str) -> list[dict]:
     """Load all logged steps from logs/<run_name>/metrics.jsonl."""
     path = LOGS_DIR / run_name / "metrics.jsonl"
@@ -90,7 +44,6 @@ def load_metrics_jsonl(run_name: str) -> list[dict]:
                 records.append(json.loads(line))
     return records
 
-
 def pick_best_run() -> str:
     """Read sweep_results.csv and return the run_name with lowest best_val_loss."""
     import csv
@@ -105,7 +58,6 @@ def pick_best_run() -> str:
                 best_run = row["run_name"]
     print(f"[phase6] best run from sweep_results.csv: {best_run} (val_loss={best_loss:.4f})")
     return best_run
-
 
 def plot_loss_curve(records: list[dict], run_name: str) -> None:
     """Plot train and val loss vs step, save to eval/loss_curve.png."""
@@ -139,15 +91,8 @@ def plot_loss_curve(records: list[dict], run_name: str) -> None:
     plt.close(fig)
     print(f"[phase6] loss curve saved -> {LOSS_CURVE_PNG}")
 
-
 def get_val_text_bytes(boundary_token_idx: int) -> tuple[int, str]:
-    """Return (byte_count, val_text_str) for the validation text span.
-
-    Uses tokenizer return_offsets_mapping to find the exact character offset
-    of the boundary token rather than re-slicing by token index. This avoids
-    the small character-alignment drift that naive slicing can introduce on a
-    second tokenization pass.
-    """
+    """Return (byte_count, val_text_str) for the validation text span."""
     from transformers import AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
@@ -173,7 +118,6 @@ def get_val_text_bytes(boundary_token_idx: int) -> tuple[int, str]:
         f"({byte_len:,} UTF-8 bytes)"
     )
     return byte_len, val_text
-
 
 def compute_final_metrics(run_name: str, device) -> dict:
     """Load best checkpoint, compute CE loss, perplexity, and BPB on val set."""
@@ -252,7 +196,6 @@ def compute_final_metrics(run_name: str, device) -> dict:
         ),
     }
 
-
 def write_interpretation_template(metrics: dict, records: list[dict]) -> None:
     """Write a 3-5 sentence interpretation skeleton populated with real stats."""
     # Find the step where val loss was lowest (best epoch)
@@ -328,7 +271,6 @@ once that track completes.
     LOSS_CURVE_INTERP_MD.write_text(interpretation, encoding="utf-8")
     print(f"[phase6] interpretation template saved -> {LOSS_CURVE_INTERP_MD}")
 
-
 def main() -> None:
     import torch
 
@@ -353,7 +295,7 @@ def main() -> None:
     run_name = args.run or pick_best_run()
     print(f"[phase6] evaluating run: {run_name}")
 
-    # ── 1. Load metrics and plot ───────────────────────────────────────────
+    # Load metrics and plot
     if args.smoke:
         # Stub two records for smoke testing shape/JSON output
         records = [
@@ -367,7 +309,7 @@ def main() -> None:
 
     plot_loss_curve(records, run_name)
 
-    # ── 2. Compute final metrics ───────────────────────────────────────────
+    # Compute final metrics
     if args.smoke:
         metrics = {
             "run_name": run_name,
@@ -390,10 +332,10 @@ def main() -> None:
     )
     print(f"[phase6] final_metrics.json saved -> {FINAL_METRICS_JSON}")
 
-    # ── 3. Write interpretation template ─────────────────────────────────
+    # Write interpretation template
     write_interpretation_template(metrics, records)
 
-    # ── 4. Definition-of-Done assertions ─────────────────────────────────
+    # Definition-of-Done assertions
     assert LOSS_CURVE_PNG.exists(), f"FAIL: {LOSS_CURVE_PNG} not written"
     assert FINAL_METRICS_JSON.exists(), f"FAIL: {FINAL_METRICS_JSON} not written"
     assert LOSS_CURVE_INTERP_MD.exists(), f"FAIL: {LOSS_CURVE_INTERP_MD} not written"
@@ -401,10 +343,9 @@ def main() -> None:
     for key in ("mean_ce_loss", "perplexity", "bpb"):
         assert key in loaded, f"FAIL: {key} missing from final_metrics.json"
 
-    print("\n[phase6] ✅ all Definition-of-Done assertions passed")
+    print("\n[phase6] [SUCCESS] all Definition-of-Done assertions passed")
     print(f"[phase6]   loss={loaded['mean_ce_loss']}  perp={loaded['perplexity']}  BPB={loaded['bpb']}")
     print("[phase6] Phase 6 complete. Edit loss_curve_interpretation.md with your curve reading.")
-
 
 if __name__ == "__main__":
     main()

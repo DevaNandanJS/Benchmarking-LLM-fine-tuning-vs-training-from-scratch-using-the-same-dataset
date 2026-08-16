@@ -1,33 +1,11 @@
-"""Phase 2 — Base Model & Tokenizer Selection.
-
-Goal: lock the pretrained base model and tokenizer, confirm exact token count,
-record the quantization decision, and extract the model's layer names so Phase 4
-LoRA target_modules can be set from *verified* names rather than assumptions.
-
-Outputs (all relative to TASK1_finetuning_model/):
-  configs/run_phase2.json          — run config dump (seed, model_name, all decisions)
-  configs/model_architecture.json  — full module name list from model.named_modules()
-  data/extracted/stats.json        — adds exact_token_count_smollm2_135m field
-                                     (proxy_token_count_gpt2_tiktoken preserved for
-                                     audit trail — NOT overwritten)
-
-Run on Colab (from repo root):
-  !python TASK1_finetuning_model/scripts/select_model.py
-
-Definition of Done (plan §Phase 2):
-  [x] Base model + tokenizer load, parameter count printed and logged
-  [x] Pad token confirmed/set, decision logged
-  [x] stats.json updated with exact token count under the real tokenizer
-  [x] Quantization decision (yes/no) recorded with memory-math justification
-  [x] Model layer names extracted and saved for Phase 4 (user-added verification step)
-"""
+"""Phase 2 — Base Model & Tokenizer Selection."""
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ──────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -38,19 +16,18 @@ from config import CLEAN_TXT, MODEL_ARCH_JSON, MODEL_CHOICE_MD, STATS_JSON  # no
 MODEL_NAME = "HuggingFaceTB/SmolLM2-135M"
 T4_VRAM_GB = 15.0
 
-
 def main() -> None:
     seed = set_seed(SEED)
     print(f"[phase2] seed = {seed}")
 
-    # ── 1. Load tokenizer ──────────────────────────────────────────────────
+    # Load tokenizer
     print(f"\n[phase2] loading tokenizer: {MODEL_NAME}")
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     print(f"[phase2] vocab size: {tokenizer.vocab_size:,}")
 
-    # ── 2. Pad token decision ──────────────────────────────────────────────
+    # Pad token decision
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
         pad_token_decision = (
@@ -70,20 +47,13 @@ def main() -> None:
         )
         print(f"[phase2] pad_token already set: '{tokenizer.pad_token}'")
 
-    # ── 3. Load model ──────────────────────────────────────────────────────
+    # Load model
     print(f"\n[phase2] loading model: {MODEL_NAME} ...")
     model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
     total_params = sum(p.numel() for p in model.parameters())
     print(f"[phase2] total parameters: {total_params:,}")
 
-    # ── 4. Architecture verification — save ALL module names now ──────────
-    #
-    # USER NOTE: this step was added at Phase 2 (not deferred to Phase 4)
-    # because the model is already loaded here. Phase 4 MUST consult
-    # configs/model_architecture.json rather than assuming layer names from
-    # documentation — SmolLM2 uses separate q_proj/k_proj/v_proj/o_proj but
-    # this is confirmed here, not assumed.
-    #
+    # Architecture verification — save ALL module names now
     all_module_names = [n for n, _ in model.named_modules() if n]  # skip root ""
     arch_record = {
         "model_name": MODEL_NAME,
@@ -110,14 +80,14 @@ def main() -> None:
     if len(attn_modules) > 40:
         print(f"  ... ({len(attn_modules) - 40} more — see model_architecture.json)")
 
-    # ── 5. Re-tokenize document_clean.txt with real tokenizer ─────────────
+    # Re-tokenize document_clean.txt with real tokenizer
     print(f"\n[phase2] tokenizing {CLEAN_TXT} ...")
     text = CLEAN_TXT.read_text(encoding="utf-8")
     token_ids = tokenizer.encode(text, add_special_tokens=False)
     exact_token_count = len(token_ids)
     print(f"[phase2] exact token count ({MODEL_NAME}): {exact_token_count:,}")
 
-    # ── 6. Update stats.json — ADD new field, preserve all existing ────────
+    # Update stats.json — ADD new field, preserve all existing
     stats = json.loads(STATS_JSON.read_text(encoding="utf-8"))
     proxy_count = stats.get("proxy_token_count_gpt2_tiktoken")
     stats["exact_token_count_smollm2_135m"] = exact_token_count
@@ -135,7 +105,7 @@ def main() -> None:
     STATS_JSON.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
     print(f"[phase2] stats.json updated -> {STATS_JSON}")
 
-    # ── 7. Quantization decision — memory math ────────────────────────────
+    # Quantization decision — memory math
     fp16_bytes = total_params * 2
     fp16_mb = fp16_bytes / 1_000_000
     vram_utilisation_pct = fp16_mb / (T4_VRAM_GB * 1000) * 100
@@ -155,7 +125,7 @@ def main() -> None:
     print(f"[phase2] fp16 weight footprint: {fp16_mb:.0f} MB ({vram_utilisation_pct:.1f}% of T4 VRAM)")
     print(f"[phase2] memory caveat: footprint is weights-only — empirically verify in Phase 5")
 
-    # ── 8. Dump run config ──────────────────────────────────────────────────
+    # Dump run config
     run_config = {
         "phase": 2,
         "model_name": MODEL_NAME,
@@ -176,7 +146,7 @@ def main() -> None:
     cfg_path = dump_config(run_config, "phase2")
     print(f"[phase2] run config saved -> {cfg_path}")
 
-    # ── 9. Definition-of-Done assertions ────────────────────────────────────
+    # Definition-of-Done assertions
     updated_stats = json.loads(STATS_JSON.read_text(encoding="utf-8"))
     assert "exact_token_count_smollm2_135m" in updated_stats, (
         "FAIL: stats.json missing exact_token_count_smollm2_135m"
@@ -185,7 +155,6 @@ def main() -> None:
     assert cfg_path.exists(), f"FAIL: run config not saved at {cfg_path}"
     print("\n[phase2] [OK] all Definition-of-Done assertions passed")
     print("[phase2] Phase 2 complete. Review configs/ and data/extracted/stats.json, then commit.")
-
 
 if __name__ == "__main__":
     main()

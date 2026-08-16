@@ -1,24 +1,4 @@
-"""Phase 8 — Cross-Track Comparison Prep.
-
-Goal: stage Track 1 artifacts into shared_eval/ (namespaced) so both tracks'
-results sit side by side for the final write-up comparison section.
-
-This script is lightweight — it copies eval artifacts and writes the comparison
-notes stub with Track 1 data filled in and Track 2 fields marked TBD.
-It cannot be fully completed until Track 2 finishes.
-
-Outputs:
-    shared_eval/finetuning_final_metrics.json   — copy of eval/final_metrics.json
-    shared_eval/finetuning_loss_curve.png       — copy of eval/loss_curve.png
-    shared_eval/comparison_notes.md         — Track 1 section filled, Track 2 TBD
-
-Run on Colab (from repo root after git pull):
-    !python TASK1_finetuning_model/scripts/stage_comparison.py
-
-Definition of Done (plan §Phase 8):
-    [ ] Track 1 metrics/plots staged in shared_eval/
-    [ ] comparison_notes.md started (Track 2 fields marked TBD)
-"""
+"""Phase 8 — Cross-Track Comparison Prep."""
 from __future__ import annotations
 
 import json
@@ -39,16 +19,14 @@ from config import (  # noqa: E402
     TRAINABLE_PARAMS_JSON,
 )
 
-
 COMPARISON_NOTES_MD = SHARED_EVAL_DIR / "comparison_notes.md"
 T1_METRICS_JSON = SHARED_EVAL_DIR / "finetuning_final_metrics.json"
 T1_LOSS_CURVE_PNG = SHARED_EVAL_DIR / "finetuning_loss_curve.png"
 
-
 def main() -> None:
     SHARED_EVAL_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── 1. Copy eval artifacts into shared_eval/ ──────────────────────────
+    # Copy eval artifacts into shared_eval/
     if not FINAL_METRICS_JSON.exists():
         print(
             f"[phase8] ERROR: {FINAL_METRICS_JSON} not found. "
@@ -65,7 +43,7 @@ def main() -> None:
     else:
         print(f"[phase8] WARNING: {LOSS_CURVE_PNG} not found — skipping plot copy")
 
-    # ── 2. Load Track 1 metrics for notes ─────────────────────────────────
+    # Load Track 1 metrics for notes
     t1 = json.loads(FINAL_METRICS_JSON.read_text(encoding="utf-8"))
 
     # Load trainable param count if available
@@ -76,7 +54,7 @@ def main() -> None:
         trainable_pct = f"{tp.get('trainable_percentage', '?'):.3f}%"
         trainable_count = f"{tp.get('trainable_parameters', '?'):,}"
 
-    # ── 3. Write comparison_notes.md ──────────────────────────────────────
+    # Write comparison_notes.md
     notes = f"""# Cross-Track Comparison Notes
 
 > **Status:** Track 1 complete. Track 2 fields are TBD — fill in once Track 2 finishes.
@@ -148,13 +126,12 @@ vs TBD for Track 2) quantifies the compute cost of each approach.
     COMPARISON_NOTES_MD.write_text(notes, encoding="utf-8")
     print(f"[phase8] comparison notes written -> {COMPARISON_NOTES_MD}")
 
-    # ── 4. Definition-of-Done assertions ─────────────────────────────────
+    # Definition-of-Done assertions
     assert T1_METRICS_JSON.exists(), f"FAIL: {T1_METRICS_JSON} not written"
     assert COMPARISON_NOTES_MD.exists(), f"FAIL: {COMPARISON_NOTES_MD} not written"
-    print("\n[phase8] ✅ all Definition-of-Done assertions passed")
+    print("\n[phase8] [SUCCESS] all Definition-of-Done assertions passed")
     print(f"[phase8]   BPB={t1.get('bpb', '?')}  perplexity={t1.get('perplexity', '?')}")
     print("[phase8] Phase 8 complete. Fill in Track 2 fields once Track 2 finishes.")
-
 
 if __name__ == "__main__":
     main()

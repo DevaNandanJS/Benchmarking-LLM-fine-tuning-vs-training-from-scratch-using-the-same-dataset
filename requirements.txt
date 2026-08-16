@@ -1,13 +1,3 @@
-# Track 1/2 dependencies — installed inside the Colab kernel via the notebook sync cells.
-#
-# Pinning strategy:
-#   - torch is deliberately NOT listed: Colab ships a CUDA-enabled torch already.
-#   - transformers is capped below v5 (the plan's code targets the stable 4.x API;
-#     v5 is a new major that can break PEFT/LoRA tutorials).
-#   - exact installed versions are frozen separately in TASK1_finetuning_model/environment.txt
-#     (and TASK2_slm_from_scratch/environment.txt) via `pip freeze` on the remote session — that
-#     file is the reproducibility lock, commit it back to the repo.
-
 transformers>=4.46,<5
 peft>=0.13,<1
 accelerate>=1.0,<2
@@ -19,12 +9,6 @@ pypdf>=4.0
 pdfplumber>=0.11
 matplotlib>=3.8
 pandas>=2.1
-
-# Phase 1 extras
-tiktoken>=0.6        # GPT-2 proxy token count (Phase 1 stats); CPU-only, no model download
-nltk>=3.8            # English wordlist for garble detection + hyphen-join disambiguation
-
-# bitsandbytes>=0.43   # only if the quantization decision gate (Phase 2) requires QLoRA
-
-# Track 2 extras — scratch training from random init
-tokenizers>=0.20       # Hugging Face Rust-backed BPE tokenizer trainer (ByteLevelBPETokenizer)
+tiktoken>=0.6       
+nltk>=3.8            
+tokenizers>=0.20

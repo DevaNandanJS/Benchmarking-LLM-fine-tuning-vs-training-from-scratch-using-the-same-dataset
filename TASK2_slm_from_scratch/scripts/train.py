@@ -1,71 +1,4 @@
-"""Phase 4 \u2014 Training Loop Implementation (Training from Scratch).
-
-Goal (plan \u00a7Phase 4): a from-scratch training loop with the same logging
-discipline as Track 1.  No Trainer, no abstractions beyond what we wrote in
-Phases 1\u20133 \u2014 every gradient step, scheduler tick, and validation pass is
-visible and explainable line-by-line.
-
-Key design decisions (documented for interview readiness):
-
-Step-based outer loop (`for step in range(total_steps)`):
-    The dataset is tiny (~200\u2013400 training chunks of 256 tokens).  A step-based
-    loop with a generous TOTAL_STEPS budget decouples training length from
-    epoch count, allowing the best-val checkpoint mechanism (not epoch count)
-    to determine when to stop caring about new updates.
-
-DataLoader with shuffle=True + cyclic stateful iterator:
-    Shuffled-epoch approach: every time the loader is exhausted, re-shuffling
-    occurs automatically when the next iterator is created.  Logged in the run
-    config as batch_strategy=\"dataloader_shuffle\".
-
-Save check nested inside eval block:
-    val_loss is always freshly computed immediately before the save comparison.
-    No stale-value risk; SAVE_EVERY as a separate constant is eliminated \u2014
-    one fewer knob that could be tuned independently and cause subtle bugs.
-
-AMP (fp16 / GradScaler):
-    use_amp gates BOTH autocast and GradScaler via the same boolean \u2014 they
-    cannot drift out of sync.  Disabled on CPU (smoke-test safe).
-
-Weight decay split:
-    2D+ params (Linear/Embedding weights) get WEIGHT_DECAY; biases and
-    LayerNorm params get 0.0.  See make_param_groups() docstring.
-
-LR schedule:
-    Linear warmup (WARMUP_RATIO of total_steps) \u2192 cosine decay to
-    MIN_LR_RATIO * peak_lr.  Implemented via LambdaLR for full transparency.
-
-Smoke-test mode (--smoke-test):
-    4 chunks, 5 steps, CPU fp32.  Calls evaluate() once to exercise the
-    model.eval()/model.train() state-restoration path before Colab.
-    Does not write checkpoints or update sweep_results.csv.
-
-Sweep runs (\u22652 required by plan \u00a7Phase 4 Step 7):
-    small:       n_layer=4, n_embd=128, n_head=4, lr=3e-4  \u2190 architecture sweep
-    base:        n_layer=6, n_embd=192, n_head=4, lr=3e-4  \u2190 architecture sweep
-    base_highlr: n_layer=6, n_embd=192, n_head=4, lr=6e-4  \u2190 LR sweep
-
-Outputs (relative to repo root):
-    TASK2_slm_from_scratch/configs/run_phase4_<run_name>.json        \u2014 config dump pre-training
-    TASK2_slm_from_scratch/logs/<run_name>/metrics.jsonl             \u2014 step-level logging
-    TASK2_slm_from_scratch/checkpoints/best_val/<run_name>/best_val.pt
-    TASK2_slm_from_scratch/checkpoints/best_val/<run_name>/best_val_config.json
-    TASK2_slm_from_scratch/checkpoints/last/<run_name>/last_ckpt.pt  \u2014 audit artifact
-    TASK2_slm_from_scratch/eval/sweep_results.csv                    \u2014 one row per run
-
-Run on Colab (from repo root after git pull):
-    !python TASK2_slm_from_scratch/scripts/train.py --run small
-    !python TASK2_slm_from_scratch/scripts/train.py --run base
-    !python TASK2_slm_from_scratch/scripts/train.py --run base_highlr
-
-Smoke-test (local, CPU, no GPU needed \u2014 validates all code paths):
-    python TASK2_slm_from_scratch/scripts/train.py --run base --smoke-test
-
-Definition of Done (plan \u00a7Phase 4):
-    [ ] Full training loop runs end-to-end with metrics.jsonl logging
-    [ ] Best-val-loss checkpoint saved and distinguishable from last checkpoint
-    [ ] Small sweep (\u22652 configurations) completed and tabulated in sweep_results.csv
-"""
+"""Phase 4 — Training Loop Implementation (Training from Scratch)."""
 from __future__ import annotations
 
 import argparse
@@ -93,7 +26,6 @@ from config import (  # noqa: E402
 )
 from model import GPT, GPTConfig  # noqa: E402
 
-
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a71 \u2014 Fixed training hyperparameters
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -108,7 +40,6 @@ WEIGHT_DECAY  = 0.1     # applied to 2D+ params only (see make_param_groups)
 LOG_EVERY     = 25      # steps between train-loss-only metrics.jsonl entries
 EVAL_EVERY    = 100     # steps between full val passes AND checkpoint-save checks
                          # (save check is nested inside eval \u2014 SAVE_EVERY eliminated)
-
 
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a72 \u2014 Sweep configurations
@@ -141,36 +72,12 @@ SWEEP_CONFIGS: dict[str, dict] = {
     },
 }
 
-
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a73 \u2014 Weight-decay parameter split
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 def make_param_groups(model: GPT) -> list[dict]:
-    """Split parameters into weight-decay and no-weight-decay groups.
-
-    Convention (standard GPT-2-style, explained for interview):
-        decay group:    all 2D+ tensors \u2014 nn.Linear.weight, nn.Embedding.weight
-        no_decay group: 1D tensors \u2014 biases, nn.LayerNorm.weight, nn.LayerNorm.bias
-
-    Why the split matters:
-        Weight decay is L2 regularisation that shrinks parameter magnitudes
-        toward zero.  For weight matrices (linear projections, embeddings) this
-        prevents any single weight from dominating \u2014 a useful inductive bias
-        against overfitting.
-
-        For biases: pulling them toward zero fights the optimizer's ability to
-        set the correct output offset for each layer \u2014 no regularisation benefit,
-        direct interference.
-
-        For LayerNorm scale (weight) and shift (bias): these are not \"weights\"
-        in the traditional sense; they are normalisation parameters that the
-        model needs to set freely to maintain the correct activation statistics.
-        Applying weight decay here can destabilize LayerNorm and harm training.
-
-    Returns:
-        List of two dicts \u2014 passed directly to AdamW constructor.
-    """
+    """Split parameters into weight-decay and no-weight-decay groups."""
     decay:    list = []
     no_decay: list = []
     decay_names:    list[str] = []
@@ -196,31 +103,12 @@ def make_param_groups(model: GPT) -> list[dict]:
         {"params": no_decay, "weight_decay": 0.0},
     ]
 
-
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a74 \u2014 LR schedule: linear warmup + cosine decay
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 def get_lr_schedule(optimizer, total_steps: int, warmup_steps: int):
-    """Return a LambdaLR with linear warmup then cosine decay to MIN_LR_RATIO.
-
-    Why warmup (explained for interview):
-        From-scratch training starts with random weights far from any useful
-        solution.  The first gradient steps can be large and chaotic.  A slow
-        LR ramp gives the optimizer small, controlled first steps, preventing
-        loss spikes that would require recovery steps to undo.
-
-    Why cosine decay (not step decay):
-        Step decay creates a discontinuity \u2014 the loss often spikes at the drop
-        point and then has to recover.  Cosine decay is smooth: it naturally
-        decelerates as it approaches the minimum LR, giving the optimizer time
-        to settle at each loss level rather than jumping past it.
-
-    Why a MIN_LR_RATIO floor (not decay to 0):
-        A zero LR in the final steps is a dead zone \u2014 time is still spent but
-        no updates are made.  Keeping 10% of peak LR maintains slow, useful
-        learning throughout the budget without wasting compute.
-    """
+    """Return a LambdaLR with linear warmup then cosine decay to MIN_LR_RATIO."""
     from torch.optim.lr_scheduler import LambdaLR
 
     def lr_lambda(step: int) -> float:
@@ -234,24 +122,12 @@ def get_lr_schedule(optimizer, total_steps: int, warmup_steps: int):
 
     return LambdaLR(optimizer, lr_lambda)
 
-
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a75 \u2014 Validation pass
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 def evaluate(model: GPT, val_loader, device) -> float:
-    """Full validation pass \u2014 returns mean cross-entropy loss over the val set.
-
-    model.eval() is set before the loop and model.train() is restored after.
-    This is critical: CausalSelfAttention.forward() gates attention dropout on
-    self.training (see model.py \u00a72 docstring and Phase 3 unit test 8).
-    Without model.eval(), attention dropout fires stochastically during
-    validation, making val_loss noisy and best-val checkpoint selection
-    unreliable.  This was the exact class of bug caught in Phase 3 testing.
-
-    torch.no_grad() prevents accumulation of computation graphs for the
-    forward pass, reducing memory usage during the val loop significantly.
-    """
+    """Full validation pass — returns mean cross-entropy loss over the val set."""
     import torch
 
     model.eval()
@@ -269,7 +145,6 @@ def evaluate(model: GPT, val_loader, device) -> float:
     model.train()
     return total_loss / max(1, n_batches)
 
-
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a76 \u2014 Sweep CSV append
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
@@ -282,13 +157,7 @@ def append_sweep_row(
     best_val_loss:   float,
     best_val_step:   int,
 ) -> None:
-    """Append one row to eval/sweep_results.csv.
-
-    Creates the file with header if it does not yet exist.
-    Rows are append-only (never overwritten), so re-running a sweep appends
-    a new timestamped row rather than silently overwriting the old one.
-    This preserves the full run history for later analysis.
-    """
+    """Append one row to eval/sweep_results.csv. Creates the file with header if it does not yet exist."""
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     write_header = not SWEEP_RESULTS_CSV.exists()
     with SWEEP_RESULTS_CSV.open("a", newline="", encoding="utf-8") as f:
@@ -314,18 +183,12 @@ def append_sweep_row(
         ])
     print(f"[phase4] sweep row appended \u2192 {SWEEP_RESULTS_CSV}")
 
-
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a77 \u2014 Runtime config reader (mirrors model.py \u00a76)
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 def _load_vocab_and_block_size() -> tuple[int, int]:
-    """Read vocab_size and block_size from Phase 1/2 outputs.
-
-    Falls back to (1024, 256) with a warning if files are missing \u2014 the same
-    safe-defaults pattern as model.py \u00a76, allowing local smoke-tests to run
-    before Phases 1/2 have been executed on Colab.
-    """
+    """Read vocab_size and block_size from Phase 1/2 outputs."""
     vocab_size = 1024
     block_size = 256
 
@@ -355,7 +218,6 @@ def _load_vocab_and_block_size() -> tuple[int, int]:
         )
 
     return vocab_size, block_size
-
 
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a78 \u2014 Main
@@ -396,9 +258,6 @@ def main() -> None:
     print(f"[phase4] run={run_name}  smoke={smoke}  seed={SEED}")
 
     # \u2500\u2500 Device + AMP setup \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-    # use_amp gates BOTH autocast and GradScaler \u2014 same boolean, cannot drift.
-    # autocast(enabled=False) is a transparent no-op on CPU (does not crash).
-    # GradScaler(enabled=False) passes through unscaled gradients.
     if smoke:
         device  = torch.device("cpu")
         use_amp = False
@@ -463,10 +322,7 @@ def main() -> None:
         dump_config(run_cfg, f"phase4_{run_name}")
         print(f"[phase4] config dumped to configs/run_phase4_{run_name}.json")
 
-    # ──── Load dataset tensors ───────────────────────────────────────────────
-    # Smoke-test: generate tiny random tensors so the test works locally
-    # without requiring slm_train.pt / slm_val.pt (those only exist after
-    # Phases 1–2 have run on Colab).  All other code paths are identical.
+    # Load dataset tensors
     if smoke:
         import torch as _torch
         rng = _torch.Generator().manual_seed(SEED)
@@ -496,12 +352,7 @@ def main() -> None:
         val_input_ids:   torch.Tensor = val_data["input_ids"]     # (N_val, block_size)
         val_labels:      torch.Tensor = val_data["labels"]         # (N_val, block_size)
 
-
-    # ──── DataLoader construction ────────────────────────────────────────────────
-    # shuffle=True: the DataLoader re-shuffles every time a new iterator is
-    # created (i.e., when the current epoch is exhausted and get_batch() restarts
-    # it).  This is the "shuffled-epoch" batching strategy logged in run_cfg.
-    # Using a seeded Generator ensures reproducibility despite the shuffle.
+    # DataLoader construction
     train_dataset = TensorDataset(train_input_ids, train_labels)
     val_dataset   = TensorDataset(val_input_ids,   val_labels)
 
@@ -556,25 +407,18 @@ def main() -> None:
         f"peak_lr={lr:.2e}  floor_lr={lr * MIN_LR_RATIO:.2e}"
     )
 
-    # ──── AMP GradScaler ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    # AMP GradScaler
     # enabled=use_amp: same gate as autocast below — cannot drift out of sync.
     # GradScaler(enabled=False) is a pass-through on CPU (no scaling, no crash).
     scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
     print(f"[phase4] AMP GradScaler: {'enabled (fp16)' if use_amp else 'disabled (CPU/fp32)'}")
 
-    # ──── Metrics logger ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    # Metrics logger
     logger = MetricsLogger(run_name)
-    print(f"[phase4] metrics → {logger.path}")
+    print(f"[phase4] metrics -> {logger.path}")
     print(f"[phase4] LOG_EVERY={LOG_EVERY} steps  EVAL_EVERY={EVAL_EVERY} steps")
 
     # \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-    # \u00a78.1 \u2014 Training loop
-    # \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-    # Explicit pre-loop initialisation:
-    #   best_val_loss: save check at step=EVAL_EVERY needs a finite baseline.
-    #   val_loss:      the post-loop summary print doesn't NameError if
-    #                  EVAL_EVERY > total_steps (possible in edge cases).
-    #   last_train_loss: avoids UnboundLocalError in summary if loop is empty.
     best_val_loss:   float = float("inf")
     best_val_step:   int   = -1
     val_loss:        float = float("inf")
@@ -592,9 +436,6 @@ def main() -> None:
         optimizer.zero_grad(set_to_none=True)
 
         # \u2500\u2500 Mixed-precision forward pass \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-        # autocast(enabled=False) is a transparent no-op on CPU.
-        # LoRA A/B matrices stay fp32 under autocast (not applicable here \u2014
-        # all params are trainable from scratch, all fp32/fp16 via dtype).
         with torch.amp.autocast("cuda", dtype=torch.float16, enabled=use_amp):
             _, loss = model(input_ids, labels=labels)
 
@@ -608,10 +449,6 @@ def main() -> None:
             )
 
         # \u2500\u2500 Backward: scale \u2192 backward \u2192 unscale \u2192 clip \u2192 step \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-        # Order matters: unscale_ must happen BEFORE clip_grad_norm_ so that
-        # the norm is computed on real (unscaled) gradient magnitudes, not the
-        # loss-scaled ones.  clip_grad_norm_ must happen BEFORE scaler.step()
-        # so the optimizer sees clipped gradients.
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(model.parameters(), MAX_GRAD_NORM)
@@ -632,11 +469,6 @@ def main() -> None:
             )
 
         # \u2500\u2500 Eval pass + conditional checkpoint (save NESTED inside eval) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-        # The save check is structurally inside the eval block: val_loss is
-        # always freshly computed immediately before the comparison.
-        # There is no separate SAVE_EVERY constant that could drift out of sync.
-        # Also trigger eval on the final smoke-test step so evaluate() runs
-        # at least once in smoke mode (exercises model.eval()/model.train()).
         eval_now = (step % EVAL_EVERY == 0) or (smoke and step == total_steps)
         if eval_now:
             val_loss = evaluate(model, val_loader, device)
@@ -711,7 +543,6 @@ def main() -> None:
     )
     print(f"[phase4] Phase 4 run complete.")
     print(f"[phase4] Commit logs/, checkpoints/, eval/ back to the repo before Phase 5.")
-
 
 # \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 # \u00a79 \u2014 Entry point

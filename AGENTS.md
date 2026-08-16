@@ -1,119 +1,125 @@
-# Agent Conventions (llm_task)
+# Agent Conventions & Guidelines
 
-These conventions come from `plan/finetuning_execution_plan.md` §0 ("Global conventions")
-and §0.a ("Authoring vs. execution model"). They apply to **every** phase of both tracks.
-Read them before writing any code.
+These conventions and guardrails apply to **all** phases across both tracks in this repository.
+Read and follow them before authoring or modifying any code.
 
-## Repo root
+---
 
-`llm_task/`. All paths below are relative to this root.
+## 1. Project Goal & Overview
 
-## Directory layout
+**Core Goal:** Benchmark **LLM Fine-Tuning** (Parameter-Efficient Fine-Tuning / LoRA on pre-trained open-weights LLMs) versus **Training a Small Language Model (SLM) from Scratch** using the **exact same dataset** and preprocessing pipeline.
 
-```
-llm_task/
-  data/
-    raw/                 # original PDF  -> data/raw/document.pdf (Phase 1)
-    extracted/           # cleaned .txt + stats.json
-    processed/           # tokenized/chunked datasets (per track, prefixed)
-  TASK1_finetuning_model/
-    configs/             # run_<name>.json, model_choice.md, split_strategy.md, trainable_params.json
-    checkpoints/         # LoRA adapters, sweep_<name>/ subdirs (gitignored)
-    logs/                # metrics.jsonl per run, env_check.json, environment.txt (committed)
-    eval/                # loss_curve.png, final_metrics.json, sweep_results.csv, *.md
-    generations/         # finetuning_samples.md
-    scripts/             # importable .py modules — THIS is where the agent edits
-    finetuning_run.ipynb # thin orchestrator notebook (cells sync + call into scripts/)
-  TASK2_slm_from_scratch/
-    configs/ checkpoints/ logs/ eval/ generations/ scripts/ slm_run.ipynb
-  shared_eval/           # cross-track comparison artifacts
-  progress/              # human-readable phase-by-phase documentation (updated after EVERY phase)
-    README.md            # project index + status table for both tracks
-    TASK1_finetuning_model/    # one .md file per completed phase
-    TASK2_slm_from_scratch/    # one .md file per completed phase
-  writeup/
-  requirements.txt       # pinned deps (installed on the Colab kernel)
-```
+### The Dual-Track Architecture
 
-## Global conventions (mandatory in every script)
+1. **Track 1 (`TASK1_finetuning_model/`):**
+   - Fine-tune a pre-trained open-weights language model (e.g., Qwen, LLaMA family) using LoRA / PEFT.
+   - Focus on adaptation efficiency, parameter retention, convergence speed, and downstream task quality on domain-specific text extracted from the dataset.
 
-- **Determinism:** `SEED = 42`. Call `set_seed()` (from `scripts/common.py`) at the top of
-  every script and record the seed in every run's config JSON.
-- **Logging format:** every training run emits `logs/<run_name>/metrics.jsonl`, one JSON
-  object per logged step:
-  `{"step": int, "epoch": float, "train_loss": float, "val_loss": float|null, "lr": float, "timestamp": iso8601}`.
-  Use `MetricsLogger` from `scripts/common.py` — do not hand-roll it.
-- **Config-as-file:** dump every run's hyperparameters to `configs/run_<name>.json` BEFORE
-  training starts (use `common.dump_config`).
-- **No silent numeric choices:** never pick one value from a hyperparameter range blindly.
-  Run a small sweep (2–3 values), each under a distinct run name, then tabulate into
-  `eval/sweep_results.csv` before locking a final config.
-- **Trainable params:** log the LoRA `print_trainable_parameters()` output to
-  `configs/trainable_params.json` (required deliverable).
+2. **Track 2 (`TASK2_slm_from_scratch/`):**
+   - Train a custom Small Language Model (custom Transformer architecture + custom BPE tokenizer) completely from scratch on the exact same dataset.
+   - Focus on architectural sizing, tokenizer vocabulary optimization, training dynamics, loss scaling, and sample generation capability.
 
-## Authoring vs. execution model (VS Code + Google Colab extension)
+3. **Cross-Track Comparison (`shared_eval/`):**
+   - Comprehensive side-by-side benchmarking evaluating loss curves, perplexity, task evaluation metrics, inference latency/throughput, VRAM consumption, and sample generation quality under identical test prompts and holdout splits.
 
-- **The remote Colab kernel has its own filesystem (typically `/content`).** Local `.py`
-  files are NOT visible to it. Files only reach the kernel via `git clone/pull` (the sync
-  cell) or Drive.
-- **Cell execution ≠ terminal execution.** Selecting "Colab" as the notebook kernel only
-  makes *cells* run on the GPU. A `python foo.py` run from an agent's shell tool runs
-  locally, with no GPU. Anything that needs the GPU must run as a notebook cell.
-- **Pattern:** all real logic lives in importable `.py` modules under `TASK1_finetuning_model/scripts/`
-  (agent edits these). The notebook `finetuning_run.ipynb` is a thin orchestrator: its cells only
-  sync code (`git clone/pull`), install deps, and call `!python TASK1_finetuning_model/scripts/<script>.py`.
-- **Sync workflow (critical):** after the agent edits local files, the user must
-  `git add -A && git commit -m ... && git push` BEFORE re-running the notebook's sync cell,
-  or the remote kernel will keep running stale code.
+---
 
-## Agent/terminal guidance
+## 2. Directory Layout
 
-- Author any file locally, any time — no Colab connection needed.
-- You cannot trigger Colab kernel execution from your own shell tool. Treat running the
-  notebook as a **human-in-the-loop checkpoint**: agent finishes a phase's code → user runs
-  the relevant notebook cells → agent reads back the resulting logs/checkpoints from disk
-  (they'll be in the repo after the user copies/pushes, or under Drive) to continue.
-- Do NOT run GPU-requiring scripts from the terminal expecting a GPU; you'll waste time on
-  errors that only exist because of the missing GPU.
-- `environment.txt` (`pip freeze` from the remote session) must be committed back to the
-  repo — it is the reproducibility artifact that locks exact dependency versions.
-
-## Definition-of-Done discipline
-
-Complete a phase only when its "Definition of Done" checklist in
-`plan/finetuning_execution_plan.md` is verifiably satisfied (files exist, logged, committed).
-Do not mark a phase done on intent.
-
-## Progress documentation (user-triggered, not automatic)
-
-The `progress/` folder contains human-readable, study-ready documentation of every
-decision and implementation step taken. The user reads these documents to understand
-and revise the project.
-
-**When:** The user explicitly asks — e.g. "document phase 1", "write up what we did",
-"update progress". Do NOT write or update progress documents unless the user asks.
-
-### Folder structure
+All paths in the project are organized as follows:
 
 ```
-progress/
-  README.md                    # project index + status table for both tracks
-  TASK1_finetuning_model/
-    phase1_data_extraction.md  # one file per phase
-    phase2_model_selection.md
-    ...
-  TASK2_slm_from_scratch/
-    phase1_data_extraction.md  # stub exists
-    ...
+├── data/
+│   ├── raw/                 # Original source documents (e.g., PDFs)
+│   ├── extracted/           # Cleaned plain text and extracted statistics (stats.json)
+│   └── processed/           # Tokenized/chunked dataset artifacts (per track)
+├── TASK1_finetuning_model/
+│   ├── configs/             # run_<name>.json, model_choice.md, trainable_params.json
+│   ├── checkpoints/         # LoRA adapters, sweep checkpoints (gitignored)
+│   ├── logs/                # metrics.jsonl per run, env_check.json, environment.txt
+│   ├── eval/                # loss_curve.png, final_metrics.json, sweep_results.csv, *.md
+│   ├── generations/         # Generation samples and qualitative outputs
+│   ├── scripts/             # Modular Python logic (common.py, train.py, eval.py, etc.)
+│   └── finetuning_run.ipynb # Thin Colab orchestrator notebook
+├── TASK2_slm_from_scratch/
+│   ├── configs/             # Run configs, architecture hyperparameters
+│   ├── checkpoints/         # Model weights, optimizer states (gitignored)
+│   ├── logs/                # metrics.jsonl per run, environment.txt
+│   ├── eval/                # Evaluation reports, loss comparisons, metrics
+│   ├── generations/         # SLM generation samples
+│   ├── tokenizer/           # Trained BPE tokenizer files (vocab, merges)
+│   ├── scripts/             # Modular Python logic (model.py, train.py, eval.py, etc.)
+│   └── slm_run.ipynb        # Thin Colab orchestrator notebook
+├── shared_eval/             # Cross-track benchmarking & side-by-side comparison artifacts
+├── progress/                # Study-ready documentation (user-triggered)
+│   ├── README.md            # Overall project index and status table
+│   ├── TASK1_finetuning_model/
+│   └── TASK2_slm_from_scratch/
+└── requirements.txt         # Pinned project dependencies
 ```
 
-### How to document a phase when requested
+---
 
-1. Read all relevant scripts, configs, logs, and artifacts for the target phase.
-2. Fill out or update the phase document (`progress/<track>/phase<N>_<name>.md`):
-   - **Goal & summary** of the phase.
-   - **Step-by-step walkthrough** of code logic and why choices were made.
-   - **Key findings / bugs / edge cases** encountered and how they were solved.
-   - **Decisions table** (choice + reasoning).
-   - **Definition of Done checklist** marked with evidence.
-3. Update the status table in `progress/README.md` (`🔲 Not started` → `✅ Complete`).
+## 3. Authoring vs. Execution Model (Colab & Local Environment)
+
+- **Local Authoring:** All real logic lives in importable, modular `.py` files under `TASK1_finetuning_model/scripts/` and `TASK2_slm_from_scratch/scripts/`. The agent edits these `.py` files locally.
+- **Thin Orchestrator Notebooks:** `finetuning_run.ipynb` and `slm_run.ipynb` are thin orchestrators. Notebook cells only sync code (`git pull`), install dependencies, and execute scripts via `!python TASK1_finetuning_model/scripts/<script>.py`.
+- **Remote Kernel Filesystem:** The remote Google Colab kernel runs in its own environment (e.g., `/content`). Local file edits are **not** automatically mirrored to the remote kernel without syncing.
+- **Human-in-the-Loop Sync Workflow:**
+  1. Agent authors/updates `.py` modules locally.
+  2. Code is committed and pushed to Git: `git add -A && git commit -m "..." && git push`.
+  3. The user executes the sync cell in the notebook on Colab (`git pull`).
+  4. The user runs the notebook execution cells on the Colab GPU.
+  5. The agent inspects returned logs, metric files, and evaluation outputs to proceed.
+- **Terminal vs. GPU Execution:** Do **not** run GPU-intensive training or inference scripts directly from the local terminal expecting GPU acceleration. Anything requiring a GPU must be executed via notebook cells on the remote GPU kernel.
+- **Dependency Lock:** `environment.txt` (`pip freeze` from the remote Colab execution) should be committed to maintain an exact dependency record.
+
+---
+
+## 4. Global Conventions & Guardrails (Mandatory in Every Script)
+
+Every script across both tracks must adhere to these conventions:
+
+- **Determinism:** `SEED = 42`. Call `set_seed()` (from `scripts/common.py`) at the top of every script and record the seed in every run's config JSON.
+- **Logging Format:** Every training run emits `logs/<run_name>/metrics.jsonl`, writing one JSON object per logged step:
+  ```json
+  {"step": 100, "epoch": 1.0, "train_loss": 1.8452, "val_loss": 1.9124, "lr": 0.0003, "timestamp": "2026-08-16T01:00:00Z"}
+  ```
+  Always use `MetricsLogger` from `scripts/common.py` — do not implement ad-hoc custom logging.
+- **Config-as-File:** Dump every run's complete configuration to `configs/run_<name>.json` **before** training starts using `common.dump_config()`.
+- **Empirical Hyperparameter Discipline:** Never pick hyperparameter values blindly. Run small sweeps (2–3 values per key parameter), log results under distinct run names, and tabulate comparisons into `eval/sweep_results.csv` before selecting final configurations.
+- **Parameter Accounting:** For Track 1 (PEFT/LoRA), log `print_trainable_parameters()` output to `configs/trainable_params.json`. For Track 2 (SLM), log total model parameters, non-embedding parameters, and layer breakdown.
+- **Track Isolation:** Keep Track 1 and Track 2 fully decoupled. Each track has its own `scripts/common.py` where `TRACK_DIR` resolves to that track's directory. Never import `TASK1` modules from `TASK2` or vice versa.
+- **Cross-Platform & UTF-8 Safety:** Reconfigure standard output streams (`sys.stdout`, `sys.stderr`) to UTF-8 on initialization to prevent encoding errors across different OS environments.
+- **Path Resolution:** Always resolve file paths using `pathlib.Path(__file__).resolve()` rather than hardcoded string paths or assumptions about the current working directory.
+
+---
+
+## 5. Definition-of-Done Discipline
+
+A phase or milestone is complete **only** when its concrete deliverables are verifiably present on disk:
+- Scripts are modular, executable, and free of syntax/runtime errors.
+- Configuration JSON files (`configs/run_<name>.json`) are written.
+- Training metric logs (`logs/<run_name>/metrics.jsonl`) are generated and populated.
+- Evaluation metrics, loss curve figures, and generation artifacts exist in `eval/` and `generations/`.
+- Checkpoints and adapters are properly saved in `checkpoints/`.
+
+Do not mark any task or phase as complete based on intent alone.
+
+---
+
+## 6. Progress Documentation (User-Triggered)
+
+The `progress/` directory houses human-readable documentation summarizing decisions, implementations, and empirical results.
+
+- **Trigger:** Only create or update progress documentation when the user explicitly requests it (e.g., "document phase 1", "write up what we did", "update progress").
+- **Documentation Structure:**
+  - `progress/README.md`: Project status overview and tracking matrix.
+  - `progress/TASK1_finetuning_model/phase<N>_<name>.md`: Track 1 phase reports.
+  - `progress/TASK2_slm_from_scratch/phase<N>_<name>.md`: Track 2 phase reports.
+- **Document Contents (when requested):**
+  1. Goal and high-level summary.
+  2. Walkthrough of implementation logic and architectural decisions.
+  3. Key findings, edge cases, and solutions.
+  4. Decisions table (options considered, choice made, rationale).
+  5. Verification checklist with supporting evidence (metrics, logs, artifact paths).

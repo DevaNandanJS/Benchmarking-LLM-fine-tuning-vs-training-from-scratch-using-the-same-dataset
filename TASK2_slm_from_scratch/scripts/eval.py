@@ -1,55 +1,4 @@
-"""Phase 5 — Quantitative Evaluation (Training from Scratch).
-
-Goal (plan §Phase 5): mirror Track 1's Phase 6 exactly in structure so the two
-tracks' numbers can sit side-by-side.  Produces three artefacts:
-  - eval/loss_curve.png                — train/val loss curves for all sweep runs
-  - eval/final_metrics.json           — CE loss, perplexity, BPB for best checkpoint
-  - eval/loss_curve_interpretation.md — templated interpretation seeded with real numbers
-
-BPB formula (identical to Track 1 evaluate.py):
-    BPB = (total_ce_nats / utf8_byte_length_of_val_text) / ln(2)
-
-  where:
-    total_ce_nats       = sum over all val chunks of:
-                            model_loss_item * (block_size - 1) * actual_batch_size
-                          (block_size - 1, NOT block_size: model.forward() shifts
-                          labels internally so each chunk predicts T-1 tokens;
-                          F.cross_entropy returns the mean over those T-1 positions)
-    utf8_byte_length    = len(val_text.encode("utf-8")), where val_text is extracted
-                          by mapping split_boundary_token_idx → character offset via
-                          Encoding.offsets from the tokenizers library.  Hard-fails
-                          if split_boundary_token_idx is absent from dataset stats JSON.
-
-  This BPB is directly comparable with Track 1's (1.309722) despite the different
-  vocabulary because both use raw UTF-8 bytes as the denominator.  The token count
-  per chunk differs (255 here vs 256 in Track 1) — documented in bpb_note.
-
-Inputs (all produced by earlier phases on Colab):
-  TASK2_slm_from_scratch/checkpoints/best_val/<run_name>/best_val.pt
-  TASK2_slm_from_scratch/checkpoints/best_val/<run_name>/best_val_config.json
-  TASK2_slm_from_scratch/eval/sweep_results.csv
-  data/processed/slm_val.pt
-  data/processed/slm_dataset_stats.json
-  data/extracted/document_clean.txt
-  TASK2_slm_from_scratch/tokenizer/vocab.json + merges.txt
-
-Outputs:
-  TASK2_slm_from_scratch/eval/loss_curve.png
-  TASK2_slm_from_scratch/eval/final_metrics.json
-  TASK2_slm_from_scratch/eval/loss_curve_interpretation.md
-
-Run on Colab (from repo root after git pull):
-  !python TASK2_slm_from_scratch/scripts/eval.py
-  !python TASK2_slm_from_scratch/scripts/eval.py --run base   # force a specific run
-
-Smoke-test (local, CPU, no real data needed):
-  python TASK2_slm_from_scratch/scripts/eval.py --smoke-test
-
-Definition of Done (plan §Phase 5):
-  [ ] eval/loss_curve.png produced and legible (labelled axes, legend)
-  [ ] eval/final_metrics.json contains mean_ce_loss, perplexity, bpb (all finite, positive)
-  [ ] eval/loss_curve_interpretation.md exists and explicitly discusses overfitting dynamics
-"""
+"""Phase 5 — Quantitative Evaluation (Training from Scratch)."""
 from __future__ import annotations
 
 import argparse
@@ -59,7 +8,7 @@ import math
 import sys
 from pathlib import Path
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ────────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -79,7 +28,6 @@ from config import (  # noqa: E402
     VAL_PT,
 )
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §1 — Sweep run discovery
 # ════════════════════════════════════════════════════════════════════════════
@@ -87,13 +35,8 @@ from config import (  # noqa: E402
 # The three named sweep runs defined in train.py.
 KNOWN_RUNS = ("small", "base", "base_highlr")
 
-
 def find_best_run() -> str:
-    """Read sweep_results.csv and return the run_name with lowest best_val_loss.
-
-    Hard-fails if sweep_results.csv does not exist — the user must run all
-    Phase 4 training cells before calling Phase 5.
-    """
+    """Read sweep_results.csv and return the run_name with lowest best_val_loss."""
     if not SWEEP_RESULTS_CSV.exists():
         raise FileNotFoundError(
             f"[eval] sweep_results.csv not found at {SWEEP_RESULTS_CSV}.\n"
@@ -111,17 +54,12 @@ def find_best_run() -> str:
     print(f"[eval] best run from sweep_results.csv: {best_run}  (val_loss={best_loss:.4f})")
     return best_run
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §2 — Checkpoint loader
 # ════════════════════════════════════════════════════════════════════════════
 
 def load_best_checkpoint(run_name: str, device):
-    """Load best_val.pt and reconstruct the GPT model for the given run.
-
-    Returns (model, cfg_dict) where cfg_dict is the raw JSON loaded from
-    best_val_config.json (used downstream for bpb_note logging).
-    """
+    """Load best_val.pt and reconstruct the GPT model for the given run."""
     import torch
     from model import GPT, GPTConfig  # noqa: PLC0415
 
@@ -164,26 +102,12 @@ def load_best_checkpoint(run_name: str, device):
           f"(total params: {param_info['total']:,})")
     return model, cfg_dict
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §3 — Validation pass: total CE nats
 # ════════════════════════════════════════════════════════════════════════════
 
 def compute_val_metrics(model, val_pt: Path, device, batch_size: int = 16) -> dict:
-    """Run a full validation pass and return CE statistics.
-
-    block_size is read from model.config.block_size — no separate parameter
-    needed; GPT always exposes self.config (a GPTConfig dataclass).
-
-    BPB-correct accumulation (plan §5, review-adjudicated):
-        - Each chunk predicts block_size - 1 tokens (model shifts labels internally).
-        - F.cross_entropy returns the MEAN over those block_size - 1 positions.
-        - We recover the SUM by multiplying by (block_size - 1) * actual_batch_size.
-        - actual_batch_size = input_ids.shape[0] (NOT the constant batch_size
-          parameter) to handle the final partial batch correctly.
-
-    Returns dict with: mean_ce_loss, total_ce_nats, val_chunks, total_tokens_scored.
-    """
+    """Run a full validation pass and return CE statistics."""
     import torch
     from torch.utils.data import DataLoader, TensorDataset  # noqa: PLC0415
 
@@ -229,29 +153,15 @@ def compute_val_metrics(model, val_pt: Path, device, batch_size: int = 16) -> di
         "total_val_tokens_scored": total_tokens,
     }
 
-
 # ════════════════════════════════════════════════════════════════════════════
-# §4 — BPB: extract val text bytes via token-boundary → character offset
+# §4 — BPB: extract val text bytes via token-boundary -> character offset
 # ════════════════════════════════════════════════════════════════════════════
 
 def get_val_text_bytes() -> tuple[int, str]:
-    """Return (utf8_byte_count, val_text_str) for the validation text span.
-
-    Method (plan §5, review-adjudicated):
-        1. Read split_boundary_token_idx from slm_dataset_stats.json.
-           Hard-fails with KeyError if the field is absent — no character-
-           fraction fallback exists (that would misalign with the actual token
-           split because BPE tokenization is non-uniform across the document).
-        2. Tokenize the full document with the custom ByteLevelBPETokenizer.
-        3. Use Encoding.offsets[boundary_token_idx][0] to get the exact
-           character offset where the validation region begins.
-        4. Slice the raw text and measure UTF-8 bytes.
-
-    This is Track 2's equivalent of Track 1's return_offsets_mapping approach.
-    """
+    """Return (utf8_byte_count, val_text_str) for the validation text span."""
     from tokenizers import ByteLevelBPETokenizer  # noqa: PLC0415
 
-    # ── 1. Read boundary token index — hard-fail if missing ──────────────────
+    # Read boundary token index — hard-fail if missing
     if not DATASET_STATS_JSON.exists():
         raise FileNotFoundError(
             f"[eval] {DATASET_STATS_JSON} not found. Run Phase 2 on Colab first."
@@ -266,7 +176,7 @@ def get_val_text_bytes() -> tuple[int, str]:
     boundary_token_idx: int = stats["split_boundary_token_idx"]
     print(f"[eval] split_boundary_token_idx = {boundary_token_idx:,}")
 
-    # ── 2. Load tokenizer and full document text ──────────────────────────────
+    # Load tokenizer and full document text
     vocab_json  = TOKENIZER_DIR / "vocab.json"
     merges_txt  = TOKENIZER_DIR / "merges.txt"
     if not vocab_json.exists() or not merges_txt.exists():
@@ -277,7 +187,7 @@ def get_val_text_bytes() -> tuple[int, str]:
     tok  = ByteLevelBPETokenizer(str(vocab_json), str(merges_txt))
     text = CLEAN_TXT.read_text(encoding="utf-8")
 
-    # ── 3. Encode and extract per-token character offsets ────────────────────
+    # Encode and extract per-token character offsets
     # ByteLevelBPETokenizer.encode() returns an Encoding with .offsets:
     #   a list of (start_char, end_char) per token, 0-indexed into text.
     encoding = tok.encode(text)
@@ -295,7 +205,6 @@ def get_val_text_bytes() -> tuple[int, str]:
     )
     return utf8_bytes, val_text
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §5 — Loss curve plotter (all sweep runs on one figure)
 # ════════════════════════════════════════════════════════════════════════════
@@ -312,17 +221,8 @@ def load_metrics_jsonl(run_name: str) -> list[dict]:
                 records.append(json.loads(line))
     return records
 
-
 def plot_loss_curves(best_run: str) -> None:
-    """Plot train/val loss for all available sweep runs, save to eval/loss_curve.png.
-
-    Design choices:
-    - All three runs overlaid on one figure so the architecture/LR sweep is
-      visually comparable.  Different colors and linestyles per run.
-    - Val loss plotted with markers (circle) to distinguish it from train loss.
-    - Best-val checkpoint step for the best run marked with a vertical dashed line.
-    - dpi=150, tight_layout for clean PNG output.
-    """
+    """Plot train/val loss for all available sweep runs, save to eval/loss_curve.png."""
     import matplotlib  # noqa: PLC0415
     matplotlib.use("Agg")   # non-interactive backend — works in Colab cells
     import matplotlib.pyplot as plt  # noqa: PLC0415
@@ -379,22 +279,14 @@ def plot_loss_curves(best_run: str) -> None:
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     fig.savefig(LOSS_CURVE_PNG, dpi=150, bbox_inches="tight")
     plt.close(fig)
-    print(f"[eval] loss curve → {LOSS_CURVE_PNG}")
-
+    print(f"[eval] loss curve -> {LOSS_CURVE_PNG}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §6 — Loss curve interpretation writer
 # ════════════════════════════════════════════════════════════════════════════
 
 def write_loss_curve_interpretation(metrics: dict, best_run: str) -> None:
-    """Write a templated interpretation .md populated with real statistics.
-
-    Per plan §Phase 5 step 3:
-    - Explicitly discusses whether 'fast overfitting' (val loss turning up earlier
-      than in Track 1) is observed.
-    - Distinguishes 'data-scarcity overfitting' from 'optimization/architecture bug'.
-    - Compares qualitatively against Track 1's known BPB of 1.309722.
-    """
+    """Write a templated interpretation .md populated with real statistics."""
     records = load_metrics_jsonl(best_run)
     val_records  = [r for r in records if r.get("val_loss") is not None]
     train_records = [r for r in records if r.get("train_loss") is not None]
@@ -513,8 +405,7 @@ Track 2 is expected to overfit *earlier and more severely* than Track 1 because:
 """
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     LOSS_CURVE_INTERP_MD.write_text(md, encoding="utf-8")
-    print(f"[eval] interpretation → {LOSS_CURVE_INTERP_MD}")
-
+    print(f"[eval] interpretation -> {LOSS_CURVE_INTERP_MD}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §7 — Main
@@ -548,12 +439,12 @@ def main() -> None:
                           ("cuda" if torch.cuda.is_available() else "cpu"))
     print(f"[eval] device={device}  smoke={args.smoke_test}")
 
-    # ── Smoke-test path ───────────────────────────────────────────────────────
+    # Smoke-test path
     if args.smoke_test:
         _smoke_test(device)
         return
 
-    # ── Real path ─────────────────────────────────────────────────────────────
+    # Real path
     run_name = args.run or find_best_run()
     print(f"[eval] evaluating run: {run_name}")
 
@@ -566,7 +457,7 @@ def main() -> None:
     # 3. Full validation pass
     val_metrics = compute_val_metrics(model, VAL_PT, device, args.batch_size)
 
-    # 4. BPB: extract val text byte count via token-boundary → char-offset mapping
+    # 4. BPB: extract val text byte count via token-boundary -> char-offset mapping
     utf8_bytes, _ = get_val_text_bytes()
     bpb = (val_metrics["total_ce_nats"] / utf8_bytes) / math.log(2)
     perplexity = math.exp(val_metrics["mean_ce_loss"])
@@ -597,14 +488,14 @@ def main() -> None:
             "-100 rather than slicing); total_val_tokens_scored therefore differs between "
             "tracks but BPB is still directly comparable (same byte denominator, same "
             "val text span, same formula). "
-            "Byte boundary: split_boundary_token_idx → char offset via "
+            "Byte boundary: split_boundary_token_idx -> char offset via "
             "ByteLevelBPETokenizer Encoding.offsets — no character-fraction approximation."
         ),
         "timestamp": iso_now(),
     }
     EVAL_DIR.mkdir(parents=True, exist_ok=True)
     FINAL_METRICS_JSON.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
-    print(f"[eval] final_metrics.json → {FINAL_METRICS_JSON}")
+    print(f"[eval] final_metrics.json -> {FINAL_METRICS_JSON}")
 
     # 6. Write interpretation
     write_loss_curve_interpretation(metrics, run_name)
@@ -618,31 +509,17 @@ def main() -> None:
         assert key in loaded and math.isfinite(loaded[key]) and loaded[key] > 0, (
             f"FAIL: {key} missing or not a positive finite number in final_metrics.json"
         )
-    print("\n[eval] ✅ all Definition-of-Done assertions passed")
+    print("\n[eval] [SUCCESS] all Definition-of-Done assertions passed")
     print(f"[eval]   BPB={loaded['bpb']}  perplexity={loaded['perplexity']}  "
           f"ce_loss={loaded['mean_ce_loss']}")
     print("[eval] Phase 5 complete.")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §8 — Smoke-test (local, CPU, no real data or trained checkpoint needed)
 # ════════════════════════════════════════════════════════════════════════════
 
 def _smoke_test(device) -> None:
-    """Verify all code paths using a tiny random model and synthetic data.
-
-    Does NOT need:
-      - A trained checkpoint (random-init model used instead)
-      - Real .pt dataset files (synthetic random tensors used instead)
-      - Real tokenizer files (BPB stub computation used instead)
-
-    Does verify:
-      - compute_val_metrics accumulation logic (block_size-1, partial batch)
-      - BPB formula produces a finite positive number
-      - plot_loss_curves runs without error on stub records
-      - write_loss_curve_interpretation runs and writes the file
-      - final_metrics.json is written and passes DoD assertions
-    """
+    """Verify all code paths using a tiny random model and synthetic data."""
     import torch
     from model import GPT, GPTConfig  # noqa: PLC0415
 
@@ -657,7 +534,7 @@ def _smoke_test(device) -> None:
     model  = GPT(config).to(device)
     model.eval()
 
-    # ── Synthetic val data ───────────────────────────────────────────────────
+    # Synthetic val data
     ids = torch.randint(0, VOCAB, (N_CHUNKS, BSIZE))
     lbl = ids.clone()
 
@@ -693,7 +570,7 @@ def _smoke_test(device) -> None:
     print(f"[eval] SMOKE: n_chunks={n_chunks}  tokens_scored={total_tok}  "
           f"mean_ce={mean_ce:.4f}  BPB={bpb:.4f}")
 
-    # ── Smoke: plot (no real log files — empty run records, should not crash) ─
+    # Smoke: plot (no real log files — empty run records, should not crash)
     # Temporarily patch SWEEP_RESULTS_CSV path and LOSS_CURVE_PNG to tmp locations
     import tempfile, shutil  # noqa: E401, PLC0415
     tmp_dir = Path(tempfile.mkdtemp())
@@ -709,9 +586,9 @@ def _smoke_test(device) -> None:
         fig.savefig(smoke_png, dpi=72)
         plt.close(fig)
         assert smoke_png.exists(), "FAIL: smoke PNG not created"
-        print(f"[eval] SMOKE: loss curve plot OK → {smoke_png}")
+        print(f"[eval] SMOKE: loss curve plot OK -> {smoke_png}")
 
-        # ── Smoke: JSON write and DoD assertions ─────────────────────────────
+        # Smoke: JSON write and DoD assertions
         smoke_metrics = {
             "run_name":                "smoke",
             "val_chunks":              N_CHUNKS,
@@ -736,9 +613,8 @@ def _smoke_test(device) -> None:
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    print("[eval] ✅ SMOKE TEST PASSED — all code paths exercised")
+    print("[eval] [SUCCESS] SMOKE TEST PASSED — all code paths exercised")
     print("[eval] Run without --smoke-test on Colab after Phase 4 completes.")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §9 — Entry point

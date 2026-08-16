@@ -1,42 +1,4 @@
-"""Phase 2 — Dataset Construction (Tokenise, Chunk, Split).
-
-Goal (plan §Phase 2): tokenize document_clean.txt with the custom BPE tokenizer
-produced in Phase 1, apply the same contiguous-holdout / sliding-window strategy
-as Track 1's Phase 3, save plain PyTorch tensors, and document all decisions.
-
-Key design choices:
-  - context_length = 256   same block_size as Track 1 for architectural alignment
-  - train_stride  = 128    50% overlap — maximises sample density from limited data
-  - val_stride    = 256    non-overlapping — independent, non-redundant val spans
-  - val_fraction  = 0.15   contiguous last-15% holdout (same boundary as Track 1)
-
-Why context_length=256 (NOT a CE-comparability claim):
-  Matching block_size keeps the forward-pass structure identical across tracks.
-  Raw cross-entropy loss is NOT directly comparable between tracks because it scales
-  with log(vocab_size) — Track 2's 1024-token vocab has a theoretical CE ceiling of
-  ln(1024) ≈ 6.93 nats vs Track 1's ln(49152) ≈ 10.80 nats.  The comparison metric
-  for the write-up is bits-per-byte (BPB), computed in Phase 5, which normalises by
-  raw UTF-8 bytes and is therefore vocabulary-agnostic.
-
-Smoke-test invocation contract:
-  - bare:          python build_dataset.py           → smoke_test + main()
-  - local-only:    python build_dataset.py --smoke-test → smoke_test only (no main)
-  The smoke test always runs first as an unconditional invariant guard.
-
-Outputs (relative to repo root):
-  data/processed/slm_train.pt          — {input_ids, labels} LongTensor[N,256]
-  data/processed/slm_val.pt            — same schema, val chunks
-  data/processed/slm_dataset_stats.json
-  TASK2_slm_from_scratch/configs/run_phase2_dataset.json
-  TASK2_slm_from_scratch/configs/split_strategy.md
-
-Run on Colab (from repo root after git pull):
-  !python TASK2_slm_from_scratch/scripts/build_dataset.py
-
-Definition of Done (plan Phase 2):
-  [ ] Script runs end-to-end from document_clean.txt + trained tokenizer to tensors
-  [ ] Stats logged; context length and split strategy documented
-"""
+"""Phase 2 — Dataset Construction (Tokenise, Chunk, Split)."""
 from __future__ import annotations
 
 import json
@@ -44,7 +6,7 @@ import sys
 import textwrap
 from pathlib import Path
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ───────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -60,7 +22,7 @@ from config import (  # noqa: E402
     VAL_PT,
 )
 
-# ── Hyperparameters ──────────────────────────────────────────────────────────
+# Hyperparameters
 CONTEXT_LENGTH = 256    # tokens per chunk (matches Track 1's block_size)
 TRAIN_STRIDE   = 128    # 50% overlap — maximises training sample density
 VAL_STRIDE     = 256    # non-overlapping val windows — independent eval spans
@@ -68,42 +30,20 @@ VAL_FRACTION   = 0.15   # last 15% of token sequence held out for validation
 
 SPLIT_STRATEGY_MD = CONFIGS_DIR / "split_strategy.md"
 
-
-# ── Pure-Python sliding-window helper ────────────────────────────────────────
+# Pure-Python sliding-window helper
 # Copied from TASK1_finetuning_model/scripts/build_dataset.py — no Track 1 imports.
 
 def sliding_windows(token_ids: list[int], context_length: int, stride: int) -> list[list[int]]:
-    """Return fixed-length chunks from token_ids using a sliding window.
-
-    Trailing tokens that do not fill a complete window are silently dropped.
-    Caller should log the dropped count for full token accounting.
-
-    Args:
-        token_ids:      flat list of integer token IDs
-        context_length: number of tokens per chunk
-        stride:         step size between window start positions
-
-    Returns:
-        List of lists, each of length context_length.
-    """
+    """Return fixed-length chunks from token_ids using a sliding window."""
     chunks = []
     for start in range(0, len(token_ids) - context_length + 1, stride):
         chunks.append(token_ids[start: start + context_length])
     return chunks
 
-
-# ── Smoke test — unconditional invariant guard ────────────────────────────────
+# Smoke test — unconditional invariant guard
 
 def _smoke_test() -> None:
-    """Validate sliding_windows(), split logic, and tensor round-trip.
-
-    Uses the same production constants (CONTEXT_LENGTH, TRAIN_STRIDE, VAL_STRIDE)
-    on a 2,000-element fake token sequence so several windows are produced and
-    the dropped-remainder logic is exercised.
-
-    Requires only torch (deferred import) and pure Python — no tokenizers library,
-    no real data files.  Raises AssertionError on any failure.
-    """
+    """Validate sliding_windows(), split logic, and tensor round-trip."""
     import torch  # noqa: PLC0415
 
     print("[smoke] Running smoke test with production constants on fake token sequence ...")
@@ -119,7 +59,7 @@ def _smoke_test() -> None:
     train_chunks = sliding_windows(train_ids, CONTEXT_LENGTH, TRAIN_STRIDE)
     val_chunks   = sliding_windows(val_ids,   CONTEXT_LENGTH, VAL_STRIDE)
 
-    # ── Shape assertions ──────────────────────────────────────────────────────
+    # Shape assertions
     expected_train = (len(train_ids) - CONTEXT_LENGTH) // TRAIN_STRIDE + 1
     expected_val   = (len(val_ids)   - CONTEXT_LENGTH) // VAL_STRIDE   + 1
 
@@ -134,7 +74,7 @@ def _smoke_test() -> None:
     for c in val_chunks:
         assert len(c) == CONTEXT_LENGTH, f"[smoke] FAIL: val chunk length {len(c)} != {CONTEXT_LENGTH}"
 
-    # ── Zero-leakage: no train window touches the val region ──────────────────
+    # Zero-leakage: no train window touches the val region
     if train_chunks and val_chunks:
         last_train_end = (len(train_chunks) - 1) * TRAIN_STRIDE + CONTEXT_LENGTH
         assert last_train_end <= boundary, (
@@ -142,7 +82,7 @@ def _smoke_test() -> None:
             f"exceeds boundary {boundary}"
         )
 
-    # ── Tensor round-trip via a tmp file ──────────────────────────────────────
+    # Tensor round-trip via a tmp file
     # Use mkdtemp (not NamedTemporaryFile) — on Windows, NamedTemporaryFile
     # cannot be opened a second time while still open (error code 32).
     import tempfile  # noqa: PLC0415
@@ -164,8 +104,7 @@ def _smoke_test() -> None:
         f"context={CONTEXT_LENGTH}, train_stride={TRAIN_STRIDE}, val_stride={VAL_STRIDE}"
     )
 
-
-# ── Split strategy document ───────────────────────────────────────────────────
+# Split strategy document
 
 def _write_split_strategy(
     *,
@@ -289,17 +228,16 @@ def _write_split_strategy(
 
     SPLIT_STRATEGY_MD.parent.mkdir(parents=True, exist_ok=True)
     SPLIT_STRATEGY_MD.write_text(md, encoding="utf-8")
-    print(f"[phase2] split strategy doc → {SPLIT_STRATEGY_MD}")
+    print(f"[phase2] split strategy doc -> {SPLIT_STRATEGY_MD}")
 
-
-# ── Main ──────────────────────────────────────────────────────────────────────
+# Main
 
 def main() -> None:
     import math  # noqa: PLC0415
 
     set_seed(SEED)
 
-    # ── 1. Pre-flight ─────────────────────────────────────────────────────────
+    # Pre-flight
     vocab_json  = TOKENIZER_DIR / "vocab.json"
     merges_txt  = TOKENIZER_DIR / "merges.txt"
     if not vocab_json.exists() or not merges_txt.exists():
@@ -318,7 +256,7 @@ def main() -> None:
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     CONFIGS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── 2. Config-as-file BEFORE computation (global convention §0) ───────────
+    # Config-as-file BEFORE computation (global convention §0)
     run_cfg = {
         "phase": "phase2_dataset",
         "context_length": CONTEXT_LENGTH,
@@ -331,7 +269,7 @@ def main() -> None:
     }
     dump_config(run_cfg, "phase2_dataset")
 
-    # ── 3. Load custom tokenizer ──────────────────────────────────────────────
+    # Load custom tokenizer
     from tokenizers import ByteLevelBPETokenizer  # noqa: PLC0415
 
     print(f"\n[phase2] loading tokenizer from {TOKENIZER_DIR} ...")
@@ -342,7 +280,7 @@ def main() -> None:
     tokenizer_vocab_size: int = tok.get_vocab_size()
     print(f"[phase2] tokenizer vocab size: {tokenizer_vocab_size:,}")
 
-    # ── 4. Tokenize full document ─────────────────────────────────────────────
+    # Tokenize full document
     print(f"[phase2] reading {CLEAN_TXT} ...")
     text = CLEAN_TXT.read_text(encoding="utf-8")
     total_chars = len(text.encode("utf-8"))   # raw UTF-8 bytes (for BPB later)
@@ -354,15 +292,15 @@ def main() -> None:
     total_tokens = len(token_ids)
     print(f"[phase2] total tokens: {total_tokens:,}  (vocab size {tokenizer_vocab_size:,})")
 
-    # ── 5. Character coverage per token / per window ──────────────────────────
+    # Character coverage per token / per window
     chars_per_token: float = total_chars_str / total_tokens if total_tokens else 0.0
     chars_per_window: float = chars_per_token * CONTEXT_LENGTH
     print(
         f"[phase2] chars/token: {chars_per_token:.3f}  "
-        f"→ chars/window ({CONTEXT_LENGTH} tok): {chars_per_window:.0f}"
+        f"-> chars/window ({CONTEXT_LENGTH} tok): {chars_per_window:.0f}"
     )
 
-    # ── 6. Contiguous holdout split ───────────────────────────────────────────
+    # Contiguous holdout split
     boundary = int(total_tokens * (1.0 - VAL_FRACTION))
     train_token_ids = token_ids[:boundary]
     val_token_ids   = token_ids[boundary:]
@@ -372,7 +310,7 @@ def main() -> None:
     print(f"[phase2] train: tokens 0–{boundary - 1:,}  ({train_tokens:,} tokens, {1 - VAL_FRACTION:.0%})")
     print(f"[phase2] val:   tokens {boundary:,}–{total_tokens - 1:,}  ({val_tokens:,} tokens, {VAL_FRACTION:.0%})")
 
-    # ── 7. Sliding-window chunking ────────────────────────────────────────────
+    # Sliding-window chunking
     print(
         f"\n[phase2] chunking train: context={CONTEXT_LENGTH}, "
         f"stride={TRAIN_STRIDE} (50% overlap)"
@@ -389,7 +327,7 @@ def main() -> None:
 
     print(f"[phase2] train chunks: {n_train},  val chunks: {n_val}")
 
-    # ── 8. Dropped-remainder accounting ──────────────────────────────────────
+    # Dropped-remainder accounting
     tokens_covered_train = (CONTEXT_LENGTH + (n_train - 1) * TRAIN_STRIDE) if n_train > 0 else 0
     tokens_covered_val   = (CONTEXT_LENGTH + (n_val   - 1) * VAL_STRIDE)   if n_val   > 0 else 0
     dropped_train = train_tokens - tokens_covered_train
@@ -397,7 +335,7 @@ def main() -> None:
     print(f"[phase2] train: covered={tokens_covered_train:,}, dropped={dropped_train}")
     print(f"[phase2] val:   covered={tokens_covered_val:,},   dropped={dropped_val}")
 
-    # ── 9. Zero-leakage assertion ──────────────────────────────────────────────
+    # Zero-leakage assertion
     if n_train > 0 and n_val > 0:
         last_train_end = (n_train - 1) * TRAIN_STRIDE + CONTEXT_LENGTH
         assert last_train_end <= boundary, (
@@ -406,7 +344,7 @@ def main() -> None:
         )
     print("[phase2] zero-leakage assertion passed")
 
-    # ── 10. Build tensors (labels = input_ids — no pre-shifting) ─────────────
+    # Build tensors (labels = input_ids — no pre-shifting)
     import torch  # noqa: PLC0415
 
     print("\n[phase2] building tensors ...")
@@ -418,13 +356,13 @@ def main() -> None:
     print(f"[phase2] train_input_ids: {tuple(train_input_ids.shape)}")
     print(f"[phase2] val_input_ids:   {tuple(val_input_ids.shape)}")
 
-    # ── 11. Save to disk ──────────────────────────────────────────────────────
+    # Save to disk
     torch.save({"input_ids": train_input_ids, "labels": train_labels}, TRAIN_PT)
     torch.save({"input_ids": val_input_ids,   "labels": val_labels},   VAL_PT)
-    print(f"\n[phase2] saved → {TRAIN_PT}")
-    print(f"[phase2] saved → {VAL_PT}")
+    print(f"\n[phase2] saved -> {TRAIN_PT}")
+    print(f"[phase2] saved -> {VAL_PT}")
 
-    # ── 12. Write dataset stats JSON ─────────────────────────────────────────
+    # Write dataset stats JSON
     stats = {
         "phase": "phase2_dataset",
         "tokenizer_vocab_size": tokenizer_vocab_size,
@@ -453,8 +391,8 @@ def main() -> None:
         "timestamp": iso_now(),
         "context_length_note": (
             f"256 tokens chosen for architectural alignment with Track 1 (same block_size). "
-            f"Raw CE loss is NOT directly comparable: Track 2 vocab={tokenizer_vocab_size} → "
-            f"CE ceiling ≈ {math.log(tokenizer_vocab_size):.2f} nats vs Track 1 vocab=49152 → "
+            f"Raw CE loss is NOT directly comparable: Track 2 vocab={tokenizer_vocab_size} -> "
+            f"CE ceiling ≈ {math.log(tokenizer_vocab_size):.2f} nats vs Track 1 vocab=49152 -> "
             f"≈ {math.log(49152):.2f} nats. Use BPB from Phase 5 for cross-track comparison."
         ),
         "val_set_caveat": (
@@ -465,9 +403,9 @@ def main() -> None:
     }
     DATASET_STATS_JSON.parent.mkdir(parents=True, exist_ok=True)
     DATASET_STATS_JSON.write_text(json.dumps(stats, indent=2) + "\n", encoding="utf-8")
-    print(f"[phase2] dataset stats → {DATASET_STATS_JSON}")
+    print(f"[phase2] dataset stats -> {DATASET_STATS_JSON}")
 
-    # ── 13. Write split_strategy.md ──────────────────────────────────────────
+    # Write split_strategy.md
     _write_split_strategy(
         total_tokens=total_tokens,
         boundary=boundary,
@@ -484,7 +422,7 @@ def main() -> None:
         chars_per_window=chars_per_window,
     )
 
-    # ── 14. Definition-of-Done assertions ────────────────────────────────────
+    # Definition-of-Done assertions
     assert TRAIN_PT.exists(), f"FAIL: {TRAIN_PT} not written"
     assert VAL_PT.exists(),   f"FAIL: {VAL_PT} not written"
     assert DATASET_STATS_JSON.exists(), f"FAIL: {DATASET_STATS_JSON} not written"
@@ -516,8 +454,7 @@ def main() -> None:
     print(f"[phase2] chars/window: {chars_per_window:.0f} raw characters per training example")
     print("[phase2] Phase 2 complete. Review data/processed/ and configs/, then commit.")
 
-
-# ── Entry point ───────────────────────────────────────────────────────────────
+# Entry point
 
 if __name__ == "__main__":
     import argparse

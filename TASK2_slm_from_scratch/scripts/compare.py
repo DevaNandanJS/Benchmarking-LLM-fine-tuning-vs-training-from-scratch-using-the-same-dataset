@@ -1,36 +1,4 @@
-"""Phase 7 — Cross-Track Comparison.
-
-Goal (plan §Phase 7): finalize shared_eval/comparison_notes.md by replacing
-all TBD placeholders with real numbers from Phase 5 and Phase 6 outputs, then
-copy the Track 2 artefacts (final_metrics.json, loss_curve.png) to shared_eval/.
-
-This script is intentionally thin.  All the interesting computation happened in
-Phase 5 (BPB) and Phase 6 (annotations).  Phase 7 only aggregates results.
-
-Inputs (all must exist before running):
-    TASK2_slm_from_scratch/eval/final_metrics.json      — Phase 5 output
-    TASK2_slm_from_scratch/eval/loss_curve.png          — Phase 5 output
-    TASK2_slm_from_scratch/generations/slm_samples.md— Phase 6 output
-    shared_eval/finetuning_final_metrics.json       — Track 1 reference (committed)
-    shared_eval/finetuning_loss_curve.png           — Track 1 reference (committed)
-
-Outputs:
-    shared_eval/slm_final_metrics.json       — copy of Phase 5 output
-    shared_eval/slm_loss_curve.png           — copy of Phase 5 output
-    shared_eval/comparison_notes.md             — fully populated (no TBD)
-
-Run on Colab (from repo root after Phase 5 and Phase 6 have completed):
-    !python TASK2_slm_from_scratch/scripts/compare.py
-
-Smoke-test (local, CPU, no Phase 5/6 outputs needed):
-    python TASK2_slm_from_scratch/scripts/compare.py --smoke-test
-
-Definition of Done (plan §Phase 7):
-    [ ] shared_eval/slm_final_metrics.json is a copy of eval/final_metrics.json
-    [ ] shared_eval/slm_loss_curve.png is a copy of eval/loss_curve.png
-    [ ] shared_eval/comparison_notes.md has real BPB values for both tracks (no 'TBD')
-    [ ] Production recommendation paragraph is written with quantified trade-offs
-"""
+"""Phase 7 — Cross-Track Comparison."""
 from __future__ import annotations
 
 import argparse
@@ -40,7 +8,7 @@ import shutil
 import sys
 from pathlib import Path
 
-# ── Bootstrap: make scripts/ importable regardless of CWD ────────────────────
+# Bootstrap: make scripts/ importable regardless of CWD
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -60,7 +28,6 @@ from config import (  # noqa: E402
     TRACK2_SHARED_METRICS_JSON,
 )
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §1 — Prerequisite guard
 # ════════════════════════════════════════════════════════════════════════════
@@ -79,11 +46,10 @@ def verify_prerequisites() -> None:
         raise FileNotFoundError(
             "[compare] Missing required input files:\n"
             + lines
-            + "\nRun Phase 4 → Phase 5 → Phase 6 on Colab, "
+            + "\nRun Phase 4 -> Phase 5 -> Phase 6 on Colab, "
               "commit outputs, then re-run Phase 7."
         )
-    print("[compare] all prerequisite files present ✓")
-
+    print("[compare] all prerequisite files present [OK]")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §2 — Copy artefacts to shared_eval/
@@ -93,20 +59,16 @@ def copy_artefacts() -> None:
     """Copy Track 2 evaluation artefacts into shared_eval/ for side-by-side access."""
     SHARED_EVAL_DIR.mkdir(parents=True, exist_ok=True)
     shutil.copy2(FINAL_METRICS_JSON, TRACK2_SHARED_METRICS_JSON)
-    print(f"[compare] copied {FINAL_METRICS_JSON.name} → {TRACK2_SHARED_METRICS_JSON}")
+    print(f"[compare] copied {FINAL_METRICS_JSON.name} -> {TRACK2_SHARED_METRICS_JSON}")
     shutil.copy2(LOSS_CURVE_PNG, TRACK2_SHARED_LOSS_CURVE_PNG)
-    print(f"[compare] copied {LOSS_CURVE_PNG.name} → {TRACK2_SHARED_LOSS_CURVE_PNG}")
-
+    print(f"[compare] copied {LOSS_CURVE_PNG.name} -> {TRACK2_SHARED_LOSS_CURVE_PNG}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §3 — Qualitative comparison: extract annotation summary from samples.md
 # ════════════════════════════════════════════════════════════════════════════
 
 def _count_annotation_labels(samples_path: Path) -> dict[str, int]:
-    """Count how many completions bear each annotation label in a samples.md.
-
-    Scans all lines starting with '> **Annotation:**' and counts labels.
-    """
+    """Count how many completions bear each annotation label in a samples.md."""
     counts: dict[str, int] = {
         "novel-plausible": 0,
         "memorization":    0,
@@ -125,17 +87,8 @@ def _count_annotation_labels(samples_path: Path) -> dict[str, int]:
                 counts["incoherence"] += 1
     return counts
 
-
 def build_qualitative_summary() -> dict:
-    """Build a dict of qualitative comparison points for use in the notes.
-
-    Track 1 annotations are read from finetuning_samples.md if present; if absent,
-    a pre-known summary from Track 1 Phase 7 is used (hard-coded from the
-    TASK1_finetuning_model/generations/ file committed after Phase 7).
-
-    'Domain vocabulary' is explicitly marked as a manual-review judgment — there
-    is no programmatic computation for this field (reviewer-confirmed decision).
-    """
+    """Build a dict of qualitative comparison points for use in the notes."""
     t2_counts = _count_annotation_labels(TRACK2_SAMPLES_MD)
 
     # Track 1 samples (optional — if not present, use known summary)
@@ -157,17 +110,12 @@ def build_qualitative_summary() -> dict:
         "t2_counts": t2_counts,
     }
 
-
 # ════════════════════════════════════════════════════════════════════════════
 # §4 — Write comparison_notes.md
 # ════════════════════════════════════════════════════════════════════════════
 
 def _build_notes_text(t2_metrics: dict, t1_metrics: dict, qual: dict) -> str:
-    """Build and return the comparison_notes.md markdown string.
-
-    Extracted as a pure function so _smoke_test can call it without patching
-    any global constants.  write_comparison_notes() calls this and writes to disk.
-    """
+    """Build and return the comparison_notes.md markdown string."""
     t2_bpb   = t2_metrics["bpb"]
     t2_ppl   = t2_metrics["perplexity"]
     t2_ce    = t2_metrics["mean_ce_loss"]
@@ -309,14 +257,12 @@ None of these conditions apply to this experiment.
 *Generated by `TASK2_slm_from_scratch/scripts/compare.py` at {iso_now()}*"""
     return md
 
-
 def write_comparison_notes(t2_metrics: dict, t1_metrics: dict, qual: dict) -> None:
     """Write comparison_notes.md to shared_eval/ using _build_notes_text."""
     md = _build_notes_text(t2_metrics, t1_metrics, qual)
     SHARED_EVAL_DIR.mkdir(parents=True, exist_ok=True)
     COMPARISON_NOTES_MD.write_text(md, encoding="utf-8")
-    print(f"[compare] comparison_notes.md → {COMPARISON_NOTES_MD}")
-
+    print(f"[compare] comparison_notes.md -> {COMPARISON_NOTES_MD}")
 
 # ════════════════════════════════════════════════════════════════════════════
 # §5 — Main
@@ -369,11 +315,10 @@ def main() -> None:
         f"FAIL: Track 1 BPB ({t1_metrics['bpb']}) not found in comparison_notes.md"
     )
 
-    print("\n[compare] ✅ all Definition-of-Done assertions passed")
+    print("\n[compare] [SUCCESS] all Definition-of-Done assertions passed")
     print(f"[compare]   T1 BPB={t1_metrics['bpb']}  T2 BPB={t2_metrics['bpb']}  "
           f"gap={t2_metrics['bpb'] - t1_metrics['bpb']:+.6f}")
     print("[compare] Phase 7 complete.")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §6 — Smoke-test
@@ -415,15 +360,14 @@ def _smoke_test() -> None:
         assert "TBD" not in content, "FAIL: 'TBD' still present in smoke comparison_notes"
         assert "2.345678" in content, "FAIL: T2 BPB not in smoke notes"
         assert "1.309722" in content, "FAIL: T1 BPB not in smoke notes"
-        print("[compare] SMOKE: comparison_notes.md written, TBD-free, BPBs present  ✓")
+        print("[compare] SMOKE: comparison_notes.md written, TBD-free, BPBs present  [OK]")
 
     finally:
         import shutil  # noqa: PLC0415
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
-    print("[compare] ✅ SMOKE TEST PASSED")
+    print("[compare] [SUCCESS] SMOKE TEST PASSED")
     print("[compare] Run without --smoke-test on Colab after Phase 5 and 6 complete.")
-
 
 # ════════════════════════════════════════════════════════════════════════════
 # §7 — Entry point
